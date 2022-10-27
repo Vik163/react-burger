@@ -1,0 +1,16 @@
+.burger-ingredients-card {
+  position: relative;
+  width: 271px;
+  height: 208px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.burger-ingredients-card__price-container {
+  display: flex;
+}
+
+.text_type_main-default {
+  text-align: center;
+}

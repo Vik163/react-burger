@@ -1,0 +1,26 @@
+@font-face {
+  font-family: 'JetBrainsMono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('JetBrainsMono-Regular.woff?v=3.19') format('woff'),
+    url('JetBrainsMono-Regular.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'JetBrainsMono';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('JetBrainsMono-Medium.woff?v=3.19') format('woff'),
+    url('JetBrainsMono-Medium.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'JetBrainsMono';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('JetBrainsMono-Bold.woff?v=3.19') format('woff'),
+    url('JetBrainsMono-Bold.ttf') format('truetype');
+}

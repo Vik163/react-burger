@@ -1,0 +1,51 @@
+.burger-constructor {
+  width: 600px;
+  height: 912px;
+}
+
+.burger-constructor__container {
+  height: 656px;
+  overflow-y: auto;
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.burger-constructor__icon {
+  height: 24px;
+}
+
+.burger-constructor__container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.burger-constructor__container::-webkit-scrollbar-track {
+  background: #2f2f37;
+}
+
+.burger-constructor__container::-webkit-scrollbar-thumb {
+  background: #8585ad;
+}
+
+.burger-constructor__item {
+  width: 568px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.burger-constructor__total-price-container {
+  display: flex;
+  align-items: center;
+  justify-content: end;
+}
+
+.button_size_large {
+  margin-left: 20px;
+}
+
+.burger-constructor__total-price-container > svg {
+  width: 36px;
+  height: 36px;
+}
