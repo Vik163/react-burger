@@ -1,15 +1,15 @@
 import React from 'react';
 
-import './burger-ingredients-view.css';
+import './burger-ingredients-types.css';
 
 import BurgerIngredientsCard from '../burger-ingredients-card/burger-ingredients-card.js';
 
-function BurgerIngredientsView(props) {
+function BurgerIngredientsTypes(props) {
   const { title, data } = props;
   return (
-    <section className='burger-ingredients-view pl-4' id={title}>
+    <section className='burger-ingredients-types pl-4' id={title}>
       <h2 className='text text_type_main-medium mt-10 mb-6'>{title}</h2>
-      <ul className='burger-ingredients-view__container'>
+      <ul className='burger-ingredients-types__container'>
         {data.map((card) => (
           <BurgerIngredientsCard card={card} key={card._id} />
         ))}
@@ -17,4 +17,4 @@ function BurgerIngredientsView(props) {
     </section>
   );
 }
-export default BurgerIngredientsView;
+export default BurgerIngredientsTypes;

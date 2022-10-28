@@ -5,26 +5,32 @@
 
 .burger-constructor__container {
   height: 656px;
-  overflow-y: auto;
   list-style: none;
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 16px;
 }
 .burger-constructor__icon {
   height: 24px;
 }
 
-.burger-constructor__container::-webkit-scrollbar {
+.burger-constructor__scrollbar {
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.burger-constructor__scrollbar::-webkit-scrollbar {
   width: 8px;
 }
 
-.burger-constructor__container::-webkit-scrollbar-track {
+.burger-constructor__scrollbar::-webkit-scrollbar-track {
   background: #2f2f37;
 }
 
-.burger-constructor__container::-webkit-scrollbar-thumb {
+.burger-constructor__scrollbar::-webkit-scrollbar-thumb {
   background: #8585ad;
 }
 

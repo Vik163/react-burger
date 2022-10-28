@@ -2,7 +2,7 @@ import { useState } from 'react';
 
 import './burger-ingredients.css';
 
-import BurgerIngredientsView from './burger-ingredients-view/burger-ingredients-view.js';
+import BurgerIngredientsTypes from './burger-ingredients-types/burger-ingredients-types.js';
 import { bun, sauce, filling } from '../../utils/data';
 
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
@@ -29,9 +29,9 @@ function BurgerIngredients() {
         </Tab>
       </nav>
       <div className='burger-ingredients__container'>
-        <BurgerIngredientsView title='Булки' data={bun} />
-        <BurgerIngredientsView title='Соусы' data={sauce} />
-        <BurgerIngredientsView title='Начинки' data={filling} />
+        <BurgerIngredientsTypes title='Булки' data={bun} />
+        <BurgerIngredientsTypes title='Соусы' data={sauce} />
+        <BurgerIngredientsTypes title='Начинки' data={filling} />
       </div>
     </section>
   );
