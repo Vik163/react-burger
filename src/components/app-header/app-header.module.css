@@ -23,7 +23,3 @@
 .header__link:last-child {
   margin-left: 289px;
 }
-
-.header__link > .text {
-  color: #8585ad;
-}

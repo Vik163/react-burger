@@ -1,20 +1,39 @@
-import { useState } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 
-import './burger-constructor.css';
+import constructorStyles from './burger-constructor.module.css';
 
-import { ConstructorElement } from '@ya.praktikum/react-developer-burger-ui-components';
-import { DragIcon } from '@ya.praktikum/react-developer-burger-ui-components';
-import { CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
-import { Button } from '@ya.praktikum/react-developer-burger-ui-components';
+import {
+  ConstructorElement,
+  DragIcon,
+  CurrencyIcon,
+  Button,
+} from '@ya.praktikum/react-developer-burger-ui-components';
+
+const dataPropTypes = PropTypes.shape({
+  _id: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
+  type: PropTypes.string.isRequired,
+  proteins: PropTypes.number,
+  fat: PropTypes.number,
+  carbohydrates: PropTypes.number,
+  calories: PropTypes.number,
+  price: PropTypes.number.isRequired,
+  image: PropTypes.string.isRequired,
+  image_mobile: PropTypes.string.isRequired,
+  image_large: PropTypes.string.isRequired,
+});
 
 function BurgerConstructor(props) {
   const { data } = props;
 
   return (
-    <section className='burger-constructor'>
-      <ul className='burger-constructor__container mt-25 mb-10 ml-4'>
+    <section className={constructorStyles.constructor}>
+      <ul
+        className={` ${constructorStyles.constructor__container} mt-25 mb-10 ml-4`}
+      >
         <li
-          className='burger-constructor__item'
+          className={constructorStyles.constructor__item}
           style={{ justifyContent: 'end' }}
         >
           <ConstructorElement
@@ -25,9 +44,9 @@ function BurgerConstructor(props) {
             thumbnail={data[0].image}
           />
         </li>
-        <div className='burger-constructor__scrollbar'>
+        <div className={constructorStyles.constructor__scrollbar}>
           {data.map((item) => (
-            <li className='burger-constructor__item' key={item._id}>
+            <li className={constructorStyles.constructor__item} key={item._id}>
               <DragIcon type='primary' />
               <ConstructorElement
                 text={item.name}
@@ -38,7 +57,7 @@ function BurgerConstructor(props) {
           ))}
         </div>
         <li
-          className='burger-constructor__item'
+          className={constructorStyles.constructor__item}
           style={{ justifyContent: 'end' }}
         >
           <ConstructorElement
@@ -50,7 +69,7 @@ function BurgerConstructor(props) {
           />
         </li>
       </ul>
-      <div className='burger-constructor__total-price-container mr-4'>
+      <div className={` ${constructorStyles.constructor__price} mr-4`}>
         <p className='text text_type_digits-medium mr-2'>610</p>
         <CurrencyIcon type='primary' />
         <Button type='primary' size='large' htmlType='submit'>
@@ -60,5 +79,9 @@ function BurgerConstructor(props) {
     </section>
   );
 }
+
+BurgerConstructor.propTypes = {
+  data: PropTypes.arrayOf(dataPropTypes),
+};
 
 export default BurgerConstructor;

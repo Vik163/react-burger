@@ -1,4 +1,4 @@
-.burger-ingredients-card {
+.card {
   position: relative;
   width: 271px;
   height: 208px;
@@ -7,10 +7,10 @@
   align-items: center;
 }
 
-.burger-ingredients-card__price-container {
+.card__price {
   display: flex;
 }
 
-.text_type_main-default {
+.card__name {
   text-align: center;
 }

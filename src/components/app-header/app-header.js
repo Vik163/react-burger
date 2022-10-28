@@ -1,11 +1,13 @@
 import { useState } from 'react';
 
-import './app-header.css';
+import headerStyles from './app-header.module.css';
 
-import { Logo } from '@ya.praktikum/react-developer-burger-ui-components';
-import { BurgerIcon } from '@ya.praktikum/react-developer-burger-ui-components';
-import { ListIcon } from '@ya.praktikum/react-developer-burger-ui-components';
-import { ProfileIcon } from '@ya.praktikum/react-developer-burger-ui-components';
+import {
+  Logo,
+  BurgerIcon,
+  ListIcon,
+  ProfileIcon,
+} from '@ya.praktikum/react-developer-burger-ui-components';
 
 function AppHeader() {
   const [isActive, setIsActive] = useState({
@@ -25,40 +27,40 @@ function AppHeader() {
     }
   };
   return (
-    <header className='header'>
+    <header className={headerStyles.header}>
       <div
-        className='header__link header__link_type_constructor pl-5 pr-5 pb-4 pt-4'
+        className={`${headerStyles.header__link} header__link_type_constructor pl-5 pr-5 pb-4 pt-4`}
         onClick={activeLink}
       >
         <BurgerIcon type={isActive.constructor ? 'primary' : 'secondary'} />
         <p
           className='text text_type_main-default'
-          style={{ color: isActive.constructor && 'white' }}
+          style={{ color: isActive.constructor ? 'white' : '#8585ad' }}
         >
           Конструктор
         </p>
       </div>
       <div
-        className='header__link header__link_type_list pl-5 pr-5 pb-4 pt-4'
+        className={`${headerStyles.header__link} header__link_type_list pl-5 pr-5 pb-4 pt-4`}
         onClick={activeLink}
       >
         <ListIcon type={isActive.list ? 'primary' : 'secondary'} />
         <p
           className='text text_type_main-default'
-          style={{ color: isActive.list && 'white' }}
+          style={{ color: isActive.list ? 'white' : '#8585ad' }}
         >
           Лента заказов
         </p>
       </div>
       <Logo />
       <div
-        className='header__link header__link_type_profile pl-5 pr-5 pb-4 pt-4'
+        className={`${headerStyles.header__link} header__link_type_profile pl-5 pr-5 pb-4 pt-4`}
         onClick={activeLink}
       >
         <ProfileIcon type={isActive.profile ? 'primary' : 'secondary'} />
         <p
           className='text text_type_main-default'
-          style={{ color: isActive.profile && 'white' }}
+          style={{ color: isActive.profile ? 'white' : '#8585ad' }}
         >
           Личный кабинет
         </p>
