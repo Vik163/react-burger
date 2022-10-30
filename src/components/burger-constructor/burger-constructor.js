@@ -1,7 +1,10 @@
-import React from 'react';
+import { useState } from 'react';
 import PropTypes from 'prop-types';
 
 import constructorStyles from './burger-constructor.module.css';
+
+import Modal from '../modal/modal';
+import ModalOverlay from '../modal-overlay/modal-overlay';
 
 import {
   ConstructorElement,
@@ -13,6 +16,16 @@ import { dataPropTypes } from '../../utils/types';
 
 function BurgerConstructor(props) {
   const { data } = props;
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
 
   return (
     <section className={constructorStyles.constructor}>
@@ -32,8 +45,14 @@ function BurgerConstructor(props) {
           />
         </li>
         <div className={constructorStyles.constructor__scrollbar}>
+          <ModalOverlay isModalOpen={isModalOpen} closeModal={closeModal} />
+          {isModalOpen && <Modal />}
           {data.map((item) => (
-            <li className={constructorStyles.constructor__item} key={item._id}>
+            <li
+              className={constructorStyles.constructor__item}
+              key={item._id}
+              onClick={openModal}
+            >
               <DragIcon type='primary' />
               <ConstructorElement
                 text={item.name}

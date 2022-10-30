@@ -3,15 +3,27 @@ import { useState } from 'react';
 import ingredientsStyles from './burger-ingredients.module.css';
 
 import BurgerIngredientsTypes from './burger-ingredients-types/burger-ingredients-types.js';
+import Modal from '../modal/modal';
+import ModalOverlay from '../modal-overlay/modal-overlay';
 
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 
 function BurgerIngredients(props) {
   const { data } = props;
-  const [current, setCurrent] = useState('');
   const sauce = data.filter((item) => item.type === 'sauce');
   const bun = data.filter((item) => item.type === 'bun');
   const filling = data.filter((item) => item.type === 'main');
+
+  const [current, setCurrent] = useState('');
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
 
   return (
     <section className={` ${ingredientsStyles.ingredients} mb-10`}>
@@ -32,9 +44,24 @@ function BurgerIngredients(props) {
         </Tab>
       </nav>
       <div className={ingredientsStyles.ingredients__container}>
-        <BurgerIngredientsTypes title='Булки' data={bun} />
-        <BurgerIngredientsTypes title='Соусы' data={sauce} />
-        <BurgerIngredientsTypes title='Начинки' data={filling} />
+        <ModalOverlay isModalOpen={isModalOpen} closeModal={closeModal} />
+        {isModalOpen && <Modal />}
+
+        <BurgerIngredientsTypes
+          title='Булки'
+          data={bun}
+          openModal={openModal}
+        />
+        <BurgerIngredientsTypes
+          title='Соусы'
+          data={sauce}
+          openModal={openModal}
+        />
+        <BurgerIngredientsTypes
+          title='Начинки'
+          data={filling}
+          openModal={openModal}
+        />
       </div>
     </section>
   );
