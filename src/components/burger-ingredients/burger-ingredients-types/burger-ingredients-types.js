@@ -4,20 +4,7 @@ import PropTypes from 'prop-types';
 import ingredientsTypesStyles from './burger-ingredients-types.module.css';
 
 import BurgerIngredientsCard from '../burger-ingredients-card/burger-ingredients-card.js';
-
-const dataPropTypes = PropTypes.shape({
-  _id: PropTypes.string.isRequired,
-  name: PropTypes.string.isRequired,
-  type: PropTypes.string.isRequired,
-  proteins: PropTypes.number,
-  fat: PropTypes.number,
-  carbohydrates: PropTypes.number,
-  calories: PropTypes.number,
-  price: PropTypes.number.isRequired,
-  image: PropTypes.string.isRequired,
-  image_mobile: PropTypes.string.isRequired,
-  image_large: PropTypes.string.isRequired,
-});
+import { dataPropTypes } from '../../../utils/types';
 
 function BurgerIngredientsTypes(props) {
   const { title, data } = props;

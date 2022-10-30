@@ -212,7 +212,3 @@ export const data = [
     __v: 0,
   },
 ];
-
-export const sauce = data.filter((item) => item.type === 'sauce');
-export const bun = data.filter((item) => item.type === 'bun');
-export const filling = data.filter((item) => item.type === 'main');

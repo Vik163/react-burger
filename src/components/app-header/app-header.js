@@ -28,7 +28,8 @@ function AppHeader() {
   };
   return (
     <header className={headerStyles.header}>
-      <div
+      <a
+        href='#'
         className={`${headerStyles.header__link} header__link_type_constructor pl-5 pr-5 pb-4 pt-4`}
         onClick={activeLink}
       >
@@ -39,8 +40,8 @@ function AppHeader() {
         >
           Конструктор
         </p>
-      </div>
-      <div
+      </a>
+      <a
         className={`${headerStyles.header__link} header__link_type_list pl-5 pr-5 pb-4 pt-4`}
         onClick={activeLink}
       >
@@ -51,9 +52,9 @@ function AppHeader() {
         >
           Лента заказов
         </p>
-      </div>
+      </a>
       <Logo />
-      <div
+      <a
         className={`${headerStyles.header__link} header__link_type_profile pl-5 pr-5 pb-4 pt-4`}
         onClick={activeLink}
       >
@@ -64,7 +65,7 @@ function AppHeader() {
         >
           Личный кабинет
         </p>
-      </div>
+      </a>
     </header>
   );
 }

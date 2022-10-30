@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import PropTypes from 'prop-types';
 
 import ingredientsCardStyles from './burger-ingredients-card.module.css';
 
@@ -6,6 +7,7 @@ import {
   Counter,
   CurrencyIcon,
 } from '@ya.praktikum/react-developer-burger-ui-components';
+import { dataPropTypes } from '../../../utils/types';
 
 function BurgerIngredientsCard(props) {
   const { card } = props;
@@ -35,5 +37,9 @@ function BurgerIngredientsCard(props) {
     </li>
   );
 }
+
+BurgerIngredientsCard.propTypes = {
+  card: dataPropTypes.isRequired,
+};
 
 export default BurgerIngredientsCard;

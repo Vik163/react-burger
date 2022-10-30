@@ -3,12 +3,15 @@ import { useState } from 'react';
 import ingredientsStyles from './burger-ingredients.module.css';
 
 import BurgerIngredientsTypes from './burger-ingredients-types/burger-ingredients-types.js';
-import { bun, sauce, filling } from '../../utils/data';
 
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 
-function BurgerIngredients() {
+function BurgerIngredients(props) {
+  const { data } = props;
   const [current, setCurrent] = useState('');
+  const sauce = data.filter((item) => item.type === 'sauce');
+  const bun = data.filter((item) => item.type === 'bun');
+  const filling = data.filter((item) => item.type === 'main');
 
   return (
     <section className={` ${ingredientsStyles.ingredients} mb-10`}>

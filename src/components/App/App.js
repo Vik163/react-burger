@@ -12,7 +12,7 @@ function App() {
     <div className={appStyles.page}>
       <AppHeader />
       <main className={appStyles.main}>
-        <BurgerIngredients />
+        <BurgerIngredients data={data} />
         <BurgerConstructor data={data} />
       </main>
     </div>
