@@ -1,22 +1,12 @@
 import { useEffect } from 'react';
+import PropTypes from 'prop-types';
 
 import './modal-overlay.css';
 
-function ModalOverlay(props) {
+export function ModalOverlay(props) {
   const { isModalOpen, closeModal } = props;
-  useEffect(() => {
-    if (!isModalOpen) return;
-    // объявляем внутри `useEffect` функцию, чтобы она не теряла ссылку при перерисовке компонента
-    const closeByEscape = (e) => {
-      if (e.key === 'Escape') {
-        closeModal();
-      }
-    };
 
-    document.addEventListener('keydown', closeByEscape);
-    return () => document.removeEventListener('keydown', closeByEscape);
-  }, [isModalOpen, closeModal]);
-
+  //Клик по ModalOverlay
   const closeOverlay = (e) => {
     if (e.target === e.currentTarget) {
       closeModal();
@@ -30,4 +20,7 @@ function ModalOverlay(props) {
   );
 }
 
-export default ModalOverlay;
+ModalOverlay.propTypes = {
+  closeModal: PropTypes.func.isRequired,
+  isModalOpen: PropTypes.bool.isRequired,
+};

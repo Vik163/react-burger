@@ -1,24 +1,30 @@
 import { useState } from 'react';
+import PropTypes from 'prop-types';
 
 import ingredientsStyles from './burger-ingredients.module.css';
 
-import BurgerIngredientsTypes from './burger-ingredients-types/burger-ingredients-types.js';
-import Modal from '../modal/modal';
-import ModalOverlay from '../modal-overlay/modal-overlay';
+import { BurgerIngredientsTypes } from './burger-ingredients-types/burger-ingredients-types.js';
+import { IngredientDetails } from '../ingredient-details/ingredient-details';
+import { ModalOverlay } from '../modal-overlay/modal-overlay';
+
+import { dataPropTypes } from '../../utils/types';
 
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 
-function BurgerIngredients(props) {
+export function BurgerIngredients(props) {
   const { data } = props;
+  // Данные по видам
   const sauce = data.filter((item) => item.type === 'sauce');
   const bun = data.filter((item) => item.type === 'bun');
   const filling = data.filter((item) => item.type === 'main');
 
   const [current, setCurrent] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isDataIngredients, setIsDataIngredients] = useState({});
 
-  const openModal = () => {
+  const openModal = (card) => {
     setIsModalOpen(true);
+    setIsDataIngredients(card);
   };
 
   const closeModal = () => {
@@ -45,8 +51,14 @@ function BurgerIngredients(props) {
       </nav>
       <div className={ingredientsStyles.ingredients__container}>
         <ModalOverlay isModalOpen={isModalOpen} closeModal={closeModal} />
-        {isModalOpen && <Modal />}
-
+        {isModalOpen && (
+          <IngredientDetails
+            closeModal={closeModal}
+            title='Детали ингредиента'
+            isDataIngredients={isDataIngredients}
+            isModalOpen={isModalOpen}
+          />
+        )}
         <BurgerIngredientsTypes
           title='Булки'
           data={bun}
@@ -67,4 +79,6 @@ function BurgerIngredients(props) {
   );
 }
 
-export default BurgerIngredients;
+BurgerIngredients.propTypes = {
+  data: PropTypes.arrayOf(dataPropTypes).isRequired,
+};

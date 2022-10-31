@@ -1,32 +1,42 @@
 import { useEffect } from 'react';
 import ReactDOM from 'react-dom';
+import PropTypes from 'prop-types';
 
 import modal from './modal.module.css';
 
-const Modal = (props) => {
-  const { text, isOpen, name, title, onClose, onSubmit, children } = props;
+import { CloseIcon } from '@ya.praktikum/react-developer-burger-ui-components';
+
+export const Modal = (props) => {
+  const { isModalOpen, title, closeModal, children } = props;
+  //Корневой элемент
   const modalRoot = document.querySelector('#page');
+
+  useEffect(() => {
+    if (!isModalOpen) return;
+    const closeByEscape = (e) => {
+      if (e.key === 'Escape') {
+        closeModal();
+      }
+    };
+
+    document.addEventListener('keydown', closeByEscape);
+    return () => document.removeEventListener('keydown', closeByEscape);
+  }, [isModalOpen, closeModal]);
 
   return ReactDOM.createPortal(
     <div className={modal.modal}>
-      <div
-        className={
-          name === 'image'
-            ? `popup__container-image`
-            : `popup__container popup__container_type_${name}`
-        }
-      >
-        {children}
-        <button
-          className='popup__close button-hover'
-          aria-label='close'
-          type='button'
-          onClick={onClose}
-        />
+      <div className={`${modal.title_container} ml-10 mt-10 mr-10`}>
+        <p className='text text_type_main-large'>{title}</p>
+        <CloseIcon type='primary' onClick={closeModal} />
       </div>
+      {children}
     </div>,
     modalRoot
   );
 };
 
-export default Modal;
+Modal.propTypes = {
+  closeModal: PropTypes.func.isRequired,
+  isModalOpen: PropTypes.bool.isRequired,
+  title: PropTypes.string,
+};

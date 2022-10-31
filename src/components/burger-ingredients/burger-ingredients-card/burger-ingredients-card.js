@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import PropTypes from 'prop-types';
 
 import ingredientsCardStyles from './burger-ingredients-card.module.css';
 
@@ -8,14 +9,15 @@ import {
 } from '@ya.praktikum/react-developer-burger-ui-components';
 import { dataPropTypes } from '../../../utils/types';
 
-function BurgerIngredientsCard(props) {
+export function BurgerIngredientsCard(props) {
   const { card, openModal } = props;
   const [isVisibleCounter, setIsVisibleCounter] = useState({
     display: 'block',
   });
 
   const openModalIngredients = () => {
-    openModal();
+    // Отправка данных в попап
+    openModal(card);
   };
 
   return (
@@ -45,6 +47,5 @@ function BurgerIngredientsCard(props) {
 
 BurgerIngredientsCard.propTypes = {
   card: dataPropTypes.isRequired,
+  openModal: PropTypes.func.isRequired,
 };
-
-export default BurgerIngredientsCard;

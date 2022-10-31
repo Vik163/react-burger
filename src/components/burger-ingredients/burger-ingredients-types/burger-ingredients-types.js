@@ -3,11 +3,11 @@ import PropTypes from 'prop-types';
 
 import ingredientsTypesStyles from './burger-ingredients-types.module.css';
 
-import BurgerIngredientsCard from '../burger-ingredients-card/burger-ingredients-card.js';
+import { BurgerIngredientsCard } from '../burger-ingredients-card/burger-ingredients-card.js';
 
 import { dataPropTypes } from '../../../utils/types';
 
-function BurgerIngredientsTypes(props) {
+export function BurgerIngredientsTypes(props) {
   const { title, data, openModal } = props;
   return (
     <section className={` ${ingredientsTypesStyles.type} pl-4`}>
@@ -27,6 +27,6 @@ function BurgerIngredientsTypes(props) {
 
 BurgerIngredientsTypes.propTypes = {
   data: PropTypes.arrayOf(dataPropTypes),
+  openModal: PropTypes.func.isRequired,
+  title: PropTypes.string.isRequired,
 };
-
-export default BurgerIngredientsTypes;

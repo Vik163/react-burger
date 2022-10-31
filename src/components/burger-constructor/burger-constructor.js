@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 
 import constructorStyles from './burger-constructor.module.css';
 
-import Modal from '../modal/modal';
-import ModalOverlay from '../modal-overlay/modal-overlay';
+import { ModalOverlay } from '../modal-overlay/modal-overlay';
+import { OrderDetails } from '../order-details/order-details';
 
 import {
   ConstructorElement,
@@ -14,10 +14,12 @@ import {
 } from '@ya.praktikum/react-developer-burger-ui-components';
 import { dataPropTypes } from '../../utils/types';
 
-function BurgerConstructor(props) {
+export function BurgerConstructor(props) {
   const { data } = props;
+  const totalSum = data.reduce((sum, current) => sum + current.price, 0);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isDataOrder, setIsDataOrder] = useState(123456);
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -46,13 +48,15 @@ function BurgerConstructor(props) {
         </li>
         <div className={constructorStyles.constructor__scrollbar}>
           <ModalOverlay isModalOpen={isModalOpen} closeModal={closeModal} />
-          {isModalOpen && <Modal />}
+          {isModalOpen && (
+            <OrderDetails
+              closeModal={closeModal}
+              isModalOpen={isModalOpen}
+              isDataOrder={isDataOrder}
+            />
+          )}
           {data.map((item) => (
-            <li
-              className={constructorStyles.constructor__item}
-              key={item._id}
-              onClick={openModal}
-            >
+            <li className={constructorStyles.constructor__item} key={item._id}>
               <DragIcon type='primary' />
               <ConstructorElement
                 text={item.name}
@@ -76,9 +80,14 @@ function BurgerConstructor(props) {
         </li>
       </ul>
       <div className={` ${constructorStyles.constructor__price} mr-4`}>
-        <p className='text text_type_digits-medium mr-2'>610</p>
+        <p className='text text_type_digits-medium mr-2'>{totalSum}</p>
         <CurrencyIcon type='primary' />
-        <Button type='primary' size='large' htmlType='submit'>
+        <Button
+          type='primary'
+          size='large'
+          htmlType='submit'
+          onClick={openModal}
+        >
           Оформить заказ
         </Button>
       </div>
@@ -89,5 +98,3 @@ function BurgerConstructor(props) {
 BurgerConstructor.propTypes = {
   data: PropTypes.arrayOf(dataPropTypes).isRequired,
 };
-
-export default BurgerConstructor;

@@ -6,10 +6,8 @@
   position: fixed;
   top: 50%;
   left: 50%;
-
   transform: translate(-50%, -50%);
   width: 720px;
-  height: 718px;
   background-color: #1c1c21;
   padding: 0;
   margin: 0;
@@ -17,69 +15,17 @@
     0px 16px 24px rgba(0, 0, 0, 0.04), 0px 4px 8px rgba(0, 0, 0, 0.04),
     0px 0px 1px rgba(0, 0, 0, 0.04);
   border-radius: 40px;
-  border: 2px solid #4c4cff;
   cursor: default;
   z-index: 2;
 }
-.popup__title {
-  width: 358px;
-  font-size: 24px;
-  line-height: 23px;
-  font-weight: 900;
-  margin: 34px 0 54px;
-}
-.popup_opened {
-  visibility: visible;
-  opacity: 1;
-  z-index: 2;
-}
-.popup__message {
-  width: 358px;
-  margin: 0;
-  text-align: center;
-  font-size: 24px;
-  line-height: 29px;
-  font-weight: 900;
-}
-.popup__sign {
-  margin-top: 60px;
-  margin-bottom: 32px;
-  width: 120px;
-  height: 120px;
-}
-.popup__close {
+.title_container {
   display: flex;
-  align-items: stretch;
-  position: absolute;
-  top: -45px;
-  right: -45px;
-  width: 40px;
-  height: 40px;
-  transform: rotate(45deg);
-  background: none;
-  /* background-image: url(../../../images/add-button.svg); */
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: 40px 40px;
-  border: none;
-  padding: 0;
+  justify-content: space-between;
+  align-items: center;
+  width: 640px;
+  height: 64px;
+}
+
+.title_container > svg {
   cursor: pointer;
-}
-.popup__caption {
-  font-size: 12px;
-  line-height: 12px;
-  font-weight: 400;
-  color: white;
-  margin: 10px 0 0;
-}
-.popup__image {
-  height: 100%;
-  width: 100%;
-  object-fit: cover;
-  cursor: default;
-}
-.popup__container-image {
-  max-width: 75vw;
-  max-height: 75vh;
-  position: relative;
 }
