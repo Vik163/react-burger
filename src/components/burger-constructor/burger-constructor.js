@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import constructorStyles from './burger-constructor.module.css';
 
 import { ModalOverlay } from '../modal-overlay/modal-overlay';
+import { Modal } from '../modal/modal';
 import { OrderDetails } from '../order-details/order-details';
 
 import {
@@ -47,13 +48,13 @@ export function BurgerConstructor(props) {
           />
         </li>
         <div className={constructorStyles.constructor__scrollbar}>
-          <ModalOverlay isModalOpen={isModalOpen} closeModal={closeModal} />
           {isModalOpen && (
-            <OrderDetails
-              closeModal={closeModal}
-              isModalOpen={isModalOpen}
-              isDataOrder={isDataOrder}
-            />
+            <>
+              <ModalOverlay closeModal={closeModal} />
+              <Modal closeModal={closeModal} isModalOpen={isModalOpen}>
+                <OrderDetails isDataOrder={isDataOrder} />
+              </Modal>
+            </>
           )}
           {data.map((item) => (
             <li className={constructorStyles.constructor__item} key={item._id}>

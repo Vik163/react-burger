@@ -6,6 +6,7 @@ import ingredientsStyles from './burger-ingredients.module.css';
 import { BurgerIngredientsTypes } from './burger-ingredients-types/burger-ingredients-types.js';
 import { IngredientDetails } from '../ingredient-details/ingredient-details';
 import { ModalOverlay } from '../modal-overlay/modal-overlay';
+import { Modal } from '../modal/modal';
 
 import { dataPropTypes } from '../../utils/types';
 
@@ -50,14 +51,17 @@ export function BurgerIngredients(props) {
         </Tab>
       </nav>
       <div className={ingredientsStyles.ingredients__container}>
-        <ModalOverlay isModalOpen={isModalOpen} closeModal={closeModal} />
         {isModalOpen && (
-          <IngredientDetails
-            closeModal={closeModal}
-            title='Детали ингредиента'
-            isDataIngredients={isDataIngredients}
-            isModalOpen={isModalOpen}
-          />
+          <>
+            <ModalOverlay closeModal={closeModal} />
+            <Modal
+              closeModal={closeModal}
+              title='Детали ингредиента'
+              isModalOpen={isModalOpen}
+            >
+              <IngredientDetails isDataIngredients={isDataIngredients} />
+            </Modal>
+          </>
         )}
         <BurgerIngredientsTypes
           title='Булки'

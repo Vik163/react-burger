@@ -1,17 +1,12 @@
-import { useState } from 'react';
-import PropTypes from 'prop-types';
-
 import detailsStyles from './ingredient-details.module.css';
-
-import { Modal } from '../modal/modal';
 
 import { dataPropTypes } from '../../utils/types';
 
 export function IngredientDetails(props) {
-  const { isModalOpen, isDataIngredients, closeModal, title } = props;
+  const { isDataIngredients } = props;
 
   return (
-    <Modal closeModal={closeModal} title={title} isModalOpen={isModalOpen}>
+    <>
       <img
         className={detailsStyles.image}
         src={isDataIngredients.image}
@@ -44,13 +39,10 @@ export function IngredientDetails(props) {
           </p>
         </li>
       </ul>
-    </Modal>
+    </>
   );
 }
 
 IngredientDetails.propTypes = {
   isDataIngredients: dataPropTypes.isRequired,
-  isModalOpen: PropTypes.bool.isRequired,
-  closeModal: PropTypes.func.isRequired,
-  title: PropTypes.string.isRequired,
 };
