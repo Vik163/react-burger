@@ -1,0 +1,25 @@
+.ingredients {
+  width: 600px;
+  height: 912px;
+}
+
+.ingredients__container {
+  height: 756px;
+  overflow-y: auto;
+}
+
+.ingredients__container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.ingredients__container::-webkit-scrollbar-track {
+  background: #2f2f37;
+}
+
+.ingredients__container::-webkit-scrollbar-thumb {
+  background: #8585ad;
+}
+
+.ingredients__link {
+  text-decoration: none;
+}

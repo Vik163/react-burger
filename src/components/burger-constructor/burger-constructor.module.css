@@ -1,0 +1,58 @@
+.constructor {
+  width: 600px;
+  height: 912px;
+}
+
+.constructor__container {
+  height: 656px;
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.constructor__icon {
+  height: 24px;
+}
+
+.constructor__scrollbar {
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.constructor__scrollbar::-webkit-scrollbar {
+  width: 8px;
+}
+
+.constructor__scrollbar::-webkit-scrollbar-track {
+  background: #2f2f37;
+}
+
+.constructor__scrollbar::-webkit-scrollbar-thumb {
+  background: #8585ad;
+}
+
+.constructor__item {
+  width: 568px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.constructor__price {
+  display: flex;
+  align-items: center;
+  justify-content: end;
+}
+
+.constructor__price > button {
+  cursor: pointer;
+}
+
+.constructor__price > svg {
+  width: 36px;
+  height: 36px;
+  margin-right: 20px;
+}

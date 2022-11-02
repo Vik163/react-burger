@@ -1,0 +1,21 @@
+.root {
+  background-color: #1a1b22;
+  font-family: 'Jet Brains Mono', Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.page {
+  position: relative;
+  width: 1280px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.main {
+  width: 1240px;
+  display: flex;
+  justify-content: space-between;
+}
