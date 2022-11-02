@@ -49,12 +49,9 @@ export function BurgerConstructor(props) {
         </li>
         <div className={constructorStyles.constructor__scrollbar}>
           {isModalOpen && (
-            <>
-              <ModalOverlay closeModal={closeModal} />
-              <Modal closeModal={closeModal} isModalOpen={isModalOpen}>
-                <OrderDetails isDataOrder={isDataOrder} />
-              </Modal>
-            </>
+            <Modal closeModal={closeModal} isModalOpen={isModalOpen}>
+              <OrderDetails isDataOrder={isDataOrder} />
+            </Modal>
           )}
           {data.map((item) => (
             <li className={constructorStyles.constructor__item} key={item._id}>

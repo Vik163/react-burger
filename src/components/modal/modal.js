@@ -4,6 +4,8 @@ import PropTypes from 'prop-types';
 
 import modal from './modal.module.css';
 
+import { ModalOverlay } from '../modal-overlay/modal-overlay';
+
 import { CloseIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 
 export const Modal = (props) => {
@@ -24,13 +26,16 @@ export const Modal = (props) => {
   }, [isModalOpen, closeModal]);
 
   return ReactDOM.createPortal(
-    <div className={modal.modal}>
-      <div className={`${modal.title_container} ml-10 mt-10 mr-10`}>
-        <p className='text text_type_main-large'>{title}</p>
-        <CloseIcon type='primary' onClick={closeModal} />
+    <>
+      <ModalOverlay closeModal={closeModal} />
+      <div className={modal.modal}>
+        <div className={`${modal.title_container} ml-10 mt-10 mr-10`}>
+          <p className='text text_type_main-large'>{title}</p>
+          <CloseIcon type='primary' onClick={closeModal} />
+        </div>
+        {children}
       </div>
-      {children}
-    </div>,
+    </>,
     modalRoot
   );
 };
