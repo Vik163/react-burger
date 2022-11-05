@@ -1,11 +1,12 @@
-import { useState } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import PropTypes from 'prop-types';
 
 import constructorStyles from './burger-constructor.module.css';
 
-import { ModalOverlay } from '../modal-overlay/modal-overlay';
 import { Modal } from '../modal/modal';
 import { OrderDetails } from '../order-details/order-details';
+
+import { BurgerConstructorContext } from '../../contexts/burgerConstructorContext';
 
 import {
   ConstructorElement,
@@ -13,17 +14,36 @@ import {
   CurrencyIcon,
   Button,
 } from '@ya.praktikum/react-developer-burger-ui-components';
-import { dataPropTypes } from '../../utils/types';
 
 export function BurgerConstructor(props) {
-  const { data } = props;
-  const totalSum = data.reduce((sum, current) => sum + current.price, 0);
+  const { sendOrder, numberOrder } = props;
+  const data = useContext(BurgerConstructorContext);
+  const [bun, setBun] = useState([]);
+  const [ingredients, setIngredients] = useState([]);
+  const [totalSum, setTotalSum] = useState(0);
+
+  useEffect(() => {
+    const totalSumIngredients = ingredients.reduce(
+      (sum, current) => sum + current.price,
+      0
+    );
+
+    if (data && data.length > 0) {
+      setBun(data.filter((item) => item.type === 'bun')[0]);
+      setIngredients(data.filter((item) => !(item.type === 'bun')));
+      if (bun && bun.price) {
+        setTotalSum(totalSumIngredients + bun.price * 2);
+      } else {
+        setTotalSum(totalSumIngredients);
+      }
+    }
+  }, [data, bun]);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isDataOrder, setIsDataOrder] = useState(123456);
 
   const openModal = () => {
     setIsModalOpen(true);
+    sendOrder();
   };
 
   const closeModal = () => {
@@ -35,47 +55,55 @@ export function BurgerConstructor(props) {
       <ul
         className={` ${constructorStyles.constructor__container} mt-25 mb-10 ml-4`}
       >
-        <li
-          className={constructorStyles.constructor__item}
-          style={{ justifyContent: 'end' }}
-        >
-          <ConstructorElement
-            type='top'
-            isLocked={true}
-            text='Краторная булка N-200i (верх)'
-            price={200}
-            thumbnail={data[0].image}
-          />
-        </li>
+        {bun && !(bun.length === 0) && (
+          <li
+            className={constructorStyles.constructor__item}
+            style={{ justifyContent: 'end' }}
+          >
+            <ConstructorElement
+              type='top'
+              isLocked={true}
+              text={`${bun.name} (верх)`}
+              price={bun.price}
+              thumbnail={bun.image}
+            />
+          </li>
+        )}
         <div className={constructorStyles.constructor__scrollbar}>
-          {isModalOpen && (
+          {isModalOpen && numberOrder && (
             <Modal closeModal={closeModal} isModalOpen={isModalOpen}>
-              <OrderDetails isDataOrder={isDataOrder} />
+              <OrderDetails numberOrder={numberOrder} />
             </Modal>
           )}
-          {data.map((item) => (
-            <li className={constructorStyles.constructor__item} key={item._id}>
-              <DragIcon type='primary' />
-              <ConstructorElement
-                text={item.name}
-                price={item.price}
-                thumbnail={item.image}
-              />
-            </li>
-          ))}
+          {ingredients &&
+            ingredients.map((item) => (
+              <li
+                className={constructorStyles.constructor__item}
+                key={item._id}
+              >
+                <DragIcon type='primary' />
+                <ConstructorElement
+                  text={item.name}
+                  price={item.price}
+                  thumbnail={item.image}
+                />
+              </li>
+            ))}
         </div>
-        <li
-          className={constructorStyles.constructor__item}
-          style={{ justifyContent: 'end' }}
-        >
-          <ConstructorElement
-            type='bottom'
-            isLocked={true}
-            text='Краторная булка N-200i (низ)'
-            price={200}
-            thumbnail={data[0].image}
-          />
-        </li>
+        {bun && !(bun.length === 0) && (
+          <li
+            className={constructorStyles.constructor__item}
+            style={{ justifyContent: 'end' }}
+          >
+            <ConstructorElement
+              type='bottom'
+              isLocked={true}
+              text={`${bun.name} (низ)`}
+              price={bun.price}
+              thumbnail={bun.image}
+            />
+          </li>
+        )}
       </ul>
       <div className={` ${constructorStyles.constructor__price} mr-4`}>
         <p className='text text_type_digits-medium mr-2'>{totalSum}</p>
@@ -94,5 +122,6 @@ export function BurgerConstructor(props) {
 }
 
 BurgerConstructor.propTypes = {
-  data: PropTypes.arrayOf(dataPropTypes).isRequired,
+  sendOrder: PropTypes.func.isRequired,
+  number: PropTypes.number,
 };

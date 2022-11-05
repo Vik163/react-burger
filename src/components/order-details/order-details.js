@@ -1,16 +1,13 @@
-import { useState } from 'react';
 import PropTypes from 'prop-types';
-
-import { dataPropTypes } from '../../utils/types';
 
 import ok from '../../images/ok.png';
 
 export function OrderDetails(props) {
-  const { isDataOrder } = props;
+  const { numberOrder } = props;
 
   return (
     <>
-      <p className='text text_type_digits-large mt-4 mb-8'>{isDataOrder}</p>
+      <p className='text text_type_digits-large mt-4 mb-8'>{numberOrder}</p>
       <p className='text text_type_main-medium mb-15'>идентификатор заказа</p>
       <img src={ok} alt='ok' />
       <p className='text text_type_main-default mt-15 mb-2'>
@@ -27,5 +24,5 @@ export function OrderDetails(props) {
 }
 
 OrderDetails.propTypes = {
-  isDataOrder: PropTypes.number, //Временно
+  numberOrder: PropTypes.number.isRequired,
 };

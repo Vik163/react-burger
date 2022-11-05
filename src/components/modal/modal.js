@@ -11,7 +11,7 @@ import { CloseIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 export const Modal = (props) => {
   const { isModalOpen, title, closeModal, children } = props;
   //Корневой элемент
-  const modalRoot = document.querySelector('#page');
+  const modalRoot = document.querySelector('#modals');
 
   useEffect(() => {
     if (!isModalOpen) return;

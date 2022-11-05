@@ -44,7 +44,7 @@
 .constructor__price {
   display: flex;
   align-items: center;
-  justify-content: end;
+  justify-content: flex-end;
 }
 
 .constructor__price > button {
