@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from 'react';
+import { useState, useContext, useMemo } from 'react';
 import PropTypes from 'prop-types';
 
 import constructorStyles from './burger-constructor.module.css';
@@ -6,7 +6,7 @@ import constructorStyles from './burger-constructor.module.css';
 import { Modal } from '../modal/modal';
 import { OrderDetails } from '../order-details/order-details';
 
-import { BurgerConstructorContext } from '../../contexts/burgerConstructorContext';
+import { BurgerContext } from '../../contexts/burgerContext';
 
 import {
   ConstructorElement,
@@ -17,12 +17,12 @@ import {
 
 export function BurgerConstructor(props) {
   const { sendOrder, numberOrder } = props;
-  const data = useContext(BurgerConstructorContext);
+  const data = useContext(BurgerContext).dataOrder;
   const [bun, setBun] = useState([]);
   const [ingredients, setIngredients] = useState([]);
   const [totalSum, setTotalSum] = useState(0);
 
-  useEffect(() => {
+  useMemo(() => {
     const totalSumIngredients = ingredients.reduce(
       (sum, current) => sum + current.price,
       0
@@ -56,10 +56,7 @@ export function BurgerConstructor(props) {
         className={` ${constructorStyles.constructor__container} mt-25 mb-10 ml-4`}
       >
         {bun && !(bun.length === 0) && (
-          <li
-            className={constructorStyles.constructor__item}
-            style={{ justifyContent: 'end' }}
-          >
+          <li className={constructorStyles.constructor__item}>
             <ConstructorElement
               type='top'
               isLocked={true}
@@ -91,10 +88,7 @@ export function BurgerConstructor(props) {
             ))}
         </div>
         {bun && !(bun.length === 0) && (
-          <li
-            className={constructorStyles.constructor__item}
-            style={{ justifyContent: 'end' }}
-          >
+          <li className={constructorStyles.constructor__item}>
             <ConstructorElement
               type='bottom'
               isLocked={true}

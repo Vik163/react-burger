@@ -1,1 +1,2 @@
-@import url('./fonts/JetBrainsMono.css');
+@import url('./vendor/normalize.css');
+@import url('./vendor/fonts/JetBrainsMono.css');

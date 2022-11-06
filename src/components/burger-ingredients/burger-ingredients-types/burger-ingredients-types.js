@@ -7,10 +7,10 @@ import { BurgerIngredientsCard } from '../burger-ingredients-card/burger-ingredi
 
 import { dataPropTypes } from '../../../utils/types';
 
-export function BurgerIngredientsTypes(props) {
+export const BurgerIngredientsTypes = React.forwardRef((props, ref) => {
   const { title, data, openModal } = props;
   return (
-    <section className={` ${ingredientsTypesStyles.type} pl-4`}>
+    <section className={` ${ingredientsTypesStyles.type} pl-4`} ref={ref}>
       <h2 className='text text_type_main-medium mt-10 mb-6'>{title}</h2>
       <ul className={ingredientsTypesStyles.type__container}>
         {data.map((card) => (
@@ -23,7 +23,7 @@ export function BurgerIngredientsTypes(props) {
       </ul>
     </section>
   );
-}
+});
 
 BurgerIngredientsTypes.propTypes = {
   data: PropTypes.arrayOf(dataPropTypes),

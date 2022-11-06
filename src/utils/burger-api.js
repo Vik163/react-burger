@@ -8,26 +8,31 @@ class BurgerApi {
     return res.ok ? res.json() : Promise.reject(res.status);
   }
 
+  _request(url, options) {
+    return fetch(`${this._settings.baseUrl}${url}`, options).then(
+      this._checkResponse
+    );
+  }
+
   getIngredients() {
-    return fetch(`${this._settings.baseUrl}/ingredients`, {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    }).then(this._checkResponse);
+    return this._request('/ingredients', {
+      headers: this._settings.headers,
+    });
   }
 
   sendOrder(order) {
-    return fetch(`${this._settings.baseUrl}/orders `, {
+    return this._request('/orders', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      headers: this._settings.headers,
       body: JSON.stringify(order),
-    }).then(this._checkResponse);
+    });
   }
 }
 
 //
 export const burgerApi = new BurgerApi({
   baseUrl: 'https://norma.nomoreparties.space/api',
+  headers: {
+    'Content-Type': 'application/json',
+  },
 });

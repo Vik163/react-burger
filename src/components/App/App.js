@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import appStyles from './App.module.css';
+import appStyles from './app.module.css';
 
 import { AppHeader } from '../app-header/app-header.js';
 import { BurgerConstructor } from '../burger-constructor/burger-constructor.js';
@@ -7,7 +7,7 @@ import { BurgerIngredients } from '../burger-ingredients/burger-ingredients.js';
 import { ErrorsPage } from '../errors-page/errors-page';
 import { burgerApi } from '../../utils/burger-api';
 
-import { BurgerConstructorContext } from '../../contexts/burgerConstructorContext';
+import { BurgerContext } from '../../contexts/burgerContext';
 
 function App() {
   const [data, setData] = useState([]);
@@ -60,19 +60,19 @@ function App() {
 
   return (
     <div className={appStyles.page} id='page'>
-      <AppHeader />
-      {data.length > 0 && (
-        <main className={appStyles.main}>
-          <BurgerIngredients data={data} />
-          <BurgerConstructorContext.Provider value={dataOrder}>
+      <BurgerContext.Provider value={{ data, dataOrder }}>
+        <AppHeader />
+        {data.length > 0 && (
+          <main className={appStyles.main}>
+            <BurgerIngredients />
             <BurgerConstructor
               sendOrder={sendOrder}
               numberOrder={resultOrder.order && resultOrder.order.number}
             />
-          </BurgerConstructorContext.Provider>
-        </main>
-      )}
-      <ErrorsPage error={error} />
+          </main>
+        )}
+      </BurgerContext.Provider>
+      {error.status && <ErrorsPage error={error} />}
     </div>
   );
 }

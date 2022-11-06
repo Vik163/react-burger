@@ -1,5 +1,4 @@
-import { useState } from 'react';
-import PropTypes from 'prop-types';
+import { useState, useRef, useContext } from 'react';
 
 import ingredientsStyles from './burger-ingredients.module.css';
 
@@ -7,12 +6,15 @@ import { BurgerIngredientsTypes } from './burger-ingredients-types/burger-ingred
 import { IngredientDetails } from '../ingredient-details/ingredient-details';
 import { Modal } from '../modal/modal';
 
-import { dataPropTypes } from '../../utils/types';
+import { BurgerContext } from '../../contexts/burgerContext';
 
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 
-export function BurgerIngredients(props) {
-  const { data } = props;
+export function BurgerIngredients() {
+  const data = useContext(BurgerContext).data;
+  const bunRef = useRef();
+  const sauceRef = useRef();
+  const fillingRef = useRef();
   // Данные по видам
   const sauce = data.filter((item) => item.type === 'sauce');
   const bun = data.filter((item) => item.type === 'bun');
@@ -31,10 +33,21 @@ export function BurgerIngredients(props) {
     setIsModalOpen(false);
   };
 
+  const clickTab = (e) => {
+    const tab = e.target.textContent;
+    if (tab === 'Булки') {
+      bunRef.current.scrollIntoView({ block: 'start', behavior: 'smooth' });
+    } else if (tab === 'Соусы') {
+      sauceRef.current.scrollIntoView({ block: 'start', behavior: 'smooth' });
+    } else if (tab === 'Начинки') {
+      fillingRef.current.scrollIntoView({ block: 'start', behavior: 'smooth' });
+    }
+  };
+
   return (
     <section className={` ${ingredientsStyles.ingredients} mb-10`}>
       <h1 className='text text_type_main-large mt-10 mb-5'>Соберите бургер</h1>
-      <nav style={{ display: 'flex' }}>
+      <nav className={ingredientsStyles.links} onClick={clickTab}>
         <Tab value='Булки' active={current === 'Булки'} onClick={setCurrent}>
           Булки
         </Tab>
@@ -63,22 +76,21 @@ export function BurgerIngredients(props) {
           title='Булки'
           data={bun}
           openModal={openModal}
+          ref={bunRef}
         />
         <BurgerIngredientsTypes
           title='Соусы'
           data={sauce}
           openModal={openModal}
+          ref={sauceRef}
         />
         <BurgerIngredientsTypes
           title='Начинки'
           data={filling}
           openModal={openModal}
+          ref={fillingRef}
         />
       </div>
     </section>
   );
 }
-
-BurgerIngredients.propTypes = {
-  data: PropTypes.arrayOf(dataPropTypes).isRequired,
-};

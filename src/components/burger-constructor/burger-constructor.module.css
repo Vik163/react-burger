@@ -41,12 +41,22 @@
   align-items: center;
 }
 
+.constructor__item:first-child {
+  justify-content: flex-end;
+}
+
+.constructor__item:last-child {
+  justify-content: flex-end;
+}
+
 .constructor__price {
   display: flex;
   align-items: center;
   justify-content: flex-end;
 }
 
+/*Я не смог обратиться к стилям элементов из библиотеки
+и класс не получилось навесить. Не знаю и не нашел как это сделать.*/
 .constructor__price > button {
   cursor: pointer;
 }
