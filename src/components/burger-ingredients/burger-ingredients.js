@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import ingredientsStyles from './burger-ingredients.module.css';
@@ -6,26 +6,29 @@ import ingredientsStyles from './burger-ingredients.module.css';
 import { BurgerIngredientsTypes } from './burger-ingredients-types/burger-ingredients-types.js';
 import { IngredientDetails } from '../ingredient-details/ingredient-details';
 import { Modal } from '../modal/modal';
+import { setIngredientDetails } from '../../services/actions/ingredient-details';
 
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 
 export function BurgerIngredients() {
+  const dispatch = useDispatch();
   const cards = useSelector((store) => store.burgerIngredients.cards);
   const bunRef = useRef();
   const sauceRef = useRef();
   const fillingRef = useRef();
+
   // Данные по видам
   const sauce = cards.filter((item) => item.type === 'sauce');
   const bun = cards.filter((item) => item.type === 'bun');
   const filling = cards.filter((item) => item.type === 'main');
 
-  const [current, setCurrent] = useState('');
+  const [current, setCurrent] = useState('Булки');
+  const [scroll, setScroll] = useState('Булки');
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isDataIngredients, setIsDataIngredients] = useState({});
 
   const openModal = (card) => {
     setIsModalOpen(true);
-    setIsDataIngredients(card);
+    dispatch(setIngredientDetails(card));
   };
 
   const closeModal = () => {
@@ -43,9 +46,42 @@ export function BurgerIngredients() {
     }
   };
 
+  const onScroll = (e) => {
+    const scroll = e.currentTarget.scrollTop;
+    setScroll(scroll);
+  };
+
+  const positionBlocks = () => {
+    if (bunRef.current) {
+      const positionBun = bunRef.current.offsetTop;
+      const positionSauce = sauceRef.current.offsetTop;
+      const positionFilling = fillingRef.current.offsetTop;
+      const position = {
+        bun: (positionSauce - positionBun) / 1.7,
+        sauce:
+          positionSauce - positionBun + (positionFilling - positionSauce) / 1.7,
+      };
+      return position;
+    }
+  };
+
+  useEffect(() => {
+    if (bunRef.current) {
+      const blocks = positionBlocks();
+
+      if (scroll > blocks.bun && scroll <= blocks.sauce) {
+        setCurrent('Соусы');
+      } else if (scroll > blocks.sauce) {
+        setCurrent('Начинки');
+      } else {
+        setCurrent('Булки');
+      }
+    }
+  }, [scroll]);
+
   return (
     <section className={` ${ingredientsStyles.ingredients} mb-10`}>
-      <h1 className='text text_type_main-large mt-10 mb-5'>Соберите бургер</h1>
+      <h1 className='text text_type_main-large mt-10 mb-7'>Соберите бургер</h1>
       <nav className={ingredientsStyles.links} onClick={clickTab}>
         <Tab value='Булки' active={current === 'Булки'} onClick={setCurrent}>
           Булки
@@ -61,14 +97,17 @@ export function BurgerIngredients() {
           Начинки
         </Tab>
       </nav>
-      <div className={ingredientsStyles.ingredients__container}>
+      <div
+        className={ingredientsStyles.ingredients__container}
+        onScroll={onScroll}
+      >
         {isModalOpen && (
           <Modal
             closeModal={closeModal}
             title='Детали ингредиента'
             isModalOpen={isModalOpen}
           >
-            <IngredientDetails isDataIngredients={isDataIngredients} />
+            <IngredientDetails />
           </Modal>
         )}
         <BurgerIngredientsTypes

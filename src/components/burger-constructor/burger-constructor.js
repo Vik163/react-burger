@@ -1,12 +1,12 @@
-import { useState, useContext, useMemo } from 'react';
+import { useState, useMemo } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
 
 import constructorStyles from './burger-constructor.module.css';
 
 import { Modal } from '../modal/modal';
 import { OrderDetails } from '../order-details/order-details';
-
-import { BurgerContext } from '../../contexts/burgerContext';
+import { sendOrder } from '../../services/actions/burger-constructor';
 
 import {
   ConstructorElement,
@@ -15,35 +15,36 @@ import {
   Button,
 } from '@ya.praktikum/react-developer-burger-ui-components';
 
-export function BurgerConstructor(props) {
-  const { sendOrder, numberOrder } = props;
-  const data = useContext(BurgerContext).dataOrder;
-  const [bun, setBun] = useState([]);
-  const [ingredients, setIngredients] = useState([]);
+export function BurgerConstructor() {
+  const dispatch = useDispatch();
+  const { dataOrder, resultOrder } = useSelector((store) => ({
+    dataOrder: store.burgerConstructor.dataOrder,
+    resultOrder: store.burgerConstructor.resultOrder,
+  }));
+
+  const bun = dataOrder.bun;
+  const ingredients = dataOrder.ingredients;
   const [totalSum, setTotalSum] = useState(0);
 
   useMemo(() => {
-    const totalSumIngredients = ingredients.reduce(
-      (sum, current) => sum + current.price,
-      0
-    );
+    const totalSumIngredients =
+      ingredients &&
+      ingredients.reduce((sum, current) => sum + current.price, 0);
 
-    if (data && data.length > 0) {
-      setBun(data.filter((item) => item.type === 'bun')[0]);
-      setIngredients(data.filter((item) => !(item.type === 'bun')));
+    if (bun && ingredients.length > 0) {
       if (bun && bun.price) {
         setTotalSum(totalSumIngredients + bun.price * 2);
       } else {
         setTotalSum(totalSumIngredients);
       }
     }
-  }, [data, bun]);
+  }, [dataOrder, bun]);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const openModal = () => {
     setIsModalOpen(true);
-    sendOrder();
+    dispatch(sendOrder(dataOrder));
   };
 
   const closeModal = () => {
@@ -67,9 +68,9 @@ export function BurgerConstructor(props) {
           </li>
         )}
         <div className={constructorStyles.constructor__scrollbar}>
-          {isModalOpen && numberOrder && (
+          {isModalOpen && resultOrder && (
             <Modal closeModal={closeModal} isModalOpen={isModalOpen}>
-              <OrderDetails numberOrder={numberOrder} />
+              <OrderDetails />
             </Modal>
           )}
           {ingredients &&
@@ -115,7 +116,7 @@ export function BurgerConstructor(props) {
   );
 }
 
-BurgerConstructor.propTypes = {
-  sendOrder: PropTypes.func.isRequired,
-  number: PropTypes.number,
-};
+// BurgerConstructor.propTypes = {
+//   sendOrder: PropTypes.func.isRequired,
+//   result: PropTypes.result,
+// };
