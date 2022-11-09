@@ -7,11 +7,9 @@ export const SEND_ORDER_FAILED = 'SEND_ORDER_FAILED';
 
 export function setDataOrder(dataOrder) {
   return function (dispatch) {
-    const bun = dataOrder.filter((item) => item.type === 'bun')[0];
-    const ingredients = dataOrder.filter((item) => !(item.type === 'bun'));
     dispatch({
       type: 'DATA_ORDER',
-      dataOrder: { bun: bun, ingredients: ingredients },
+      dataOrder: { bun: dataOrder.bun, ingredients: dataOrder.ingredients },
     });
   };
 }

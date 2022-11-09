@@ -1,7 +1,11 @@
 import { useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { useDrag } from 'react-dnd';
 import PropTypes from 'prop-types';
 
 import ingredientsCardStyles from './burger-ingredients-card.module.css';
+
+import { setCardOrder } from '../../../services/actions/burger-ingredients-card';
 
 import {
   Counter,
@@ -10,10 +14,21 @@ import {
 import { dataPropTypes } from '../../../utils/types';
 
 export function BurgerIngredientsCard(props) {
+  const dispatch = useDispatch();
   const { card, openModal } = props;
   const [isVisibleCounter, setIsVisibleCounter] = useState({
     display: 'block',
   });
+
+  // const [, dragRef] = useDrag({
+  //   type: 'bun',
+  //   item: card._id,
+  // });
+
+  const onDragHandler = (e) => {
+    e.preventDefault();
+    dispatch(setCardOrder(card));
+  };
 
   const openModalIngredients = () => {
     // Отправка данных в попап
@@ -22,7 +37,13 @@ export function BurgerIngredientsCard(props) {
 
   return (
     <>
-      <li className={ingredientsCardStyles.card} onClick={openModalIngredients}>
+      <li
+        className={ingredientsCardStyles.card}
+        onClick={openModalIngredients}
+        // ref={dragRef}
+        draggable
+        onDrag={(e) => onDragHandler(e)}
+      >
         <div style={isVisibleCounter}>
           <Counter count={1} size='default' />
         </div>
@@ -45,7 +66,7 @@ export function BurgerIngredientsCard(props) {
   );
 }
 
-BurgerIngredientsCard.propTypes = {
-  card: dataPropTypes.isRequired,
-  openModal: PropTypes.func.isRequired,
-};
+// BurgerIngredientsCard.propTypes = {
+//   card: dataPropTypes.isRequired,
+//   openModal: PropTypes.func.isRequired,
+// };
