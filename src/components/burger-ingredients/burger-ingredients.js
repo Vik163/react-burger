@@ -1,4 +1,5 @@
-import { useState, useRef, useContext } from 'react';
+import { useState, useRef } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 
 import ingredientsStyles from './burger-ingredients.module.css';
 
@@ -6,19 +7,17 @@ import { BurgerIngredientsTypes } from './burger-ingredients-types/burger-ingred
 import { IngredientDetails } from '../ingredient-details/ingredient-details';
 import { Modal } from '../modal/modal';
 
-import { BurgerContext } from '../../contexts/burgerContext';
-
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 
 export function BurgerIngredients() {
-  const data = useContext(BurgerContext).data;
+  const cards = useSelector((store) => store.burgerIngredients.cards);
   const bunRef = useRef();
   const sauceRef = useRef();
   const fillingRef = useRef();
   // Данные по видам
-  const sauce = data.filter((item) => item.type === 'sauce');
-  const bun = data.filter((item) => item.type === 'bun');
-  const filling = data.filter((item) => item.type === 'main');
+  const sauce = cards.filter((item) => item.type === 'sauce');
+  const bun = cards.filter((item) => item.type === 'bun');
+  const filling = cards.filter((item) => item.type === 'main');
 
   const [current, setCurrent] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);

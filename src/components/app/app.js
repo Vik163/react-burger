@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import appStyles from './app.module.css';
 
 import { AppHeader } from '../app-header/app-header.js';
@@ -6,11 +7,33 @@ import { BurgerConstructor } from '../burger-constructor/burger-constructor.js';
 import { BurgerIngredients } from '../burger-ingredients/burger-ingredients.js';
 import { ErrorsPage } from '../errors-page/errors-page';
 import { burgerApi } from '../../utils/burger-api';
+import { getCards } from '../../services/actions/burger-ingredients';
 
 import { BurgerContext } from '../../contexts/burgerContext';
 
 function App() {
-  const [data, setData] = useState([]);
+  const dispatch = useDispatch();
+
+  const {
+    cards,
+    cardsFailed,
+    statusRequest,
+    messageError,
+    promoDiscount,
+    cardsRequest,
+    promoFailed,
+    itemsRequest,
+  } = useSelector((store) => ({
+    cards: store.burgerIngredients.cards,
+    cardsFailed: store.burgerIngredients.cardsFailed,
+    cardsRequest: store.burgerIngredients.cardsRequest,
+    statusRequest: store.burgerIngredients.statusRequest,
+    messageError: store.burgerIngredients.messageError,
+    promoFailed: store.promoFailed,
+    itemsRequeste: store.itemsRequest,
+    promoDiscount: store.promoDiscount,
+  }));
+
   const [dataOrder, setDataOrder] = useState([]);
   const [resultOrder, setResultOrder] = useState({});
   const [error, setError] = useState({
@@ -19,17 +42,7 @@ function App() {
   });
 
   useEffect(() => {
-    burgerApi
-      .getIngredients()
-      .then((data) => {
-        setData(data.data);
-        setDataOrder(data.data); // Временно
-      })
-      .catch((err) => {
-        err === 404
-          ? setError({ status: err, message: 'Запрашиваемые файлы не найдены' })
-          : setError({ status: err, message: 'Внутренняя ошибка сервера' });
-      });
+    dispatch(getCards());
   }, []);
 
   function sendOrder() {
@@ -60,9 +73,9 @@ function App() {
 
   return (
     <div className={appStyles.page} id='page'>
-      <BurgerContext.Provider value={{ data, dataOrder }}>
+      <BurgerContext.Provider value={{ dataOrder }}>
         <AppHeader />
-        {data.length > 0 && (
+        {cards.length > 0 && (
           <main className={appStyles.main}>
             <BurgerIngredients />
             <BurgerConstructor
@@ -72,7 +85,7 @@ function App() {
           </main>
         )}
       </BurgerContext.Provider>
-      {error.status && <ErrorsPage error={error} />}
+      {messageError && <ErrorsPage />}
     </div>
   );
 }
