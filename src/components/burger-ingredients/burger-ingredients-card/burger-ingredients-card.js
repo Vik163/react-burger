@@ -1,6 +1,5 @@
 import { useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { useDrag } from 'react-dnd';
+import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 
 import ingredientsCardStyles from './burger-ingredients-card.module.css';
@@ -16,18 +15,17 @@ import { dataPropTypes } from '../../../utils/types';
 export function BurgerIngredientsCard(props) {
   const dispatch = useDispatch();
   const { card, openModal } = props;
+  const { dataOrder, cardOrder } = useSelector((store) => ({
+    cardOrder: store.burgerIngredientsCard.cardOrder,
+    dataOrder: store.burgerConstructor.dataOrder,
+  }));
   const [isVisibleCounter, setIsVisibleCounter] = useState({
     display: 'block',
   });
 
-  // const [, dragRef] = useDrag({
-  //   type: 'bun',
-  //   item: card._id,
-  // });
-
   const onDragHandler = (e) => {
     e.preventDefault();
-    dispatch(setCardOrder(card));
+    dispatch(setCardOrder(card, dataOrder));
   };
 
   const openModalIngredients = () => {
@@ -40,7 +38,6 @@ export function BurgerIngredientsCard(props) {
       <li
         className={ingredientsCardStyles.card}
         onClick={openModalIngredients}
-        // ref={dragRef}
         draggable
         onDrag={(e) => onDragHandler(e)}
       >

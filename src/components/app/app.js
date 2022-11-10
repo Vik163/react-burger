@@ -1,5 +1,7 @@
 import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
 import appStyles from './app.module.css';
 
 import { AppHeader } from '../app-header/app-header.js';
@@ -37,13 +39,15 @@ function App() {
 
   return (
     <div className={appStyles.page} id='page'>
-      <AppHeader />
-      {cards.length > 0 && (
-        <main className={appStyles.main}>
-          <BurgerIngredients />
-          <BurgerConstructor />
-        </main>
-      )}
+      <DndProvider backend={HTML5Backend}>
+        <AppHeader />
+        {cards.length > 0 && (
+          <main className={appStyles.main}>
+            <BurgerIngredients />
+            <BurgerConstructor />
+          </main>
+        )}
+      </DndProvider>
       {messageError && <ErrorsPage />}
     </div>
   );

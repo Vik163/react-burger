@@ -12,7 +12,6 @@ export const burgerIngredientsCardReducer = (state = initialState, action) => {
         cardOrder: action.cardOrder,
       };
     }
-
     default: {
       return state;
     }

@@ -11,9 +11,6 @@
   flex-direction: column;
   gap: 16px;
 }
-.constructor__icon {
-  height: 24px;
-}
 
 .constructor__scrollbar {
   overflow-y: auto;
@@ -37,16 +34,13 @@
 .constructor__item {
   width: 568px;
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
   align-items: center;
+  cursor: pointer;
 }
 
-.constructor__item:first-child {
-  justify-content: flex-end;
-}
-
-.constructor__item:last-child {
-  justify-content: flex-end;
+.constructor__item > svg {
+  margin-right: 10px;
 }
 
 .constructor__price {
@@ -55,8 +49,6 @@
   justify-content: flex-end;
 }
 
-/*Я не смог обратиться к стилям элементов из библиотеки
-и класс не получилось навесить. Не знаю и не нашел как это сделать.*/
 .constructor__price > button {
   cursor: pointer;
 }
