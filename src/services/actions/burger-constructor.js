@@ -1,3 +1,4 @@
+import { v4 as uuidv4 } from 'uuid';
 import { burgerApi } from '../../utils/burger-api';
 
 export const DATA_ORDER = 'DATA_ORDER';

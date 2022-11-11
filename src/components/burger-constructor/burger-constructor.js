@@ -1,12 +1,19 @@
 import { useState, useEffect, useMemo, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { useDrop } from 'react-dnd';
+
 import PropTypes from 'prop-types';
 
 import constructorStyles from './burger-constructor.module.css';
 
+import {
+  setCardOrder,
+  setCardOrderId,
+} from '../../services/actions/burger-ingredients-card';
+
 import { Modal } from '../modal/modal';
 import { OrderDetails } from '../order-details/order-details';
-import { DragItem } from './drag-item';
+import { DragCard } from './drag-item';
 import {
   sendOrder,
   setDataOrder,
@@ -31,33 +38,17 @@ export function BurgerConstructor(props) {
   const [ingredientsMove, setIngredientsMove] = useState(ingredients);
   const [totalSum, setTotalSum] = useState(0);
 
+  const [, drop] = useDrop({
+    accept: 'item',
+    drop(item) {
+      item.card && dispatch(setCardOrder(item.card, cardOrder, dataOrder));
+    },
+  });
+
   useEffect(() => {
-    setIngredientsMove(dataOrder.ingredients);
-  }, [dataOrder.ingredients]);
-
-  //логика подсчета суммы----------------------------------------
-  useMemo(() => {
-    const totalSumIngredients =
-      ingredients &&
-      ingredients.reduce((sum, current) => sum + current.price, 0);
-    if (bun || ingredients) {
-      if (bun && !ingredients) {
-        setTotalSum(bun.price * 2);
-      } else if (!bun && ingredients) {
-        setTotalSum(totalSumIngredients);
-      } else {
-        setTotalSum(totalSumIngredients + bun.price * 2);
-      }
-    }
-  }, [dataOrder, bun]);
-
-  const handleDragOver = (e) => e.preventDefault();
-
-  //Добавление данных к заказу--------------------------------
-  const handleDrop = () => {
     const cardCancelAdd =
       ingredients && ingredients.some((i) => i === cardOrder);
-    if (!cardCancelAdd) {
+    if (!cardCancelAdd && cardOrder) {
       if (cardOrder.type === 'bun') {
         dispatch(setDataOrder({ ...dataOrder, bun: cardOrder }));
       } else {
@@ -80,7 +71,28 @@ export function BurgerConstructor(props) {
         }
       }
     }
-  };
+  }, [cardOrder]);
+
+  useEffect(() => {
+    setIngredientsMove(dataOrder.ingredients);
+  }, [dataOrder.ingredients]);
+
+  //логика подсчета суммы----------------------------------------
+  useMemo(() => {
+    const totalSumIngredients =
+      ingredients &&
+      ingredients.reduce((sum, current) => sum + current.price, 0);
+    if (bun || ingredients) {
+      if (bun && !ingredients) {
+        setTotalSum(bun.price * 2);
+      } else if (!bun && ingredients) {
+        setTotalSum(totalSumIngredients);
+      } else {
+        setTotalSum(totalSumIngredients + bun.price * 2);
+      }
+    }
+  }, [dataOrder, bun]);
+
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const openModal = () => {
@@ -109,9 +121,11 @@ export function BurgerConstructor(props) {
     (dragIndex, hoverIndex) => {
       const dragItem = ingredientsMove[dragIndex];
       const hoverItem = ingredientsMove[hoverIndex];
+
       // Меняет местами dragItem и hoverItem в массиве
       setIngredientsMove((ingredientsMove) => {
         const updatedIngredientsMove = [...ingredientsMove];
+
         updatedIngredientsMove[dragIndex] = hoverItem;
         updatedIngredientsMove[hoverIndex] = dragItem;
         return updatedIngredientsMove;
@@ -121,11 +135,7 @@ export function BurgerConstructor(props) {
   );
 
   return (
-    <section
-      className={constructorStyles.constructor}
-      onDragOver={handleDragOver}
-      onDrop={handleDrop}
-    >
+    <section className={constructorStyles.constructor} ref={drop}>
       <ul
         className={` ${constructorStyles.constructor__container} mt-25 mb-10 ml-4`}
       >
@@ -148,7 +158,7 @@ export function BurgerConstructor(props) {
           )}
           {ingredientsMove &&
             ingredientsMove.map((item, index) => (
-              <DragItem
+              <DragCard
                 key={item._id}
                 index={index}
                 item={item}
@@ -156,7 +166,7 @@ export function BurgerConstructor(props) {
                 deleteItem={deleteItem}
               >
                 {children}
-              </DragItem>
+              </DragCard>
             ))}
         </div>
         {bun && !(bun.length === 0) && (

@@ -1,10 +1,10 @@
-import { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useEffect, useState, useMemo } from 'react';
+import { useSelector } from 'react-redux';
+import { useDrag } from 'react-dnd';
+
 import PropTypes from 'prop-types';
 
 import ingredientsCardStyles from './burger-ingredients-card.module.css';
-
-import { setCardOrder } from '../../../services/actions/burger-ingredients-card';
 
 import {
   Counter,
@@ -13,20 +13,31 @@ import {
 import { dataPropTypes } from '../../../utils/types';
 
 export function BurgerIngredientsCard(props) {
-  const dispatch = useDispatch();
   const { card, openModal } = props;
   const { dataOrder, cardOrder } = useSelector((store) => ({
     cardOrder: store.burgerIngredientsCard.cardOrder,
     dataOrder: store.burgerConstructor.dataOrder,
   }));
-  const [isVisibleCounter, setIsVisibleCounter] = useState({
-    display: 'block',
+  const [isCounter, setIsCounter] = useState({
+    [card.name]: 0,
   });
+  const [, drag] = useDrag({
+    type: 'item',
+    item: { card },
+  });
+  // console.log(isCounter);
+  // console.log(dataOrder.bun);
 
-  const onDragHandler = (e) => {
-    e.preventDefault();
-    dispatch(setCardOrder(card, dataOrder));
-  };
+  // useMemo(() => {
+  //   dispatch(setCardOrder(card, dataOrder));
+  //   dataOrder.ingredients &&
+  //     dataOrder.ingredients.map((i) => {
+  //       if (i.name === card.name) {
+  //         setIsCounter({ ...isCounter, [card.name]: isCounter[card.name] + 1 });
+  //       }
+  //     });
+  //   // dataOrder.bun && setIsCounter(isCounter + 1);
+  // }, []);
 
   const openModalIngredients = () => {
     // Отправка данных в попап
@@ -38,11 +49,10 @@ export function BurgerIngredientsCard(props) {
       <li
         className={ingredientsCardStyles.card}
         onClick={openModalIngredients}
-        draggable
-        onDrag={(e) => onDragHandler(e)}
+        ref={drag}
       >
-        <div style={isVisibleCounter}>
-          <Counter count={1} size='default' />
+        <div style={{ display: isCounter[card.name] > 0 ? 'block' : 'none' }}>
+          <Counter count={isCounter[card.name]} size='default' />
         </div>
         <img
           className={ingredientsCardStyles.card__image}

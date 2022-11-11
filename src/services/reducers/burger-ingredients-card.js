@@ -1,7 +1,7 @@
 import { CARD_ORDER } from '../actions/burger-ingredients-card';
 
 const initialState = {
-  cardOrder: {},
+  cardOrder: null,
 };
 
 export const burgerIngredientsCardReducer = (state = initialState, action) => {

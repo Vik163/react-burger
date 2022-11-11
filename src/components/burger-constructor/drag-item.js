@@ -8,7 +8,7 @@ import {
   DragIcon,
 } from '@ya.praktikum/react-developer-burger-ui-components';
 
-export const DragItem = ({ item, index, moveItem, deleteItem }) => {
+export const DragCard = ({ item, index, moveItem, deleteItem }) => {
   const [{ isDragging }, dragRef] = useDrag({
     type: 'item',
     item: { index },
@@ -20,6 +20,9 @@ export const DragItem = ({ item, index, moveItem, deleteItem }) => {
   const [, dropRef] = useDrop({
     accept: 'item',
     hover: (item, monitor) => {
+      if (!ref.current || item.card) {
+        return;
+      }
       const dragIndex = item.index;
       const hoverIndex = index;
       // Перемещает вверх или вниз, когда курсор мыши выходит за среднюю ось Y элемента

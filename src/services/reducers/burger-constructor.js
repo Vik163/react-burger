@@ -27,6 +27,7 @@ export const burgerConstructorReducer = (state = initialState, action) => {
         },
       };
     }
+
     case SEND_ORDER_REQUEST: {
       return {
         ...state,
