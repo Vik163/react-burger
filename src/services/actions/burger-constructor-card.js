@@ -16,7 +16,7 @@ export function setCardOrder(item, cardOrder, ingredients) {
 
     dispatch({
       type: 'CARD_ORDER',
-      cardOrder: { ...item, _id: isIdRepeat ? uuidv4() : item._id },
+      cardOrder: { ...item, _id: isIdRepeat() ? uuidv4() : item._id },
     });
   };
 }

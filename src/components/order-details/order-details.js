@@ -6,7 +6,7 @@ import ok from '../../images/ok.png';
 
 export function OrderDetails() {
   const resultOrder = useSelector(
-    (store) => store.burgerConstructor.resultOrder.order.number
+    (store) => store.orderDetails.resultOrder.order.number
   );
 
   return (

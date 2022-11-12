@@ -15,8 +15,8 @@ import {
 export const DragCard = ({ item, index, moveItem, deleteItem }) => {
   const dispatch = useDispatch();
 
-  const { dataOrder, ingredientsMove } = useSelector((store) => ({
-    dataOrder: store.burgerConstructor.dataOrder,
+  const { ingredients, ingredientsMove } = useSelector((store) => ({
+    ingredients: store.burgerConstructor.ingredients,
     ingredientsMove: store.moveItem.ingredientsMove,
   }));
   const [{ isDragging }, dragRef] = useDrag({
@@ -45,14 +45,7 @@ export const DragCard = ({ item, index, moveItem, deleteItem }) => {
       if (dragIndex < hoverIndex && hoverActualY < hoverMiddleY) return;
       //  hover больше middle Y
       if (dragIndex > hoverIndex && hoverActualY > hoverMiddleY) return;
-      dispatch(
-        setCardMove(
-          dragIndex,
-          hoverIndex,
-          dataOrder.ingredients,
-          ingredientsMove
-        )
-      );
+      dispatch(setCardMove(dragIndex, hoverIndex, ingredients));
       // moveItem(dragIndex, hoverIndex);
       item.index = hoverIndex;
     },

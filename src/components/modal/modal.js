@@ -9,6 +9,7 @@ import {
   setModalIngredientsClose,
   setModalConstructorClose,
 } from '../../services/actions/modal';
+import { deleteIngredientDetails } from '../../services/actions/ingredient-details';
 
 import { CloseIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 
@@ -26,6 +27,7 @@ export const Modal = (props) => {
 
   const closeModal = () => {
     dispatch(setModalIngredientsClose());
+    dispatch(deleteIngredientDetails());
     dispatch(setModalConstructorClose());
   };
 
@@ -34,6 +36,7 @@ export const Modal = (props) => {
     const closeByEscape = (e) => {
       if (e.key === 'Escape') {
         dispatch(setModalIngredientsClose());
+        dispatch(deleteIngredientDetails());
         dispatch(setModalConstructorClose());
       }
     };

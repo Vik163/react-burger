@@ -10,8 +10,6 @@ const initialState = {
 export const moveItemReducer = (state = initialState, action) => {
   switch (action.type) {
     case CARD_MOVE:
-      console.log(action);
-
       const ingredientsMove = [...action.ingredients];
 
       ingredientsMove.splice(

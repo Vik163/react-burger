@@ -1,4 +1,7 @@
-import { INGREDIENT_DETAILS } from '../actions/ingredient-details';
+import {
+  INGREDIENT_DETAILS,
+  DELETE_INGREDIENT_DETAILS,
+} from '../actions/ingredient-details';
 
 const initialState = {
   ingredientDetails: {},
@@ -12,7 +15,12 @@ export const ingredientDetailsReducer = (state = initialState, action) => {
         ingredientDetails: action.ingredientDetails,
       };
     }
-
+    case DELETE_INGREDIENT_DETAILS: {
+      return {
+        ...state,
+        ingredientDetails: action.ingredientDetails,
+      };
+    }
     default: {
       return state;
     }

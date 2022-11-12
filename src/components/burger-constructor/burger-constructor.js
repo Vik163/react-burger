@@ -13,10 +13,10 @@ import { Modal } from '../modal/modal';
 import { OrderDetails } from '../order-details/order-details';
 import { DragCard } from './drag-item';
 import {
-  sendOrder,
   setIngredients,
   setBun,
 } from '../../services/actions/burger-constructor';
+import { sendOrder } from '../../services/actions/order-details';
 
 import {
   ConstructorElement,
@@ -39,7 +39,7 @@ export function BurgerConstructor(props) {
     cardOrder: store.burgerConstructor.cardOrder,
     bun: store.burgerConstructor.bun,
     ingredients: store.burgerConstructor.ingredients,
-    resultOrder: store.burgerConstructor.resultOrder,
+    resultOrder: store.orderDetails.resultOrder,
     ingredientsMove: store.moveItem.ingredientsMove,
   }));
   const [cards, seCards] = useState(ingredients);
@@ -76,7 +76,7 @@ export function BurgerConstructor(props) {
   }, [cardOrder]);
 
   useEffect(() => {
-    seCards(ingredients);
+    seCards(a);
     // ingredientsMove && setIngredients(ingredientsMove);
   }, [ingredients]);
 
@@ -111,7 +111,6 @@ export function BurgerConstructor(props) {
     }
   };
 
-  console.log(resultOrder);
   //Перетаскивать детали заказа---------------------------
   // const moveItem = useCallback(
   //   (dragIndex, hoverIndex) => {
