@@ -1,14 +1,21 @@
 import {
-  DATA_ORDER,
+  DATA_INGREDIENTS,
+  DATA_BUN,
   SEND_ORDER_REQUEST,
   SEND_ORDER_SUCCESS,
   SEND_ORDER_FAILED,
 } from '../actions/burger-constructor';
+import { CARD_ORDER } from '../actions/burger-constructor-card';
+import {
+  MODAL_CONSTRUCTOR_OPEN,
+  MODAL_CONSTRUCTOR_CLOSE,
+} from '../actions/modal';
 
 const initialState = {
-  dataOrder: {},
-  bun: {},
+  bun: null,
+  cardOrder: null,
   ingredients: [],
+  isOpenConstructor: false,
   dataOrderRequest: false,
   dataOrderFailed: false,
   resultOrder: null,
@@ -18,16 +25,34 @@ const initialState = {
 
 export const burgerConstructorReducer = (state = initialState, action) => {
   switch (action.type) {
-    case DATA_ORDER: {
+    case MODAL_CONSTRUCTOR_OPEN:
       return {
         ...state,
-        dataOrder: {
-          bun: action.dataOrder.bun,
-          ingredients: action.dataOrder.ingredients,
-        },
+        isOpenConstructor: true,
+      };
+    case MODAL_CONSTRUCTOR_CLOSE:
+      return {
+        ...state,
+        isOpenConstructor: false,
+      };
+    case DATA_BUN: {
+      return {
+        ...state,
+        bun: action.bun,
       };
     }
-
+    case DATA_INGREDIENTS: {
+      return {
+        ...state,
+        ingredients: action.ingredients,
+      };
+    }
+    case CARD_ORDER: {
+      return {
+        ...state,
+        cardOrder: action.cardOrder,
+      };
+    }
     case SEND_ORDER_REQUEST: {
       return {
         ...state,
@@ -38,7 +63,7 @@ export const burgerConstructorReducer = (state = initialState, action) => {
       return {
         ...state,
         dataOrderFailed: false,
-        //       dataOrder: action.cards,
+        // dataOrder: action.cards,
         dataOrderRequest: false,
         resultOrder: action.resultOrder,
       };

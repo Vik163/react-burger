@@ -1,18 +1,19 @@
 import { useState, useRef, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 import ingredientsStyles from './burger-ingredients.module.css';
 
 import { BurgerIngredientsTypes } from './burger-ingredients-types/burger-ingredients-types.js';
 import { IngredientDetails } from '../ingredient-details/ingredient-details';
 import { Modal } from '../modal/modal';
-import { setIngredientDetails } from '../../services/actions/ingredient-details';
 
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 
 export function BurgerIngredients() {
-  const dispatch = useDispatch();
-  const cards = useSelector((store) => store.burgerIngredients.cards);
+  const { cards, isOpen } = useSelector((store) => ({
+    cards: store.burgerIngredients.cards,
+    isOpen: store.burgerIngredients.isOpen,
+  }));
   const bunRef = useRef();
   const sauceRef = useRef();
   const fillingRef = useRef();
@@ -24,16 +25,6 @@ export function BurgerIngredients() {
 
   const [current, setCurrent] = useState('Булки');
   const [scroll, setScroll] = useState('Булки');
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const openModal = (card) => {
-    setIsModalOpen(true);
-    dispatch(setIngredientDetails(card));
-  };
-
-  const closeModal = () => {
-    setIsModalOpen(false);
-  };
 
   const clickTab = (e) => {
     const tab = e.target.textContent;
@@ -101,31 +92,16 @@ export function BurgerIngredients() {
         className={ingredientsStyles.ingredients__container}
         onScroll={onScroll}
       >
-        {isModalOpen && (
-          <Modal
-            closeModal={closeModal}
-            title='Детали ингредиента'
-            isModalOpen={isModalOpen}
-          >
+        {isOpen && (
+          <Modal>
             <IngredientDetails />
           </Modal>
         )}
-        <BurgerIngredientsTypes
-          title='Булки'
-          data={bun}
-          openModal={openModal}
-          ref={bunRef}
-        />
-        <BurgerIngredientsTypes
-          title='Соусы'
-          data={sauce}
-          openModal={openModal}
-          ref={sauceRef}
-        />
+        <BurgerIngredientsTypes title='Булки' data={bun} ref={bunRef} />
+        <BurgerIngredientsTypes title='Соусы' data={sauce} ref={sauceRef} />
         <BurgerIngredientsTypes
           title='Начинки'
           data={filling}
-          openModal={openModal}
           ref={fillingRef}
         />
       </div>

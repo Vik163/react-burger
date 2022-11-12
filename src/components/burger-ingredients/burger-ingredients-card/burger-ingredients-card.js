@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { useDrag } from 'react-dnd';
 
-import PropTypes from 'prop-types';
-
 import ingredientsCardStyles from './burger-ingredients-card.module.css';
+
+import { setModalIngredientsOpen } from '../../../services/actions/modal';
+import { setIngredientDetails } from '../../../services/actions/ingredient-details';
 
 import {
   Counter,
@@ -13,10 +14,11 @@ import {
 import { dataPropTypes } from '../../../utils/types';
 
 export function BurgerIngredientsCard(props) {
-  const { card, openModal } = props;
-  const { dataOrder, cardOrder } = useSelector((store) => ({
-    cardOrder: store.burgerIngredientsCard.cardOrder,
-    dataOrder: store.burgerConstructor.dataOrder,
+  const dispatch = useDispatch();
+  const { card } = props;
+  const { bun, ingredients } = useSelector((store) => ({
+    bun: store.burgerConstructor.bun,
+    ingredients: store.burgerConstructor.ingredients,
   }));
   const [isCounter, setIsCounter] = useState({
     [card.name]: 0,
@@ -28,21 +30,22 @@ export function BurgerIngredientsCard(props) {
 
   useEffect(() => {
     const sameCards = () => {
-      if (dataOrder.bun) {
-        if (dataOrder.bun.name === card.name) {
+      if (bun) {
+        if (bun.name === card.name) {
           return 2;
         }
       }
-      if (dataOrder.ingredients) {
-        return dataOrder.ingredients.filter((i) => i.name === card.name).length;
+      if (ingredients) {
+        return ingredients.filter((i) => i.name === card.name).length;
       }
     };
     card.name && setIsCounter({ ...isCounter, [card.name]: sameCards() });
-  }, [dataOrder]);
+  }, [bun, ingredients]);
 
   const openModalIngredients = () => {
     // Отправка данных в попап
-    openModal(card);
+    dispatch(setModalIngredientsOpen());
+    dispatch(setIngredientDetails(card));
   };
 
   return (
@@ -74,7 +77,6 @@ export function BurgerIngredientsCard(props) {
   );
 }
 
-// BurgerIngredientsCard.propTypes = {
-//   card: dataPropTypes.isRequired,
-//   openModal: PropTypes.func.isRequired,
-// };
+BurgerIngredientsCard.propTypes = {
+  card: dataPropTypes.isRequired,
+};

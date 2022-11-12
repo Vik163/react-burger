@@ -1,30 +1,38 @@
-import { v4 as uuidv4 } from 'uuid';
 import { burgerApi } from '../../utils/burger-api';
 
-export const DATA_ORDER = 'DATA_ORDER';
+export const DATA_INGREDIENTS = 'DATA_INGREDIENTS';
+export const DATA_BUN = 'DATA_BUN';
 export const SEND_ORDER_REQUEST = 'SEND_ORDER_REQUEST';
 export const SEND_ORDER_SUCCESS = 'SEND_ORDER_SUCCESS';
 export const SEND_ORDER_FAILED = 'SEND_ORDER_FAILED';
 
-export function setDataOrder(dataOrder) {
+export function setBun({ bun }) {
   return function (dispatch) {
     dispatch({
-      type: 'DATA_ORDER',
-      dataOrder: { bun: dataOrder.bun, ingredients: dataOrder.ingredients },
+      type: 'DATA_BUN',
+      bun: bun,
     });
   };
 }
 
-export function sendOrder(dataOrder) {
+export function setIngredients({ ingredients }) {
   return function (dispatch) {
-    const ingredients = dataOrder.ingredients
-      .filter((item) => !(item.type === 'bun'))
-      .map((item) => item._id);
-    if (dataOrder) {
-      const order = {
-        ingredients: [dataOrder.bun._id, ...ingredients, dataOrder.bun._id],
-      };
+    dispatch({
+      type: 'DATA_INGREDIENTS',
+      ingredients: ingredients,
+    });
+  };
+}
 
+export function sendOrder(bun, ingredients) {
+  const ingredientsOrder = ingredients
+    .filter((item) => !(item.type === 'bun'))
+    .map((item) => item._id);
+  if (bun) {
+    const order = {
+      ingredients: [bun._id, ...ingredientsOrder, bun._id],
+    };
+    return function (dispatch) {
       dispatch({
         type: SEND_ORDER_REQUEST,
       });
@@ -51,6 +59,6 @@ export function sendOrder(dataOrder) {
                 messageError: 'Внутренняя ошибка сервера',
               });
         });
-    }
-  };
+    };
+  }
 }

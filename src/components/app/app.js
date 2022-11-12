@@ -13,26 +13,13 @@ import { getCards } from '../../services/actions/burger-ingredients';
 function App() {
   const dispatch = useDispatch();
 
-  const {
-    cards,
-    cardsFailed,
-    statusRequest,
-    messageError,
-    dataOrder,
-    cardsRequest,
-    promoFailed,
-    itemsRequest,
-  } = useSelector((store) => ({
-    cards: store.burgerIngredients.cards,
-    cardsFailed: store.burgerIngredients.cardsFailed,
-    cardsRequest: store.burgerIngredients.cardsRequest,
-    statusRequest: store.burgerIngredients.statusRequest,
-    messageError: store.burgerIngredients.messageError,
-    dataOrder: store.burgerConstructor.dataOrder,
-    itemsRequeste: store.itemsRequest,
-    promoDiscount: store.promoDiscount,
-  }));
-
+  const { cards, messageError, messageErrorConstructor } = useSelector(
+    (store) => ({
+      cards: store.burgerIngredients.cards,
+      messageError: store.burgerIngredients.messageError,
+      messageErrorConstructor: store.burgerConstructor.messageError,
+    })
+  );
   useEffect(() => {
     dispatch(getCards());
   }, []);
@@ -48,7 +35,7 @@ function App() {
           </main>
         )}
       </DndProvider>
-      {messageError && <ErrorsPage />}
+      {(messageError || messageErrorConstructor) && <ErrorsPage />}
     </div>
   );
 }

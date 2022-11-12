@@ -2,11 +2,11 @@ import { useState, useEffect, useMemo, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useDrop } from 'react-dnd';
 
-import PropTypes from 'prop-types';
-
 import constructorStyles from './burger-constructor.module.css';
 
-import { setCardOrder } from '../../services/actions/burger-ingredients-card';
+import { setCardOrder } from '../../services/actions/burger-constructor-card';
+import { setModalConstructorOpen } from '../../services/actions/modal';
+
 import { setCardMove } from '../../services/actions/move-item';
 
 import { Modal } from '../modal/modal';
@@ -14,7 +14,8 @@ import { OrderDetails } from '../order-details/order-details';
 import { DragCard } from './drag-item';
 import {
   sendOrder,
-  setDataOrder,
+  setIngredients,
+  setBun,
 } from '../../services/actions/burger-constructor';
 
 import {
@@ -26,49 +27,47 @@ import {
 export function BurgerConstructor(props) {
   const { children } = props;
   const dispatch = useDispatch();
-  const { dataOrder, resultOrder, cardOrder, ingredientsMove } = useSelector(
-    (store) => ({
-      cardOrder: store.burgerIngredientsCard.cardOrder,
-      dataOrder: store.burgerConstructor.dataOrder,
-      resultOrder: store.burgerConstructor.resultOrder,
-      ingredientsMove: store.moveItem.ingredientsMove,
-    })
-  );
-  // useSelector((store) => console.log(store));
-  const bun = dataOrder.bun;
-  const [ingredients, setIngredients] = useState(dataOrder.ingredients);
+  const {
+    resultOrder,
+    cardOrder,
+    ingredients,
+    bun,
+    ingredientsMove,
+    isOpenConstructor,
+  } = useSelector((store) => ({
+    isOpenConstructor: store.burgerConstructor.isOpenConstructor,
+    cardOrder: store.burgerConstructor.cardOrder,
+    bun: store.burgerConstructor.bun,
+    ingredients: store.burgerConstructor.ingredients,
+    resultOrder: store.burgerConstructor.resultOrder,
+    ingredientsMove: store.moveItem.ingredientsMove,
+  }));
+  const [cards, seCards] = useState(ingredients);
   const [totalSum, setTotalSum] = useState(0);
-
   const [, drop] = useDrop({
     accept: 'item',
     drop(item) {
-      item.card && dispatch(setCardOrder(item.card, cardOrder, dataOrder));
+      item.card && dispatch(setCardOrder(item.card, cardOrder, ingredients));
     },
   });
-
-  const a = ingredientsMove ? ingredientsMove : dataOrder.ingredients;
+  const a = ingredientsMove ? ingredientsMove : ingredients;
 
   useEffect(() => {
-    const cardCancelAdd =
-      ingredients && ingredients.some((i) => i === cardOrder);
+    const cardCancelAdd = cards && cards.some((i) => i === cardOrder);
     if (!cardCancelAdd && cardOrder) {
       if (cardOrder.type === 'bun') {
-        dispatch(setDataOrder({ ...dataOrder, bun: cardOrder }));
+        dispatch(setBun({ bun: cardOrder }));
       } else {
-        if (!dataOrder.ingredients) {
+        if (ingredients.length > 0) {
           dispatch(
-            setDataOrder({
-              ...dataOrder,
-              ...dataOrder.ingredients,
-              ingredients: [cardOrder],
+            setIngredients({
+              ingredients: [...cards, cardOrder],
             })
           );
         } else {
           dispatch(
-            setDataOrder({
-              ...dataOrder,
-              ...dataOrder.ingredients,
-              ingredients: [...ingredients, cardOrder],
+            setIngredients({
+              ingredients: [cardOrder],
             })
           );
         }
@@ -77,60 +76,53 @@ export function BurgerConstructor(props) {
   }, [cardOrder]);
 
   useEffect(() => {
-    setIngredients(a);
+    seCards(ingredients);
     // ingredientsMove && setIngredients(ingredientsMove);
-  }, [dataOrder.ingredients]);
+  }, [ingredients]);
 
   //логика подсчета суммы----------------------------------------
   useMemo(() => {
     const totalSumIngredients =
-      ingredients &&
-      ingredients.reduce((sum, current) => sum + current.price, 0);
-    if (bun || ingredients) {
-      if (bun && !ingredients) {
+      cards && cards.reduce((sum, current) => sum + current.price, 0);
+    if (bun || cards) {
+      if (bun && !cards) {
         setTotalSum(bun.price * 2);
-      } else if (!bun && ingredients) {
+      } else if (!bun && cards) {
         setTotalSum(totalSumIngredients);
       } else {
         setTotalSum(totalSumIngredients + bun.price * 2);
       }
     }
-  }, [dataOrder, bun]);
-
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  }, [ingredients, bun]);
 
   const openModal = () => {
-    setIsModalOpen(true);
-    dispatch(sendOrder(dataOrder));
-  };
-
-  const closeModal = () => {
-    setIsModalOpen(false);
+    dispatch(setModalConstructorOpen());
+    dispatch(sendOrder(bun, ingredients));
   };
 
   //Удаление из заказа--------------------------------------
   const deleteItem = (e, id) => {
     if (e.target.closest('.constructor-element__action')) {
       dispatch(
-        setDataOrder({
-          ...dataOrder,
+        setIngredients({
           ingredients: ingredients.filter((i) => !(i._id === id)),
         })
       );
     }
   };
 
+  console.log(resultOrder);
   //Перетаскивать детали заказа---------------------------
   // const moveItem = useCallback(
   //   (dragIndex, hoverIndex) => {
-  //     // setIngredients((ingredients) => {
-  //     //   dispatch(
-  //     //     setCardMove(dragIndex, hoverIndex, ingredients, ingredientsMove)
-  //     //   );
-  //     //   //   const ingredients = [...ingredientsMove];
-  //     //   //   ingredients.splice(dragIndex, 0, ingredients.splice(hoverIndex, 1)[0]);
-  //     //   //   return ingredients;
-  //     // });
+  // setIngredients((ingredients) => {
+  //   dispatch(
+  //     setCardMove(dragIndex, hoverIndex, ingredients, ingredientsMove)
+  //   );
+  //   //   const ingredients = [...ingredientsMove];
+  //   //   ingredients.splice(dragIndex, 0, ingredients.splice(hoverIndex, 1)[0]);
+  //   //   return ingredients;
+  // });
   //   },
   //   [ingredients]
   // );
@@ -150,7 +142,6 @@ export function BurgerConstructor(props) {
   //   },
   //   [ingredients]
   // );
-
   return (
     <section className={constructorStyles.constructor} ref={drop}>
       <ul
@@ -168,13 +159,13 @@ export function BurgerConstructor(props) {
           </li>
         )}
         <div className={constructorStyles.constructor__scrollbar}>
-          {isModalOpen && resultOrder && (
-            <Modal closeModal={closeModal} isModalOpen={isModalOpen}>
+          {isOpenConstructor && resultOrder && (
+            <Modal>
               <OrderDetails />
             </Modal>
           )}
-          {ingredients &&
-            ingredients.map((item, index) => (
+          {cards &&
+            cards.map((item, index) => (
               <DragCard
                 key={item._id}
                 index={index}
@@ -213,8 +204,3 @@ export function BurgerConstructor(props) {
     </section>
   );
 }
-
-// BurgerConstructor.propTypes = {
-//   sendOrder: PropTypes.func.isRequired,
-//   result: PropTypes.result,
-// };

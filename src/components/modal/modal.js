@@ -1,33 +1,50 @@
 import { useEffect } from 'react';
 import ReactDOM from 'react-dom';
-import PropTypes from 'prop-types';
+import { useSelector, useDispatch } from 'react-redux';
 
 import modal from './modal.module.css';
 
 import { ModalOverlay } from '../modal-overlay/modal-overlay';
+import {
+  setModalIngredientsClose,
+  setModalConstructorClose,
+} from '../../services/actions/modal';
 
 import { CloseIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 
 export const Modal = (props) => {
-  const { isModalOpen, title, closeModal, children } = props;
+  const { children } = props;
+  const dispatch = useDispatch();
+  const { title, isOpen, isOpenConstructor } = useSelector((store) => ({
+    title: store.burgerIngredients.title,
+    isOpen: store.burgerIngredients.isOpen,
+    isOpenConstructor: store.burgerConstructor.isOpenConstructor,
+  }));
+
   //Корневой элемент
   const modalRoot = document.querySelector('#modals');
 
+  const closeModal = () => {
+    dispatch(setModalIngredientsClose());
+    dispatch(setModalConstructorClose());
+  };
+
   useEffect(() => {
-    if (!isModalOpen) return;
+    if (!isOpen && !isOpenConstructor) return;
     const closeByEscape = (e) => {
       if (e.key === 'Escape') {
-        closeModal();
+        dispatch(setModalIngredientsClose());
+        dispatch(setModalConstructorClose());
       }
     };
 
     document.addEventListener('keydown', closeByEscape);
     return () => document.removeEventListener('keydown', closeByEscape);
-  }, [isModalOpen, closeModal]);
+  }, [isOpen, isOpenConstructor]);
 
   return ReactDOM.createPortal(
     <>
-      <ModalOverlay closeModal={closeModal} />
+      <ModalOverlay />
       <div className={modal.modal}>
         <div className={`${modal.title_container} ml-10 mt-10 mr-10`}>
           <p className='text text_type_main-large'>{title}</p>
@@ -38,10 +55,4 @@ export const Modal = (props) => {
     </>,
     modalRoot
   );
-};
-
-Modal.propTypes = {
-  closeModal: PropTypes.func.isRequired,
-  isModalOpen: PropTypes.bool.isRequired,
-  title: PropTypes.string,
 };
