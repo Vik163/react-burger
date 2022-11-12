@@ -1,7 +1,11 @@
-import { useRef } from 'react';
+import { useRef, useCallback } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+
 import { useDrag, useDrop } from 'react-dnd';
 
 import constructorStyles from './burger-constructor.module.css';
+
+import { setCardMove } from '../../services/actions/move-item';
 
 import {
   ConstructorElement,
@@ -9,6 +13,12 @@ import {
 } from '@ya.praktikum/react-developer-burger-ui-components';
 
 export const DragCard = ({ item, index, moveItem, deleteItem }) => {
+  const dispatch = useDispatch();
+
+  const { dataOrder, ingredientsMove } = useSelector((store) => ({
+    dataOrder: store.burgerConstructor.dataOrder,
+    ingredientsMove: store.moveItem.ingredientsMove,
+  }));
   const [{ isDragging }, dragRef] = useDrag({
     type: 'item',
     item: { index },
@@ -35,8 +45,15 @@ export const DragCard = ({ item, index, moveItem, deleteItem }) => {
       if (dragIndex < hoverIndex && hoverActualY < hoverMiddleY) return;
       //  hover больше middle Y
       if (dragIndex > hoverIndex && hoverActualY > hoverMiddleY) return;
-
-      moveItem(dragIndex, hoverIndex);
+      dispatch(
+        setCardMove(
+          dragIndex,
+          hoverIndex,
+          dataOrder.ingredients,
+          ingredientsMove
+        )
+      );
+      // moveItem(dragIndex, hoverIndex);
       item.index = hoverIndex;
     },
   });

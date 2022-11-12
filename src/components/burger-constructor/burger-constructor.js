@@ -6,10 +6,8 @@ import PropTypes from 'prop-types';
 
 import constructorStyles from './burger-constructor.module.css';
 
-import {
-  setCardOrder,
-  setCardOrderId,
-} from '../../services/actions/burger-ingredients-card';
+import { setCardOrder } from '../../services/actions/burger-ingredients-card';
+import { setCardMove } from '../../services/actions/move-item';
 
 import { Modal } from '../modal/modal';
 import { OrderDetails } from '../order-details/order-details';
@@ -28,14 +26,17 @@ import {
 export function BurgerConstructor(props) {
   const { children } = props;
   const dispatch = useDispatch();
-  const { dataOrder, resultOrder, cardOrder } = useSelector((store) => ({
-    cardOrder: store.burgerIngredientsCard.cardOrder,
-    dataOrder: store.burgerConstructor.dataOrder,
-    resultOrder: store.burgerConstructor.resultOrder,
-  }));
+  const { dataOrder, resultOrder, cardOrder, ingredientsMove } = useSelector(
+    (store) => ({
+      cardOrder: store.burgerIngredientsCard.cardOrder,
+      dataOrder: store.burgerConstructor.dataOrder,
+      resultOrder: store.burgerConstructor.resultOrder,
+      ingredientsMove: store.moveItem.ingredientsMove,
+    })
+  );
+  // useSelector((store) => console.log(store));
   const bun = dataOrder.bun;
-  const ingredients = dataOrder.ingredients;
-  const [ingredientsMove, setIngredientsMove] = useState(ingredients);
+  const [ingredients, setIngredients] = useState(dataOrder.ingredients);
   const [totalSum, setTotalSum] = useState(0);
 
   const [, drop] = useDrop({
@@ -44,6 +45,8 @@ export function BurgerConstructor(props) {
       item.card && dispatch(setCardOrder(item.card, cardOrder, dataOrder));
     },
   });
+
+  const a = ingredientsMove ? ingredientsMove : dataOrder.ingredients;
 
   useEffect(() => {
     const cardCancelAdd =
@@ -74,7 +77,8 @@ export function BurgerConstructor(props) {
   }, [cardOrder]);
 
   useEffect(() => {
-    setIngredientsMove(dataOrder.ingredients);
+    setIngredients(a);
+    // ingredientsMove && setIngredients(ingredientsMove);
   }, [dataOrder.ingredients]);
 
   //логика подсчета суммы----------------------------------------
@@ -116,23 +120,36 @@ export function BurgerConstructor(props) {
     }
   };
 
-  // Перетаскивать детали заказа---------------------------
-  const moveItem = useCallback(
-    (dragIndex, hoverIndex) => {
-      const dragItem = ingredientsMove[dragIndex];
-      const hoverItem = ingredientsMove[hoverIndex];
+  //Перетаскивать детали заказа---------------------------
+  // const moveItem = useCallback(
+  //   (dragIndex, hoverIndex) => {
+  //     // setIngredients((ingredients) => {
+  //     //   dispatch(
+  //     //     setCardMove(dragIndex, hoverIndex, ingredients, ingredientsMove)
+  //     //   );
+  //     //   //   const ingredients = [...ingredientsMove];
+  //     //   //   ingredients.splice(dragIndex, 0, ingredients.splice(hoverIndex, 1)[0]);
+  //     //   //   return ingredients;
+  //     // });
+  //   },
+  //   [ingredients]
+  // );
 
-      // Меняет местами dragItem и hoverItem в массиве
-      setIngredientsMove((ingredientsMove) => {
-        const updatedIngredientsMove = [...ingredientsMove];
+  // const moveItem = useCallback(
+  //   (dragIndex, hoverIndex) => {
+  //     setIngredients((ingredients) => {
+  //       const ingredientsMove = [...ingredients];
 
-        updatedIngredientsMove[dragIndex] = hoverItem;
-        updatedIngredientsMove[hoverIndex] = dragItem;
-        return updatedIngredientsMove;
-      });
-    },
-    [ingredientsMove]
-  );
+  //       ingredientsMove.splice(
+  //         dragIndex,
+  //         0,
+  //         ingredientsMove.splice(hoverIndex, 1)[0]
+  //       );
+  //       return ingredientsMove;
+  //     });
+  //   },
+  //   [ingredients]
+  // );
 
   return (
     <section className={constructorStyles.constructor} ref={drop}>
@@ -156,13 +173,13 @@ export function BurgerConstructor(props) {
               <OrderDetails />
             </Modal>
           )}
-          {ingredientsMove &&
-            ingredientsMove.map((item, index) => (
+          {ingredients &&
+            ingredients.map((item, index) => (
               <DragCard
                 key={item._id}
                 index={index}
                 item={item}
-                moveItem={moveItem}
+                // moveItem={moveItem}
                 deleteItem={deleteItem}
               >
                 {children}

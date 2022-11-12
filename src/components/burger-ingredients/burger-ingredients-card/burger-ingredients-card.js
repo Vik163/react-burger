@@ -1,4 +1,4 @@
-import { useEffect, useState, useMemo } from 'react';
+import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useDrag } from 'react-dnd';
 
@@ -25,19 +25,20 @@ export function BurgerIngredientsCard(props) {
     type: 'item',
     item: { card },
   });
-  // console.log(isCounter);
-  // console.log(dataOrder.bun);
 
-  // useMemo(() => {
-  //   dispatch(setCardOrder(card, dataOrder));
-  //   dataOrder.ingredients &&
-  //     dataOrder.ingredients.map((i) => {
-  //       if (i.name === card.name) {
-  //         setIsCounter({ ...isCounter, [card.name]: isCounter[card.name] + 1 });
-  //       }
-  //     });
-  //   // dataOrder.bun && setIsCounter(isCounter + 1);
-  // }, []);
+  useEffect(() => {
+    const sameCards = () => {
+      if (dataOrder.bun) {
+        if (dataOrder.bun.name === card.name) {
+          return 2;
+        }
+      }
+      if (dataOrder.ingredients) {
+        return dataOrder.ingredients.filter((i) => i.name === card.name).length;
+      }
+    };
+    card.name && setIsCounter({ ...isCounter, [card.name]: sameCards() });
+  }, [dataOrder]);
 
   const openModalIngredients = () => {
     // Отправка данных в попап

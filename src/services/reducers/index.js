@@ -5,6 +5,7 @@ import { burgerIngredientsReducer } from './burger-ingredients';
 import { ingredientDetailsReducer } from './ingredient-details';
 import { burgerIngredientsCardReducer } from './burger-ingredients-card';
 import { orderDetailsReducer } from './order-details';
+import { moveItemReducer } from './move-item';
 
 export const rootReducer = combineReducers({
   burgerConstructor: burgerConstructorReducer,
@@ -12,4 +13,5 @@ export const rootReducer = combineReducers({
   ingredientDetails: ingredientDetailsReducer,
   burgerIngredientsCard: burgerIngredientsCardReducer,
   orderDetails: orderDetailsReducer,
+  moveItem: moveItemReducer,
 });
