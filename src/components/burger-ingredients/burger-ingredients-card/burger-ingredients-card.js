@@ -4,13 +4,14 @@ import { useDrag } from 'react-dnd';
 
 import ingredientsCardStyles from './burger-ingredients-card.module.css';
 
-import { setModalIngredientsOpen } from '../../../services/actions/modal';
-import { setIngredientDetails } from '../../../services/actions/ingredient-details';
-
 import {
   Counter,
   CurrencyIcon,
 } from '@ya.praktikum/react-developer-burger-ui-components';
+
+import { setModalIngredientsOpen } from '../../../services/actions/modal';
+import { setIngredientDetails } from '../../../services/actions/ingredient-details';
+
 import { dataPropTypes } from '../../../utils/types';
 
 export function BurgerIngredientsCard(props) {

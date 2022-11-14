@@ -6,12 +6,10 @@ import App from './components/app/app'
 import { store } from './services/store'
 import reportWebVitals from './reportWebVitals';
 
-
-
-
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
+
 root.render(
   <React.StrictMode>
     <Provider store={store}>

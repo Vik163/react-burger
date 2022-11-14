@@ -4,14 +4,15 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import modal from './modal.module.css';
 
+import { CloseIcon } from '@ya.praktikum/react-developer-burger-ui-components';
+
 import { ModalOverlay } from '../modal-overlay/modal-overlay';
+
 import {
   setModalIngredientsClose,
   setModalConstructorClose,
 } from '../../services/actions/modal';
 import { deleteIngredientDetails } from '../../services/actions/ingredient-details';
-
-import { CloseIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 
 export const Modal = (props) => {
   const { children } = props;

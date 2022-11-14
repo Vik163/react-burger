@@ -13,13 +13,14 @@ import { getCards } from '../../services/actions/burger-ingredients';
 function App() {
   const dispatch = useDispatch();
 
-  const { cards, messageError, messageErrorConstructor } = useSelector(
+  const { cards, messageError, messageErrorOrderDetails } = useSelector(
     (store) => ({
       cards: store.burgerIngredients.cards,
       messageError: store.burgerIngredients.messageError,
-      messageErrorConstructor: store.burgerConstructor.messageError,
+      messageErrorOrderDetails: store.orderDetails.messageError,
     })
   );
+
   useEffect(() => {
     dispatch(getCards());
   }, []);
@@ -35,7 +36,7 @@ function App() {
           </main>
         )}
       </DndProvider>
-      {(messageError || messageErrorConstructor) && <ErrorsPage />}
+      {(messageError || messageErrorOrderDetails) && <ErrorsPage />}
     </div>
   );
 }

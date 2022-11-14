@@ -3,11 +3,11 @@ import { useSelector } from 'react-redux';
 
 import ingredientsStyles from './burger-ingredients.module.css';
 
+import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
+
 import { BurgerIngredientsTypes } from './burger-ingredients-types/burger-ingredients-types.js';
 import { IngredientDetails } from '../ingredient-details/ingredient-details';
 import { Modal } from '../modal/modal';
-
-import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 
 export function BurgerIngredients() {
   const { cards, isOpen } = useSelector((store) => ({
@@ -18,7 +18,7 @@ export function BurgerIngredients() {
   const sauceRef = useRef();
   const fillingRef = useRef();
 
-  // Данные по видам
+  // Данные по видам--------------------------------------------
   const sauce = cards.filter((item) => item.type === 'sauce');
   const bun = cards.filter((item) => item.type === 'bun');
   const filling = cards.filter((item) => item.type === 'main');
@@ -26,6 +26,7 @@ export function BurgerIngredients() {
   const [current, setCurrent] = useState('Булки');
   const [scroll, setScroll] = useState('Булки');
 
+  //Переход по ссылке между видами--------------------------------------------
   const clickTab = (e) => {
     const tab = e.target.textContent;
     if (tab === 'Булки') {

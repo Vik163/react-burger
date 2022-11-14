@@ -27,17 +27,25 @@ export function sendOrder(bun, ingredients) {
             })
         )
         .catch((err) => {
-          err === 400
-            ? dispatch({
-                type: SEND_ORDER_FAILED,
-                statusRequest: err,
-                messageError: 'Переданы некорректные данные',
-              })
-            : dispatch({
-                type: SEND_ORDER_FAILED,
-                statusRequest: err,
-                messageError: 'Внутренняя ошибка сервера',
-              });
+          if (err === 400) {
+            dispatch({
+              type: SEND_ORDER_FAILED,
+              statusRequest: err,
+              messageError: 'Переданы некорректные данные',
+            });
+          } else if (err === 404) {
+            dispatch({
+              type: SEND_ORDER_FAILED,
+              statusRequest: err,
+              messageError: 'Страница не найдена',
+            });
+          } else {
+            dispatch({
+              type: SEND_ORDER_FAILED,
+              statusRequest: err,
+              messageError: 'Внутренняя ошибка сервера',
+            });
+          }
         });
     };
   }

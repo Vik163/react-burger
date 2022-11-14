@@ -6,22 +6,22 @@ export function ErrorsPage() {
   const {
     statusRequest,
     messageError,
-    messageErrorConstructor,
-    statusRequestConstructor,
+    messageErrorOrderDetails,
+    statusRequestOrderDetails,
   } = useSelector((store) => ({
     statusRequest: store.burgerIngredients.statusRequest,
     messageError: store.burgerIngredients.messageError,
-    statusRequestConstructor: store.burgerConstructor.statusRequest,
-    messageErrorConstructor: store.burgerConstructor.messageError,
+    statusRequestOrderDetails: store.orderDetails.statusRequest,
+    messageErrorOrderDetails: store.orderDetails.messageError,
   }));
 
   //Пока функциональность не полная
   return (
     <div className={errorsStyles.page}>
       <p className={errorsStyles.status}>
-        {statusRequest || statusRequestConstructor}
+        {statusRequest || statusRequestOrderDetails}
       </p>
-      <p>{messageError || messageErrorConstructor}</p>
+      <p>{messageError || messageErrorOrderDetails}</p>
     </div>
   );
 }

@@ -4,16 +4,32 @@ import {
   MODAL_CONSTRUCTOR_OPEN,
   MODAL_CONSTRUCTOR_CLOSE,
 } from '../actions/modal';
+import { CARD_MOVE } from '../actions/move-item';
 
 const initialState = {
-  bun: null,
   cardOrder: null,
+  bun: null,
   ingredients: [],
   isOpenConstructor: false,
+  dragIndex: null,
+  hoverIndex: null,
 };
 
 export const burgerConstructorReducer = (state = initialState, action) => {
   switch (action.type) {
+    case CARD_MOVE:
+      const ingredients = [...state.ingredients];
+
+      ingredients.splice(
+        action.dragIndex,
+        0,
+        ingredients.splice(action.hoverIndex, 1)[0]
+      );
+
+      return {
+        ...state,
+        ingredients: ingredients,
+      };
     case MODAL_CONSTRUCTOR_OPEN:
       return {
         ...state,
@@ -42,7 +58,6 @@ export const burgerConstructorReducer = (state = initialState, action) => {
         cardOrder: action.cardOrder,
       };
     }
-
     default: {
       return state;
     }

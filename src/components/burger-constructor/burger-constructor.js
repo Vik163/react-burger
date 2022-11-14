@@ -1,22 +1,8 @@
-import { useState, useEffect, useMemo, useCallback } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useDrop } from 'react-dnd';
 
 import constructorStyles from './burger-constructor.module.css';
-
-import { setCardOrder } from '../../services/actions/burger-constructor-card';
-import { setModalConstructorOpen } from '../../services/actions/modal';
-
-import { setCardMove } from '../../services/actions/move-item';
-
-import { Modal } from '../modal/modal';
-import { OrderDetails } from '../order-details/order-details';
-import { DragCard } from './drag-item';
-import {
-  setIngredients,
-  setBun,
-} from '../../services/actions/burger-constructor';
-import { sendOrder } from '../../services/actions/order-details';
 
 import {
   ConstructorElement,
@@ -24,34 +10,40 @@ import {
   Button,
 } from '@ya.praktikum/react-developer-burger-ui-components';
 
+import { Modal } from '../modal/modal';
+import { OrderDetails } from '../order-details/order-details';
+import { DragCard } from './drag-item';
+
+import { setCardOrder } from '../../services/actions/burger-constructor-card';
+import { setModalConstructorOpen } from '../../services/actions/modal';
+import {
+  setIngredients,
+  setBun,
+} from '../../services/actions/burger-constructor';
+import { sendOrder } from '../../services/actions/order-details';
+
 export function BurgerConstructor(props) {
   const { children } = props;
   const dispatch = useDispatch();
-  const {
-    resultOrder,
-    cardOrder,
-    ingredients,
-    bun,
-    ingredientsMove,
-    isOpenConstructor,
-  } = useSelector((store) => ({
-    isOpenConstructor: store.burgerConstructor.isOpenConstructor,
-    cardOrder: store.burgerConstructor.cardOrder,
-    bun: store.burgerConstructor.bun,
-    ingredients: store.burgerConstructor.ingredients,
-    resultOrder: store.orderDetails.resultOrder,
-    ingredientsMove: store.moveItem.ingredientsMove,
-  }));
+  const { resultOrder, cardOrder, ingredients, bun, isOpenConstructor } =
+    useSelector((store) => ({
+      isOpenConstructor: store.burgerConstructor.isOpenConstructor,
+      cardOrder: store.burgerConstructor.cardOrder,
+      bun: store.burgerConstructor.bun,
+      ingredients: store.burgerConstructor.ingredients,
+      resultOrder: store.orderDetails.resultOrder,
+    }));
   const [cards, seCards] = useState(ingredients);
   const [totalSum, setTotalSum] = useState(0);
+
   const [, drop] = useDrop({
     accept: 'item',
     drop(item) {
       item.card && dispatch(setCardOrder(item.card, cardOrder, ingredients));
     },
   });
-  const a = ingredientsMove ? ingredientsMove : ingredients;
 
+  // Отображение ингредиентов-------------------------------------------
   useEffect(() => {
     const cardCancelAdd = cards && cards.some((i) => i === cardOrder);
     if (!cardCancelAdd && cardOrder) {
@@ -76,8 +68,7 @@ export function BurgerConstructor(props) {
   }, [cardOrder]);
 
   useEffect(() => {
-    seCards(a);
-    // ingredientsMove && setIngredients(ingredientsMove);
+    seCards(ingredients);
   }, [ingredients]);
 
   //логика подсчета суммы----------------------------------------
@@ -93,7 +84,7 @@ export function BurgerConstructor(props) {
         setTotalSum(totalSumIngredients + bun.price * 2);
       }
     }
-  }, [ingredients, bun]);
+  }, [bun, cards]);
 
   const openModal = () => {
     dispatch(setModalConstructorOpen());
@@ -111,36 +102,6 @@ export function BurgerConstructor(props) {
     }
   };
 
-  //Перетаскивать детали заказа---------------------------
-  // const moveItem = useCallback(
-  //   (dragIndex, hoverIndex) => {
-  // setIngredients((ingredients) => {
-  //   dispatch(
-  //     setCardMove(dragIndex, hoverIndex, ingredients, ingredientsMove)
-  //   );
-  //   //   const ingredients = [...ingredientsMove];
-  //   //   ingredients.splice(dragIndex, 0, ingredients.splice(hoverIndex, 1)[0]);
-  //   //   return ingredients;
-  // });
-  //   },
-  //   [ingredients]
-  // );
-
-  // const moveItem = useCallback(
-  //   (dragIndex, hoverIndex) => {
-  //     setIngredients((ingredients) => {
-  //       const ingredientsMove = [...ingredients];
-
-  //       ingredientsMove.splice(
-  //         dragIndex,
-  //         0,
-  //         ingredientsMove.splice(hoverIndex, 1)[0]
-  //       );
-  //       return ingredientsMove;
-  //     });
-  //   },
-  //   [ingredients]
-  // );
   return (
     <section className={constructorStyles.constructor} ref={drop}>
       <ul
@@ -169,7 +130,6 @@ export function BurgerConstructor(props) {
                 key={item._id}
                 index={index}
                 item={item}
-                // moveItem={moveItem}
                 deleteItem={deleteItem}
               >
                 {children}

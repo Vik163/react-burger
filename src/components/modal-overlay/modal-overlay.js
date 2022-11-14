@@ -10,7 +10,7 @@ import { deleteIngredientDetails } from '../../services/actions/ingredient-detai
 
 export function ModalOverlay() {
   const dispatch = useDispatch();
-  //Клик по ModalOverlay
+
   const closeOverlay = (e) => {
     if (e.target === e.currentTarget) {
       dispatch(setModalIngredientsClose());

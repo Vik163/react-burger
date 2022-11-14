@@ -1,12 +1,11 @@
 export const CARD_MOVE = 'CARD_MOVE';
 
-export function setCardMove(dragIndex, hoverIndex, ingredients) {
+export function setCardMove(dragIndex, hoverIndex) {
   return function (dispatch) {
     dispatch({
       type: 'CARD_MOVE',
       dragIndex: dragIndex,
       hoverIndex: hoverIndex,
-      ingredients: ingredients,
     });
   };
 }

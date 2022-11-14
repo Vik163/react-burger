@@ -1,26 +1,21 @@
-import { useRef, useCallback } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-
+import { useRef } from 'react';
+import { useDispatch } from 'react-redux';
 import { useDrag, useDrop } from 'react-dnd';
 
 import constructorStyles from './burger-constructor.module.css';
-
-import { setCardMove } from '../../services/actions/move-item';
 
 import {
   ConstructorElement,
   DragIcon,
 } from '@ya.praktikum/react-developer-burger-ui-components';
 
-export const DragCard = ({ item, index, moveItem, deleteItem }) => {
+import { setCardMove } from '../../services/actions/move-item';
+
+export const DragCard = ({ item, index, deleteItem }) => {
   const dispatch = useDispatch();
 
-  const { ingredients, ingredientsMove } = useSelector((store) => ({
-    ingredients: store.burgerConstructor.ingredients,
-    ingredientsMove: store.moveItem.ingredientsMove,
-  }));
   const [{ isDragging }, dragRef] = useDrag({
-    type: 'item',
+    type: 'itemConstructor',
     item: { index },
     collect: (monitor) => ({
       isDragging: monitor.isDragging(),
@@ -28,13 +23,14 @@ export const DragCard = ({ item, index, moveItem, deleteItem }) => {
   });
 
   const [, dropRef] = useDrop({
-    accept: 'item',
+    accept: 'itemConstructor',
     hover: (item, monitor) => {
-      if (!ref.current || item.card) {
-        return;
-      }
       const dragIndex = item.index;
       const hoverIndex = index;
+      if (!ref.current || item.card || dragIndex === hoverIndex) {
+        return;
+      }
+
       // Перемещает вверх или вниз, когда курсор мыши выходит за среднюю ось Y элемента
       const hoverBoundingRect = ref.current?.getBoundingClientRect();
       const hoverMiddleY =
@@ -45,8 +41,7 @@ export const DragCard = ({ item, index, moveItem, deleteItem }) => {
       if (dragIndex < hoverIndex && hoverActualY < hoverMiddleY) return;
       //  hover больше middle Y
       if (dragIndex > hoverIndex && hoverActualY > hoverMiddleY) return;
-      dispatch(setCardMove(dragIndex, hoverIndex, ingredients));
-      // moveItem(dragIndex, hoverIndex);
+      dispatch(setCardMove(dragIndex, hoverIndex));
       item.index = hoverIndex;
     },
   });
