@@ -2,7 +2,7 @@ import {
   SEND_ORDER_REQUEST,
   SEND_ORDER_SUCCESS,
   SEND_ORDER_FAILED,
-} from '../actions/order-details';
+} from '../actions/constants';
 
 const initialState = {
   dataOrderRequest: false,

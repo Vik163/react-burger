@@ -2,16 +2,10 @@ import {
   GET_CARDS_FAILED,
   GET_CARDS_REQUEST,
   GET_CARDS_SUCCESS,
-} from '../actions/burger-ingredients';
-import {
-  MODAL_INGREDIENTS_OPEN,
-  MODAL_INGREDIENTS_CLOSE,
-} from '../actions/modal';
+} from '../actions/constants';
 
 const initialState = {
   cards: [],
-  isOpen: false,
-  title: '',
   cardsRequest: false,
   cardsFailed: false,
   statusRequest: null,
@@ -20,18 +14,6 @@ const initialState = {
 
 export const burgerIngredientsReducer = (state = initialState, action) => {
   switch (action.type) {
-    case MODAL_INGREDIENTS_OPEN:
-      return {
-        ...state,
-        isOpen: true,
-        title: action.title,
-      };
-    case MODAL_INGREDIENTS_CLOSE:
-      return {
-        ...state,
-        isOpen: false,
-        title: action.title,
-      };
     case GET_CARDS_REQUEST: {
       return {
         ...state,

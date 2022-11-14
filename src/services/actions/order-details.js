@@ -1,16 +1,13 @@
 import { burgerApi } from '../../utils/burger-api';
 
-export const SEND_ORDER_REQUEST = 'SEND_ORDER_REQUEST';
-export const SEND_ORDER_SUCCESS = 'SEND_ORDER_SUCCESS';
-export const SEND_ORDER_FAILED = 'SEND_ORDER_FAILED';
+import { addErrorOrder } from './actionCreators';
+
+import { SEND_ORDER_REQUEST, SEND_ORDER_SUCCESS } from './constants';
 
 export function sendOrder(bun, ingredients) {
-  const ingredientsOrder = ingredients
-    .filter((item) => !(item.type === 'bun'))
-    .map((item) => item._id);
   if (bun) {
     const order = {
-      ingredients: [bun._id, ...ingredientsOrder, bun._id],
+      ingredients: [bun._id, ...ingredients, bun._id],
     };
     return function (dispatch) {
       dispatch({
@@ -28,23 +25,11 @@ export function sendOrder(bun, ingredients) {
         )
         .catch((err) => {
           if (err === 400) {
-            dispatch({
-              type: SEND_ORDER_FAILED,
-              statusRequest: err,
-              messageError: 'Переданы некорректные данные',
-            });
+            dispatch(addErrorOrder(err, 'Переданы некорректные данные'));
           } else if (err === 404) {
-            dispatch({
-              type: SEND_ORDER_FAILED,
-              statusRequest: err,
-              messageError: 'Страница не найдена',
-            });
+            dispatch(addErrorOrder(err, 'Страница не найдена'));
           } else {
-            dispatch({
-              type: SEND_ORDER_FAILED,
-              statusRequest: err,
-              messageError: 'Внутренняя ошибка сервера',
-            });
+            dispatch(addErrorOrder(err, 'Внутренняя ошибка сервера'));
           }
         });
     };

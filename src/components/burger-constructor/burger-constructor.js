@@ -15,7 +15,6 @@ import { OrderDetails } from '../order-details/order-details';
 import { DragCard } from './drag-item';
 
 import { setCardOrder } from '../../services/actions/burger-constructor-card';
-import { setModalConstructorOpen } from '../../services/actions/modal';
 import {
   setIngredients,
   setBun,
@@ -25,16 +24,15 @@ import { sendOrder } from '../../services/actions/order-details';
 export function BurgerConstructor(props) {
   const { children } = props;
   const dispatch = useDispatch();
-  const { resultOrder, cardOrder, ingredients, bun, isOpenConstructor } =
-    useSelector((store) => ({
-      isOpenConstructor: store.burgerConstructor.isOpenConstructor,
-      cardOrder: store.burgerConstructor.cardOrder,
-      bun: store.burgerConstructor.bun,
-      ingredients: store.burgerConstructor.ingredients,
-      resultOrder: store.orderDetails.resultOrder,
-    }));
+  const { resultOrder, cardOrder, ingredients, bun } = useSelector((store) => ({
+    cardOrder: store.burgerConstructor.cardOrder,
+    bun: store.burgerConstructor.bun,
+    ingredients: store.burgerConstructor.ingredients,
+    resultOrder: store.orderDetails.resultOrder,
+  }));
   const [cards, seCards] = useState(ingredients);
   const [totalSum, setTotalSum] = useState(0);
+  const [isModal, setIsModal] = useState(false);
 
   const [, drop] = useDrop({
     accept: 'item',
@@ -87,8 +85,14 @@ export function BurgerConstructor(props) {
   }, [bun, cards]);
 
   const openModal = () => {
-    dispatch(setModalConstructorOpen());
-    dispatch(sendOrder(bun, ingredients));
+    if (bun) {
+      setIsModal(true);
+      dispatch(sendOrder(bun, ingredients));
+    }
+  };
+
+  const closeModal = () => {
+    setIsModal(false);
   };
 
   //Удаление из заказа--------------------------------------
@@ -119,15 +123,15 @@ export function BurgerConstructor(props) {
           </li>
         )}
         <div className={constructorStyles.constructor__scrollbar}>
-          {isOpenConstructor && resultOrder && (
-            <Modal>
+          {isModal && resultOrder && (
+            <Modal closeModal={closeModal} isModal={isModal}>
               <OrderDetails />
             </Modal>
           )}
           {cards &&
             cards.map((item, index) => (
               <DragCard
-                key={item._id}
+                key={item.uuid ? item.uuid : item._id}
                 index={index}
                 item={item}
                 deleteItem={deleteItem}

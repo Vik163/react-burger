@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from 'uuid';
 
-export const CARD_ORDER = 'CARD_ORDER';
+import { CARD_ORDER } from './constants';
 
 export function setCardOrder(item, cardOrder, ingredients) {
   return function (dispatch) {
@@ -15,8 +15,8 @@ export function setCardOrder(item, cardOrder, ingredients) {
     };
 
     dispatch({
-      type: 'CARD_ORDER',
-      cardOrder: { ...item, _id: isIdRepeat() ? uuidv4() : item._id },
+      type: CARD_ORDER,
+      cardOrder: { ...item, uuid: isIdRepeat() && uuidv4() },
     });
   };
 }

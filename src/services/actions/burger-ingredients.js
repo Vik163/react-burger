@@ -1,8 +1,8 @@
 import { burgerApi } from '../../utils/burger-api';
 
-export const GET_CARDS_REQUEST = 'GET_CARDS_REQUEST';
-export const GET_CARDS_SUCCESS = 'GET_CARDS_SUCCESS';
-export const GET_CARDS_FAILED = 'GET_CARDS_FAILED';
+import { addErrorIngredients } from './actionCreators';
+
+import { GET_CARDS_REQUEST, GET_CARDS_SUCCESS } from './constants';
 
 export function getCards() {
   return function (dispatch) {
@@ -21,16 +21,8 @@ export function getCards() {
       )
       .catch((err) => {
         err === 404
-          ? dispatch({
-              type: GET_CARDS_FAILED,
-              statusRequest: err,
-              messageError: 'Запрашиваемые файлы не найдены',
-            })
-          : dispatch({
-              type: GET_CARDS_FAILED,
-              statusRequest: err,
-              messageError: 'Внутренняя ошибка сервера',
-            });
+          ? dispatch(addErrorIngredients(err, 'Запрашиваемые файлы не найдены'))
+          : dispatch(addErrorIngredients(err, 'Внутренняя ошибка сервера'));
       });
   };
 }

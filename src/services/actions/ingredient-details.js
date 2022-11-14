@@ -1,5 +1,4 @@
-export const INGREDIENT_DETAILS = 'INGREDIENT_DETAILS ';
-export const DELETE_INGREDIENT_DETAILS = 'DELETE_INGREDIENT_DETAILS ';
+import { INGREDIENT_DETAILS, DELETE_INGREDIENT_DETAILS } from './constants';
 
 export function setIngredientDetails(ingredientDetails) {
   return function (dispatch) {

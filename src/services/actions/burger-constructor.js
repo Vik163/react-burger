@@ -1,10 +1,9 @@
-export const DATA_INGREDIENTS = 'DATA_INGREDIENTS';
-export const DATA_BUN = 'DATA_BUN';
+import { DATA_INGREDIENTS, DATA_BUN } from './constants';
 
 export function setBun({ bun }) {
   return function (dispatch) {
     dispatch({
-      type: 'DATA_BUN',
+      type: DATA_BUN,
       bun: bun,
     });
   };
@@ -13,7 +12,7 @@ export function setBun({ bun }) {
 export function setIngredients({ ingredients }) {
   return function (dispatch) {
     dispatch({
-      type: 'DATA_INGREDIENTS',
+      type: DATA_INGREDIENTS,
       ingredients: ingredients,
     });
   };

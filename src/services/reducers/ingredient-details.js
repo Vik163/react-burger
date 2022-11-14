@@ -1,7 +1,7 @@
 import {
   INGREDIENT_DETAILS,
   DELETE_INGREDIENT_DETAILS,
-} from '../actions/ingredient-details';
+} from '../actions/constants';
 
 const initialState = {
   ingredientDetails: {},

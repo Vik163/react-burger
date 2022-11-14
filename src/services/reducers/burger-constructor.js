@@ -1,16 +1,14 @@
-import { DATA_INGREDIENTS, DATA_BUN } from '../actions/burger-constructor';
-import { CARD_ORDER } from '../actions/burger-constructor-card';
 import {
-  MODAL_CONSTRUCTOR_OPEN,
-  MODAL_CONSTRUCTOR_CLOSE,
-} from '../actions/modal';
-import { CARD_MOVE } from '../actions/move-item';
+  DATA_INGREDIENTS,
+  DATA_BUN,
+  CARD_ORDER,
+  CARD_MOVE,
+} from '../actions/constants';
 
 const initialState = {
   cardOrder: null,
   bun: null,
   ingredients: [],
-  isOpenConstructor: false,
   dragIndex: null,
   hoverIndex: null,
 };
@@ -29,16 +27,6 @@ export const burgerConstructorReducer = (state = initialState, action) => {
       return {
         ...state,
         ingredients: ingredients,
-      };
-    case MODAL_CONSTRUCTOR_OPEN:
-      return {
-        ...state,
-        isOpenConstructor: true,
-      };
-    case MODAL_CONSTRUCTOR_CLOSE:
-      return {
-        ...state,
-        isOpenConstructor: false,
       };
     case DATA_BUN: {
       return {
