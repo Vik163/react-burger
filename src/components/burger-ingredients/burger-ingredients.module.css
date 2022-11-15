@@ -3,6 +3,10 @@
   height: 912px;
 }
 
+.links {
+  display: flex;
+}
+
 .ingredients__container {
   height: 756px;
   overflow-y: auto;

@@ -11,9 +11,6 @@
   flex-direction: column;
   gap: 16px;
 }
-.constructor__icon {
-  height: 24px;
-}
 
 .constructor__scrollbar {
   overflow-y: auto;
@@ -37,14 +34,19 @@
 .constructor__item {
   width: 568px;
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
   align-items: center;
+  cursor: pointer;
+}
+
+.constructor__item > svg {
+  margin-right: 10px;
 }
 
 .constructor__price {
   display: flex;
   align-items: center;
-  justify-content: end;
+  justify-content: flex-end;
 }
 
 .constructor__price > button {

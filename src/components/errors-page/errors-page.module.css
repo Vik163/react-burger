@@ -1,6 +1,8 @@
 .page {
+  position: fixed;
+  background-color: #1a1b22;
   width: 100%;
-  height: calc(100vh - 88px);
+  height: 100vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
