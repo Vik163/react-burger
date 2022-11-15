@@ -69,6 +69,17 @@ export function BurgerConstructor(props) {
     seCards(ingredients);
   }, [ingredients]);
 
+  useEffect(() => {
+    if (resultOrder) {
+      dispatch(setBun({ bun: null }));
+      dispatch(
+        setIngredients({
+          ingredients: [],
+        })
+      );
+    }
+  }, [resultOrder]);
+
   //логика подсчета суммы----------------------------------------
   useMemo(() => {
     const totalSumIngredients =

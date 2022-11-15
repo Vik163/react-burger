@@ -10,6 +10,7 @@ const initialState = {
   cardsFailed: false,
   statusRequest: null,
   messageError: '',
+  loader: false,
 };
 
 export const burgerIngredientsReducer = (state = initialState, action) => {
@@ -18,6 +19,7 @@ export const burgerIngredientsReducer = (state = initialState, action) => {
       return {
         ...state,
         cardsRequest: true,
+        loader: true,
       };
     }
     case GET_CARDS_SUCCESS: {
@@ -26,6 +28,7 @@ export const burgerIngredientsReducer = (state = initialState, action) => {
         cardsFailed: false,
         cards: action.cards,
         cardsRequest: false,
+        loader: false,
       };
     }
     case GET_CARDS_FAILED: {
@@ -35,6 +38,7 @@ export const burgerIngredientsReducer = (state = initialState, action) => {
         statusRequest: action.statusRequest,
         messageError: action.messageError,
         cardsRequest: false,
+        loader: false,
       };
     }
     default: {

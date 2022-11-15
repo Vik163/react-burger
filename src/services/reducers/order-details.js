@@ -10,6 +10,7 @@ const initialState = {
   resultOrder: null,
   statusRequest: null,
   messageError: '',
+  loader: false,
 };
 
 export const orderDetailsReducer = (state = initialState, action) => {
@@ -18,6 +19,7 @@ export const orderDetailsReducer = (state = initialState, action) => {
       return {
         ...state,
         dataOrderRequest: true,
+        loader: true,
       };
     }
     case SEND_ORDER_SUCCESS: {
@@ -26,6 +28,7 @@ export const orderDetailsReducer = (state = initialState, action) => {
         dataOrderFailed: false,
         dataOrderRequest: false,
         resultOrder: action.resultOrder,
+        loader: false,
       };
     }
     case SEND_ORDER_FAILED: {
@@ -35,6 +38,7 @@ export const orderDetailsReducer = (state = initialState, action) => {
         statusRequest: action.statusRequest,
         messageError: action.messageError,
         dataOrderRequest: false,
+        loader: false,
       };
     }
     default: {
