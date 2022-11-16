@@ -37,7 +37,7 @@ export function BurgerConstructor(props) {
   const [, drop] = useDrop({
     accept: 'item',
     drop(item) {
-      item.card && dispatch(setCardOrder(item.card, cardOrder, ingredients));
+      item.card && dispatch(setCardOrder(item.card));
     },
   });
 
