@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 import headerStyles from './app-header.module.css';
 
@@ -29,8 +30,8 @@ export function AppHeader() {
   };
   return (
     <header className={headerStyles.header}>
-      <a
-        href='#'
+      <Link
+        to='/'
         className={`${headerStyles.header__link} header__link_type_constructor pl-5 pr-5 pb-4 pt-4`}
         onClick={activeLink}
       >
@@ -41,8 +42,9 @@ export function AppHeader() {
         >
           Конструктор
         </p>
-      </a>
-      <a
+      </Link>
+      <Link
+        to='#'
         className={`${headerStyles.header__link} header__link_type_list pl-5 pr-5 pb-4 pt-4`}
         onClick={activeLink}
       >
@@ -53,9 +55,10 @@ export function AppHeader() {
         >
           Лента заказов
         </p>
-      </a>
+      </Link>
       <Logo />
-      <a
+      <Link
+        to='/profile'
         className={`${headerStyles.header__link} header__link_type_profile pl-5 pr-5 pb-4 pt-4`}
         onClick={activeLink}
       >
@@ -66,7 +69,7 @@ export function AppHeader() {
         >
           Личный кабинет
         </p>
-      </a>
+      </Link>
     </header>
   );
 }
