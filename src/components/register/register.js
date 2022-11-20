@@ -11,36 +11,29 @@ import {
 
 import { registration } from '../../services/actions/register';
 
-export function Register(props) {
-  const { handleRegister, formReset } = props;
+export function Register() {
   const dispatch = useDispatch();
-  const { resultOrder, cardOrder, ingredients, bun } = useSelector((store) => ({
-    cardOrder: store.burgerConstructor.cardOrder,
-    bun: store.burgerConstructor.bun,
-    ingredients: store.burgerConstructor.ingredients,
-    resultOrder: store.orderDetails.resultOrder,
+  const { formReset } = useSelector((store) => ({
+    formReset: store.registerInfo.formReset,
   }));
-
   const [value, setValue] = useState({
     name: '',
     email: '',
     password: '',
   });
   const inputRef = useRef(null);
+  const [toggle, setToggle] = useState(false);
   const onIconClick = () => {
     setTimeout(() => inputRef.current.focus(), 0);
-    alert('Icon Click Callback');
+    setToggle(!toggle);
   };
-
-  const [inputEventTarget, setInputEventTarget] = useState({});
 
   //Ввод данных
   const handleChange = (event) => {
-    // setInputEventTarget(event.target);
     const target = event.target;
-    const value = target.value;
+    const valueItem = target.value;
     const name = target.name;
-    setValue({ ...value, [name]: value });
+    setValue({ ...value, [name]: valueItem });
   };
 
   // Сброс -------------------------------
@@ -52,7 +45,6 @@ export function Register(props) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // handleRegister(value);
     dispatch(registration(value));
   };
 
@@ -67,11 +59,10 @@ export function Register(props) {
           placeholder={'Имя'}
           onChange={handleChange}
           icon={''}
-          value={''}
+          value={value.name ?? ''}
           name={'name'}
           error={false}
           ref={inputRef}
-          onIconClick={onIconClick}
           errorText={'Ошибка'}
           size={'default'}
           extraClass='ml-1 mb-6'
@@ -79,23 +70,22 @@ export function Register(props) {
         <Input
           type={'email'}
           placeholder={'E-mail'}
-          onChange={(e) => setValue(e.target.value)}
+          onChange={handleChange}
           icon={''}
-          value={''}
+          value={value.email ?? ''}
           name={'email'}
           error={false}
           ref={inputRef}
-          onIconClick={onIconClick}
           errorText={'Ошибка'}
           size={'default'}
           extraClass='ml-1 mb-6'
         />
         <Input
-          type={'password'}
+          type={!toggle ? 'password' : 'text'}
           placeholder={'Пароль'}
-          onChange={(e) => setValue(e.target.value)}
-          icon={'ShowIcon'}
-          value={''}
+          onChange={handleChange}
+          icon={!toggle ? 'ShowIcon' : 'HideIcon'}
+          value={value.password ?? ''}
           name={'password'}
           error={false}
           ref={inputRef}

@@ -5,9 +5,15 @@ import errorsStyles from './errors-page.module.css';
 export function ErrorsPage() {
   const { statusRequest, messageError } = useSelector((store) => ({
     statusRequest:
-      store.burgerIngredients.statusRequest || store.orderDetails.statusRequest,
+      store.burgerIngredients.statusRequest ||
+      store.orderDetails.statusRequest ||
+      store.registerInfo.statusRequest ||
+      store.authorizationInfo.statusRequest,
     messageError:
-      store.burgerIngredients.messageError || store.orderDetails.messageError,
+      store.burgerIngredients.messageError ||
+      store.orderDetails.messageError ||
+      store.registerInfo.messageError ||
+      store.authorizationInfo.messageError,
   }));
 
   //Пока функциональность не полная

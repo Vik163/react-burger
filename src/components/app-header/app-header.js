@@ -17,7 +17,6 @@ export function AppHeader() {
     profile: false,
   });
 
-  //Временно
   const activeLink = (e) => {
     const target = e.currentTarget;
     if (target.classList.contains('header__link_type_constructor')) {

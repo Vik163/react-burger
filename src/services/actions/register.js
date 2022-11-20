@@ -11,17 +11,23 @@ export function registration(form) {
     });
     auth
       .signUp(form)
-      .then(
-        (result) =>
-          result &&
+      .then((data) => {
+        if (data) {
+          localStorage.setItem('userData', JSON.stringify(data.user));
+
           dispatch({
             type: REGISTER_SUCCESS,
-            resultOrder: result,
-          })
-      )
+          });
+        }
+      })
       .catch((err) => {
+        console.log(err);
         if (err === 400) {
           dispatch(addErrorRegister(err, 'Переданы некорректные данные'));
+        } else if (err === 403) {
+          dispatch(
+            addErrorRegister(err, 'Пользователь с таким email уже существует')
+          );
         } else if (err === 404) {
           dispatch(addErrorRegister(err, 'Страница не найдена'));
         } else {

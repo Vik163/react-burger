@@ -1,5 +1,6 @@
-import React, { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
 
 import loginStyles from './login.module.css';
 
@@ -8,80 +9,39 @@ import {
   Button,
 } from '@ya.praktikum/react-developer-burger-ui-components';
 
-export function Login(props) {
-  const { handleLogin, errorMessage, formReset, resetErrors } = props;
+import { authorization } from '../../services/actions/login';
 
-  const [value, setValue] = useState('value');
+export function Login() {
+  const dispatch = useDispatch();
+  const { formReset } = useSelector((store) => ({
+    formReset: store.authorizationInfo.formReset,
+  }));
+  const [toggle, setToggle] = useState(false);
+  const [value, setValue] = useState({ email: '', password: '' });
   const inputRef = useRef(null);
   const onIconClick = () => {
     setTimeout(() => inputRef.current.focus(), 0);
-    alert('Icon Click Callback');
+    setToggle(!toggle);
   };
 
-  const [isName, setIsName] = useState('');
-  const [values, setValues] = React.useState(false);
-  const [errors, setErrors] = React.useState({
-    password: '',
-  });
-  const [inputEventTarget, setInputEventTarget] = React.useState({});
-  const [disabled, setDisabled] = React.useState(true);
-  const [emailValid, setEmailValid] = React.useState(false);
-  const [passwordValid, setPasswordValid] = React.useState(false);
-
-  //Ввод данных и валидация
+  //Ввод данных
   const handleChange = (event) => {
-    resetErrors();
-    setInputEventTarget(event.target);
     const target = event.target;
-    const value = target.value;
+    const valueItem = target.value;
     const name = target.name;
-    setIsName(name);
-    setValues({ ...values, [name]: value });
+    setValue({ ...value, [name]: valueItem });
   };
-
-  // Валидация email и password ----------------------------------------------
-  useEffect(() => {
-    if (values.email) {
-      if (values.email.match(/^[\w]{1}[\w-.]*@[\w-]+\.[a-z]{2,4}$/i) === null) {
-        setEmailValid({
-          valid: false,
-          message: 'Некорректный адрес электронной почты ',
-        });
-      } else {
-        setEmailValid({ valid: true });
-      }
-    }
-    if (inputEventTarget.name === 'password') {
-      setPasswordValid(inputEventTarget.closest('input').checkValidity());
-      setErrors({
-        ...errors,
-        [inputEventTarget.name]: inputEventTarget.validationMessage,
-      });
-    }
-  }, [values]);
-
-  // Переключение активности кнопки submit ---
-  useEffect(() => {
-    if (emailValid.valid && passwordValid) {
-      setDisabled(false);
-    } else {
-      setDisabled(true);
-    }
-  }, [emailValid, passwordValid]);
 
   // Сброс -------------------------------
   useEffect(() => {
     if (formReset) {
-      setValues({ email: '', password: '' });
-      setErrors({});
-      setDisabled(true);
+      setValue({ email: '', password: '' });
     }
   }, [formReset]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    handleLogin(values);
-    setDisabled(false);
+    dispatch(authorization(value));
   };
 
   return (
@@ -93,23 +53,22 @@ export function Login(props) {
         <Input
           type={'email'}
           placeholder={'E-mail'}
-          onChange={(e) => setValue(e.target.value)}
+          onChange={handleChange}
           icon={''}
-          value={''}
+          value={value.email ?? ''}
           name={'email'}
           error={false}
           ref={inputRef}
-          onIconClick={onIconClick}
           errorText={'Ошибка'}
           size={'default'}
           extraClass='ml-1 mb-6'
         />
         <Input
-          type={'password'}
+          type={!toggle ? 'password' : 'text'}
           placeholder={'Пароль'}
-          onChange={(e) => setValue(e.target.value)}
-          icon={'ShowIcon'}
-          value={''}
+          onChange={handleChange}
+          icon={!toggle ? 'ShowIcon' : 'HideIcon'}
+          value={value.password ?? ''}
           name={'password'}
           error={false}
           ref={inputRef}

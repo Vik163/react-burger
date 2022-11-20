@@ -7,10 +7,10 @@ import {
 const initialState = {
   registerRequest: false,
   registerFailed: false,
-  resultOrder: null,
   statusRequest: null,
   messageError: '',
   loader: false,
+  formReset: false,
 };
 
 export const registerReducer = (state = initialState, action) => {
@@ -27,7 +27,7 @@ export const registerReducer = (state = initialState, action) => {
         ...state,
         registerFailed: false,
         registerRequest: false,
-        resultOrder: action.resultOrder,
+        formReset: true,
         loader: false,
       };
     }

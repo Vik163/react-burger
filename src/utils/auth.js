@@ -1,3 +1,5 @@
+import { getCookie } from './cookie';
+
 class Auth {
   constructor(settings) {
     this._settings = settings;
@@ -26,41 +28,69 @@ class Auth {
     });
   }
 
-  registration(name, password, email) {
-    return fetch(`${this._settings.baseUrl}/signup`, {
+  signIn(form) {
+    return this._request('/login', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      headers: this._settings.headers,
       body: JSON.stringify({
-        name: name,
-        password: password,
-        email: email,
+        password: form.password,
+        email: form.email,
       }),
-    }).then(this._checkResponse);
+    });
   }
 
-  authorization(password, email) {
-    return fetch(`${this._settings.baseUrl}/signin`, {
+  signOut() {
+    return this._request('/logout', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      headers: this._settings.headers,
       body: JSON.stringify({
-        password: password,
-        email: email,
+        token: getCookie('refreshToken'),
       }),
-    }).then(this._checkResponse);
+    });
   }
 
-  checkToken(jwt) {
-    return fetch(`${this._settings.baseUrl}/users/me`, {
-      method: 'GET',
+  updateToken() {
+    return this._request('/token', {
+      method: 'POST',
+      headers: this._settings.headers,
+      body: JSON.stringify({
+        token: getCookie('refreshToken'),
+      }),
+    });
+  }
+
+  getUser() {
+    return this._request('/user', {
+      mode: 'cors',
+      cache: 'no-cache',
+      credentials: 'same-origin',
       headers: {
         'Content-Type': 'application/json',
-        authorization: jwt,
+        Authorization: 'Bearer ' + getCookie('token'),
       },
-    }).then(this._checkResponse);
+      redirect: 'follow',
+      referrerPolicy: 'no-referrer',
+    });
+  }
+
+  updateUser(form) {
+    return this._request('/user', {
+      method: 'PATCH',
+      mode: 'cors',
+      cache: 'no-cache',
+      credentials: 'same-origin',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + getCookie('token'),
+      },
+      redirect: 'follow',
+      referrerPolicy: 'no-referrer',
+      body: JSON.stringify({
+        name: form.name,
+        password: form.password,
+        email: form.email,
+      }),
+    });
   }
 }
 
