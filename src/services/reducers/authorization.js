@@ -1,3 +1,5 @@
+import { getCookie } from '../../utils/cookie';
+
 import {
   LOGIN_REQUEST,
   LOGIN_SUCCESS,
@@ -5,13 +7,24 @@ import {
   LOGOUT_REQUEST,
   LOGOUT_SUCCESS,
   LOGOUT_FAILED,
+  REGISTER_REQUEST,
+  REGISTER_SUCCESS,
+  REGISTER_FAILED,
+  TOKEN_REQUEST,
+  TOKEN_SUCCESS,
+  TOKEN_FAILED,
 } from '../actions/constants';
 
 const initialState = {
+  loggedIn: getCookie('token') ? true : false,
+  registerRequest: false,
+  registerFailed: false,
   loginRequest: false,
   loginFailed: false,
   logoutRequest: false,
   logoutFailed: false,
+  tokenRequest: false,
+  tokenFailed: false,
   statusRequest: null,
   messageError: '',
   formReset: false,
@@ -20,6 +33,34 @@ const initialState = {
 
 export const authorizationReducer = (state = initialState, action) => {
   switch (action.type) {
+    case REGISTER_REQUEST: {
+      return {
+        ...state,
+        registerRequest: true,
+        loader: true,
+      };
+    }
+    case REGISTER_SUCCESS: {
+      return {
+        ...state,
+        registerFailed: false,
+        registerRequest: false,
+        formReset: true,
+        loader: false,
+        loggedIn: true,
+      };
+    }
+    case REGISTER_FAILED: {
+      return {
+        ...state,
+        registerFailed: true,
+        statusRequest: action.statusRequest,
+        messageError: action.messageError,
+        registerRequest: false,
+        loader: false,
+        loggedIn: false,
+      };
+    }
     case LOGIN_REQUEST: {
       return {
         ...state,
@@ -34,6 +75,7 @@ export const authorizationReducer = (state = initialState, action) => {
         loginRequest: false,
         formReset: true,
         loader: false,
+        loggedIn: true,
       };
     }
     case LOGIN_FAILED: {
@@ -44,6 +86,31 @@ export const authorizationReducer = (state = initialState, action) => {
         messageError: action.messageError,
         loginRequest: false,
         loader: false,
+        loggedIn: false,
+      };
+    }
+    case TOKEN_REQUEST: {
+      return {
+        ...state,
+        tokenRequest: true,
+      };
+    }
+    case TOKEN_SUCCESS: {
+      return {
+        ...state,
+        tokenFailed: false,
+        tokenRequest: false,
+        loggedIn: true,
+      };
+    }
+    case TOKEN_FAILED: {
+      return {
+        ...state,
+        tokenFailed: true,
+        statusRequest: action.statusRequest,
+        messageError: action.messageError,
+        tokenRequest: false,
+        loggedIn: false,
       };
     }
     case LOGOUT_REQUEST: {
@@ -57,6 +124,7 @@ export const authorizationReducer = (state = initialState, action) => {
         ...state,
         logoutFailed: false,
         logoutRequest: false,
+        loggedIn: false,
       };
     }
     case LOGOUT_FAILED: {
@@ -66,6 +134,7 @@ export const authorizationReducer = (state = initialState, action) => {
         statusRequest: action.statusRequest,
         messageError: action.messageError,
         logoutRequest: false,
+        loggedIn: true,
       };
     }
     default: {

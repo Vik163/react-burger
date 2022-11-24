@@ -4,7 +4,7 @@ import {
 } from '../actions/constants';
 
 const initialState = {
-  ingredientDetails: {},
+  ingredientDetails: JSON.parse(localStorage.getItem('card')) || {},
 };
 
 export const ingredientDetailsReducer = (state = initialState, action) => {

@@ -7,8 +7,8 @@ import {
 
 const initialState = {
   cardOrder: null,
-  bun: null,
-  ingredients: [],
+  bun: JSON.parse(localStorage.getItem('bun')) || null,
+  ingredients: JSON.parse(localStorage.getItem('ingredients')) || [],
   dragIndex: null,
   hoverIndex: null,
 };

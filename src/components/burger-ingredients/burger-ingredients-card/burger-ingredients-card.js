@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { useDrag } from 'react-dnd';
 import PropTypes from 'prop-types';
@@ -50,12 +51,12 @@ export function BurgerIngredientsCard(props) {
   };
 
   return (
-    <>
-      <li
-        className={ingredientsCardStyles.card}
-        onClick={openModalIngredients}
-        ref={drag}
-      >
+    <Link
+      to={`/ingredients/${card._id}`}
+      className={ingredientsCardStyles.link}
+      onClick={openModalIngredients}
+    >
+      <li className={ingredientsCardStyles.card} ref={drag}>
         <div style={{ display: isCounter[card.name] > 0 ? 'block' : 'none' }}>
           <Counter count={isCounter[card.name]} size='default' />
         </div>
@@ -74,7 +75,7 @@ export function BurgerIngredientsCard(props) {
           {card.name}
         </p>
       </li>
-    </>
+    </Link>
   );
 }
 

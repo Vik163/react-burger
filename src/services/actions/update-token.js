@@ -30,6 +30,9 @@ export function requestToken() {
         }
       })
       .catch((err) => {
+        if (err === 401) {
+          return;
+        }
         if (err === 400) {
           dispatch(updateToken(err, 'Переданы некорректные данные'));
         } else if (err === 404) {

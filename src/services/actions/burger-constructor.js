@@ -1,19 +1,22 @@
 import { DATA_INGREDIENTS, DATA_BUN } from './constants';
 
 export function setBun({ bun }) {
-  return function (dispatch) {
-    dispatch({
-      type: DATA_BUN,
-      bun: bun,
-    });
+  bun
+    ? localStorage.setItem('bun', JSON.stringify(bun))
+    : localStorage.removeItem('bun');
+  return {
+    type: DATA_BUN,
+    bun: bun,
   };
 }
 
 export function setIngredients({ ingredients }) {
-  return function (dispatch) {
-    dispatch({
-      type: DATA_INGREDIENTS,
-      ingredients: ingredients,
-    });
+  !ingredients[0]
+    ? localStorage.removeItem('ingredients')
+    : localStorage.setItem('ingredients', JSON.stringify(ingredients));
+
+  return {
+    type: DATA_INGREDIENTS,
+    ingredients: ingredients,
   };
 }

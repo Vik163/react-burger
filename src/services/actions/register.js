@@ -12,7 +12,18 @@ export function registration(form) {
     auth
       .signUp(form)
       .then((data) => {
-        if (data) {
+        let authToken;
+        if (data.accessToken.indexOf('Bearer') === 0) {
+          authToken = data.accessToken.split('Bearer ')[1];
+        }
+        if (authToken) {
+          document.cookie = `token=${authToken}; max-age=30`;
+        }
+        if (data.refreshToken) {
+          document.cookie = `refreshToken=${data.refreshToken}`;
+        }
+
+        if (data.success) {
           localStorage.setItem('userData', JSON.stringify(data.user));
 
           dispatch({
@@ -21,7 +32,6 @@ export function registration(form) {
         }
       })
       .catch((err) => {
-        console.log(err);
         if (err === 400) {
           dispatch(addErrorRegister(err, 'Переданы некорректные данные'));
         } else if (err === 403) {

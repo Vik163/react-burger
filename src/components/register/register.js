@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Redirect, useLocation } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 
 import registerStyles from './register.module.css';
@@ -13,8 +13,10 @@ import { registration } from '../../services/actions/register';
 
 export function Register() {
   const dispatch = useDispatch();
-  const { formReset } = useSelector((store) => ({
-    formReset: store.registerInfo.formReset,
+  const { state } = useLocation();
+  const { formReset, loggedIn } = useSelector((store) => ({
+    formReset: store.authorizationInfo.formReset,
+    loggedIn: store.authorizationInfo.loggedIn,
   }));
   const [value, setValue] = useState({
     name: '',
@@ -47,6 +49,10 @@ export function Register() {
     e.preventDefault();
     dispatch(registration(value));
   };
+
+  if (loggedIn) {
+    return <Redirect to={state?.from || '/'} />;
+  }
 
   return (
     <div className={registerStyles.register}>
@@ -102,8 +108,15 @@ export function Register() {
         className={`${registerStyles.caption} text text_type_main-default mt-20`}
       >
         Уже зарегистрированы?
-        <Link className='register__caption-link button-hover' to='/sign-in'>
-          <span className={registerStyles.link}>Войти</span>
+        <Link to='/sign-in'>
+          <Button
+            htmlType='button'
+            type='secondary'
+            size='medium'
+            extraClass='pl-2'
+          >
+            Войти
+          </Button>
         </Link>
       </p>
     </div>

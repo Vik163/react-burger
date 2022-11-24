@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Redirect, useLocation } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 
 import loginStyles from './login.module.css';
@@ -13,8 +13,10 @@ import { authorization } from '../../services/actions/login';
 
 export function Login() {
   const dispatch = useDispatch();
-  const { formReset } = useSelector((store) => ({
+  const { state } = useLocation();
+  const { formReset, loggedIn } = useSelector((store) => ({
     formReset: store.authorizationInfo.formReset,
+    loggedIn: store.authorizationInfo.loggedIn,
   }));
   const [toggle, setToggle] = useState(false);
   const [value, setValue] = useState({ email: '', password: '' });
@@ -43,6 +45,11 @@ export function Login() {
     e.preventDefault();
     dispatch(authorization(value));
   };
+  // console.log(state);
+
+  if (loggedIn) {
+    return <Redirect to={state?.from || '/'} />;
+  }
 
   return (
     <div className={loginStyles.login}>
@@ -89,17 +96,28 @@ export function Login() {
       </form>
       <p className={`${loginStyles.caption} text text_type_main-default mt-20`}>
         Вы — новый пользователь?
-        <Link className='register__caption-link button-hover' to='/sign-up'>
-          <span className={loginStyles.link}>Зарегистрироваться</span>
+        <Link to='/sign-up'>
+          <Button
+            htmlType='button'
+            type='secondary'
+            size='medium'
+            extraClass='pl-2 pb-2'
+          >
+            Зарегистрироваться
+          </Button>
         </Link>
       </p>
-      <p className={`${loginStyles.caption} text text_type_main-default mt-4`}>
+      <p className={`${loginStyles.caption} text text_type_main-default `}>
         Забыли пароль?
-        <Link
-          className='register__caption-link button-hover'
-          to='/forgot-password'
-        >
-          <span className={loginStyles.link}>Восстановить пароль</span>
+        <Link to='/forgot-password'>
+          <Button
+            htmlType='button'
+            type='secondary'
+            size='medium'
+            extraClass='pl-2 pt-2'
+          >
+            Восстановить пароль
+          </Button>
         </Link>
       </p>
     </div>

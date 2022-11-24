@@ -1,5 +1,6 @@
-import React, { useEffect, useState, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import { useEffect, useState, useRef } from 'react';
+import { Link, Redirect } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
 
 import resetPasswordStyles from './reset-password.module.css';
 
@@ -8,81 +9,47 @@ import {
   Button,
 } from '@ya.praktikum/react-developer-burger-ui-components';
 
-export function ResetPassword(props) {
-  const { handleLogin, errorMessage, formReset, resetErrors } = props;
+import { resetPassword } from '../../services/actions/reset-password';
 
-  const [value, setValue] = useState('value');
+export function ResetPassword() {
+  const dispatch = useDispatch();
+  const { resetPasswordAnswer, forgotPasswordAnswer } = useSelector(
+    (store) => ({
+      resetPasswordAnswer: store.dataUser.resetPasswordAnswer,
+      forgotPasswordAnswer: store.dataUser.forgotPasswordAnswer,
+    })
+  );
+  const [toggle, setToggle] = useState(false);
+  const [value, setValue] = useState({ password: '', token: '' });
   const inputRef = useRef(null);
   const onIconClick = () => {
     setTimeout(() => inputRef.current.focus(), 0);
-    alert('Icon Click Callback');
+    setToggle(!toggle);
   };
-
-  const [isName, setIsName] = useState('');
-  const [values, setValues] = React.useState(false);
-  const [errors, setErrors] = React.useState({
-    password: '',
-  });
-  const [inputEventTarget, setInputEventTarget] = React.useState({});
-  const [disabled, setDisabled] = React.useState(true);
-  const [emailValid, setEmailValid] = React.useState(false);
-  const [passwordValid, setPasswordValid] = React.useState(false);
 
   //Ввод данных и валидация
   const handleChange = (event) => {
-    resetErrors();
-    setInputEventTarget(event.target);
     const target = event.target;
-    const value = target.value;
+    const valueItem = target.value;
     const name = target.name;
-    setIsName(name);
-    setValues({ ...values, [name]: value });
+    setValue({ ...value, [name]: valueItem });
   };
-
-  // Валидация email и password ----------------------------------------------
-  useEffect(() => {
-    if (values.email) {
-      if (values.email.match(/^[\w]{1}[\w-.]*@[\w-]+\.[a-z]{2,4}$/i) === null) {
-        setEmailValid({
-          valid: false,
-          message: 'Некорректный адрес электронной почты ',
-        });
-      } else {
-        setEmailValid({ valid: true });
-      }
-    }
-    if (inputEventTarget.name === 'password') {
-      setPasswordValid(inputEventTarget.closest('input').checkValidity());
-      setErrors({
-        ...errors,
-        [inputEventTarget.name]: inputEventTarget.validationMessage,
-      });
-    }
-  }, [values]);
-
-  // Переключение активности кнопки submit ---
-  useEffect(() => {
-    if (emailValid.valid && passwordValid) {
-      setDisabled(false);
-    } else {
-      setDisabled(true);
-    }
-  }, [emailValid, passwordValid]);
 
   // Сброс -------------------------------
   useEffect(() => {
-    if (formReset) {
-      setValues({ email: '', password: '' });
-      setErrors({});
-      setDisabled(true);
+    if (resetPasswordAnswer) {
+      setValue({ password: '', token: '' });
     }
-  }, [formReset]);
+  }, [resetPasswordAnswer]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    handleLogin(values);
-    setDisabled(false);
+    dispatch(resetPassword(value));
   };
+
+  if (!forgotPasswordAnswer) {
+    return <Redirect to='/forgot-password' />;
+  }
 
   return (
     <div className={resetPasswordStyles.reset}>
@@ -91,11 +58,11 @@ export function ResetPassword(props) {
       </h2>
       <form className={resetPasswordStyles.form} onSubmit={handleSubmit}>
         <Input
-          type={'password'}
+          type={!toggle ? 'password' : 'text'}
           placeholder={'Введите новый пароль'}
-          onChange={(e) => setValue(e.target.value)}
-          icon={'ShowIcon'}
-          value={''}
+          onChange={handleChange}
+          icon={!toggle ? 'ShowIcon' : 'HideIcon'}
+          value={value.password ?? ''}
           name={'password'}
           error={false}
           ref={inputRef}
@@ -105,15 +72,13 @@ export function ResetPassword(props) {
           extraClass='ml-1 mb-6'
         />
         <Input
-          type={'password'}
+          type={'text'}
           placeholder={'Введите код из письма'}
-          onChange={(e) => setValue(e.target.value)}
+          onChange={handleChange}
           icon={''}
-          value={''}
-          name={'password'}
+          value={value.token ?? ''}
+          name={'token'}
           error={false}
-          ref={inputRef}
-          onIconClick={onIconClick}
           errorText={'Ошибка'}
           size={'default'}
           extraClass='ml-1 mb-6'
@@ -132,8 +97,15 @@ export function ResetPassword(props) {
         className={`${resetPasswordStyles.caption} text text_type_main-default mt-20`}
       >
         Вспомнили пароль?
-        <Link className='register__caption-link button-hover' to='/sign-in'>
-          <span className={resetPasswordStyles.link}>Войти</span>
+        <Link to='/sign-in'>
+          <Button
+            htmlType='button'
+            type='secondary'
+            size='medium'
+            extraClass='pl-2 pr-1'
+          >
+            Войти
+          </Button>
         </Link>
       </p>
     </div>

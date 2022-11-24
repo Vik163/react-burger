@@ -13,7 +13,6 @@ export function authorization(form) {
       .signIn(form)
       .then((data) => {
         let authToken;
-        console.log(data.accessToken);
         if (data.accessToken.indexOf('Bearer') === 0) {
           authToken = data.accessToken.split('Bearer ')[1];
         }

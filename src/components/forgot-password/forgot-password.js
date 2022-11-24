@@ -1,5 +1,6 @@
-import React, { useEffect, useState, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { Link, Redirect } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
 
 import forgotPasswordStyles from './forgot-password.module.css';
 
@@ -8,81 +9,31 @@ import {
   Button,
 } from '@ya.praktikum/react-developer-burger-ui-components';
 
-export function ForgotPassword(props) {
-  const { handleLogin, errorMessage, formforgot, forgotErrors } = props;
+import { forgotPassword } from '../../services/actions/forgot-password';
 
-  const [value, setValue] = useState('value');
-  const inputRef = useRef(null);
-  const onIconClick = () => {
-    setTimeout(() => inputRef.current.focus(), 0);
-    alert('Icon Click Callback');
-  };
+export function ForgotPassword() {
+  const dispatch = useDispatch();
+  const { forgotPasswordAnswer } = useSelector((store) => ({
+    forgotPasswordAnswer: store.dataUser.forgotPasswordAnswer,
+  }));
 
-  const [isName, setIsName] = useState('');
-  const [values, setValues] = React.useState(false);
-  const [errors, setErrors] = React.useState({
-    password: '',
-  });
-  const [inputEventTarget, setInputEventTarget] = React.useState({});
-  const [disabled, setDisabled] = React.useState(true);
-  const [emailValid, setEmailValid] = React.useState(false);
-  const [passwordValid, setPasswordValid] = React.useState(false);
-
-  //Ввод данных и валидация
-  const handleChange = (event) => {
-    forgotErrors();
-    setInputEventTarget(event.target);
-    const target = event.target;
-    const value = target.value;
-    const name = target.name;
-    setIsName(name);
-    setValues({ ...values, [name]: value });
-  };
-
-  // Валидация email и password ----------------------------------------------
-  useEffect(() => {
-    if (values.email) {
-      if (values.email.match(/^[\w]{1}[\w-.]*@[\w-]+\.[a-z]{2,4}$/i) === null) {
-        setEmailValid({
-          valid: false,
-          message: 'Некорректный адрес электронной почты ',
-        });
-      } else {
-        setEmailValid({ valid: true });
-      }
-    }
-    if (inputEventTarget.name === 'password') {
-      setPasswordValid(inputEventTarget.closest('input').checkValidity());
-      setErrors({
-        ...errors,
-        [inputEventTarget.name]: inputEventTarget.validationMessage,
-      });
-    }
-  }, [values]);
-
-  // Переключение активности кнопки submit ---
-  useEffect(() => {
-    if (emailValid.valid && passwordValid) {
-      setDisabled(false);
-    } else {
-      setDisabled(true);
-    }
-  }, [emailValid, passwordValid]);
+  const [value, setValue] = useState('');
 
   // Сброс -------------------------------
   useEffect(() => {
-    if (formforgot) {
-      setValues({ email: '', password: '' });
-      setErrors({});
-      setDisabled(true);
+    if (forgotPasswordAnswer) {
+      setValue('');
     }
-  }, [formforgot]);
+  }, [forgotPasswordAnswer]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    handleLogin(values);
-    setDisabled(false);
+    dispatch(forgotPassword(value));
   };
+
+  if (forgotPasswordAnswer) {
+    return <Redirect to='/reset-password' />;
+  }
 
   return (
     <div className={forgotPasswordStyles.forgot}>
@@ -97,11 +48,9 @@ export function ForgotPassword(props) {
           placeholder={'Укажите e-mail'}
           onChange={(e) => setValue(e.target.value)}
           icon={''}
-          value={''}
+          value={value ?? ''}
           name={'email'}
           error={false}
-          ref={inputRef}
-          onIconClick={onIconClick}
           errorText={'Ошибка'}
           size={'default'}
           extraClass='ml-1 mb-6'
@@ -120,8 +69,15 @@ export function ForgotPassword(props) {
         className={`${forgotPasswordStyles.caption} text text_type_main-default mt-20`}
       >
         Вспомнили пароль?
-        <Link className='register__caption-link button-hover' to='/sign-in'>
-          <span className={forgotPasswordStyles.link}>Войти</span>
+        <Link to='/sign-in'>
+          <Button
+            htmlType='button'
+            type='secondary'
+            size='medium'
+            extraClass='pl-2 pr-1'
+          >
+            Войти
+          </Button>
         </Link>
       </p>
     </div>

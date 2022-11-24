@@ -1,5 +1,7 @@
 import { useEffect } from 'react';
 import ReactDOM from 'react-dom';
+import { useHistory } from 'react-router-dom';
+
 import PropTypes from 'prop-types';
 
 import modal from './modal.module.css';
@@ -9,6 +11,7 @@ import { CloseIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import { ModalOverlay } from '../modal-overlay/modal-overlay';
 
 export const Modal = (props) => {
+  const history = useHistory();
   const { children, closeModal, isModal, title } = props;
 
   //Корневой элемент
@@ -19,6 +22,7 @@ export const Modal = (props) => {
     const closeByEscape = (e) => {
       if (e.key === 'Escape') {
         closeModal();
+        history.push('/');
       }
     };
 

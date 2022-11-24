@@ -11,18 +11,13 @@ import { BurgerIngredients } from '../burger-ingredients/burger-ingredients.js';
 import { ErrorsPage } from '../errors-page/errors-page';
 import { Preloader } from '../preloader/preloader';
 import { ModalOverlay } from '../modal-overlay/modal-overlay';
-import { Register } from '../register/register';
-import { Login } from '../login/login';
-import { Profile } from '../profile/profile';
-import { ResetPassword } from '../reset-password/reset-password';
-import { ForgotPassword } from '../forgot-password/forgot-password';
-import { Ingredient } from '../ingredient/ingredient';
-import { ProtectedRoute } from '../protected-route';
+import { ModalSwitch } from '../modal-switch/modal-switch';
 import { getCookie } from '../../utils/cookie';
 
 import { getCards } from '../../services/actions/burger-ingredients';
 import { getUser } from '../../services/actions/get-user';
 import { requestToken } from '../../services/actions/update-token';
+import { deleteIngredientDetails } from '../../services/actions/ingredient-details';
 
 function App() {
   const dispatch = useDispatch();
@@ -30,28 +25,27 @@ function App() {
   // console.log(useSelector((store) => console.log(store)));
   const userData = JSON.parse(localStorage.getItem('userData'));
 
-  const { cards, messageError, loader } = useSelector((store) => ({
+  const { cards, messageError, loader, loggedIn } = useSelector((store) => ({
     cards: store.burgerIngredients.cards,
     messageError:
       store.burgerIngredients.messageError ||
       store.orderDetails.messageError ||
-      store.registerInfo.messageError ||
-      store.authorizationInfo.messageError,
+      store.authorizationInfo.messageError ||
+      store.dataUser.messageError,
     loader: store.orderDetails.loader || store.burgerIngredients.loader,
+    loggedIn: store.authorizationInfo.loggedIn,
   }));
+  const [isModal, setIsModal] = useState(false);
 
   // console.log(userData);
 
-  const [loggedIn, setLoggedIn] = useState(false);
   const token = getCookie('token');
 
   // Проверка авторизации ------------------------
   const checkToken = () => {
     if (token) {
-      setLoggedIn(true);
-      history.push('/');
+      // history.push('/');
     } else {
-      setLoggedIn(false);
       dispatch(requestToken());
     }
   };
@@ -63,7 +57,6 @@ function App() {
 
   useEffect(() => {
     dispatch(getCards());
-    history.push('/');
   }, []);
 
   useEffect(() => {
@@ -71,8 +64,12 @@ function App() {
       if (!userData) {
         dispatch(getUser());
       }
+    } else {
+      // console.log('o');
+      // history.push('/');
     }
-  }, [userData]);
+  }, [userData, loggedIn]);
+  // console.log(loggedIn);
 
   useEffect(() => {
     if (messageError) {
@@ -80,49 +77,43 @@ function App() {
     }
   }, [messageError]);
 
+  const openModal = () => {
+    console.log('i');
+    setIsModal(true);
+  };
+
+  const closeModal = () => {
+    setIsModal(false);
+    dispatch(deleteIngredientDetails());
+    history.push('/');
+  };
+
   return (
     <div className={appStyles.page} id='page'>
       <AppHeader />
       <Switch>
-        <Route exact path='/'>
+        <Route exact={true} path='/'>
           <DndProvider backend={HTML5Backend}>
             {cards.length > 0 && (
               <main className={appStyles.main}>
-                <BurgerIngredients />
+                <BurgerIngredients openModal={openModal} />
                 <BurgerConstructor />
               </main>
             )}
           </DndProvider>
         </Route>
-        <Route path='/ingredients/:id' loggedIn={loggedIn}>
-          <Ingredient />
-        </Route>
-        <Route path='/forgot-password'>
-          <ForgotPassword />
-        </Route>
-        <Route path='/reset-password'>
-          <ResetPassword />
-        </Route>
-        <Route path='/sign-in'>
-          <Login />
-        </Route>
-        <Route path='/sign-up'>
-          <Register />
-        </Route>
+        {messageError && (
+          <Route path='/errors'>
+            <ErrorsPage />
+          </Route>
+        )}
         {loader && (
           <>
             <Preloader />
             <ModalOverlay />
           </>
         )}
-        <ProtectedRoute path='/profile' loggedIn={loggedIn}>
-          <Profile />
-        </ProtectedRoute>
-        {messageError && (
-          <Route path='/errors'>
-            <ErrorsPage />
-          </Route>
-        )}
+        <ModalSwitch closeModal={closeModal} isModal={isModal} />
       </Switch>
     </div>
   );

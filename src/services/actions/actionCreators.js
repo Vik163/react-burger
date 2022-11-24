@@ -7,6 +7,8 @@ import {
   LOGOUT_FAILED,
   GET_USER_FAILED,
   UPDATE_USER_FAILED,
+  FORGOT_PASSWORD_FAILED,
+  RESET_PASSWORD_FAILED,
 } from './constants';
 
 export const addErrorOrder = (err, messageError) => {
@@ -68,6 +70,24 @@ export function updateToken(err, messageError) {
 export function updateUserErrors(err, messageError) {
   return {
     type: UPDATE_USER_FAILED,
+    statusRequest: err,
+    messageError,
+  };
+}
+
+export function forgotPasswordErrors(err, messageError) {
+  return {
+    type: FORGOT_PASSWORD_FAILED,
+    statusRequest: err,
+    messageError,
+  };
+}
+
+export function resetPasswordErrors(err, messageError) {
+  console.log(err);
+
+  return {
+    type: RESET_PASSWORD_FAILED,
     statusRequest: err,
     messageError,
   };

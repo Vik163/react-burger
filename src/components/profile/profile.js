@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef, useCallback } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 
 import profileStyles from './profile.module.css';
@@ -34,13 +34,15 @@ export function Profile() {
 
   // Сброс -------------------------------
   useEffect(() => {
-    userData
-      ? setValue({
-          name: userData.name,
-          email: userData.email,
-          password: userData.password,
-        })
-      : setValue({ name: '', email: '', password: '' });
+    if (userData) {
+      setValue({
+        name: userData.name,
+        email: userData.email,
+        password: userData.password,
+      });
+    } else {
+      setValue({ name: '', email: '', password: '' });
+    }
   }, []);
 
   const activeLink = (e) => {
