@@ -8,18 +8,14 @@ import { BurgerIngredientsCard } from '../burger-ingredients-card/burger-ingredi
 import { dataPropTypes } from '../../../utils/types';
 
 export const BurgerIngredientsTypes = React.forwardRef((props, ref) => {
-  const { title, data, openModal } = props;
+  const { title, data } = props;
 
   return (
     <section className={` ${ingredientsTypesStyles.type} pl-4`} ref={ref}>
       <h2 className='text text_type_main-medium mt-10 mb-6'>{title}</h2>
       <ul className={ingredientsTypesStyles.type__container}>
         {data.map((card) => (
-          <BurgerIngredientsCard
-            card={card}
-            key={card._id}
-            openModal={openModal}
-          />
+          <BurgerIngredientsCard card={card} key={card._id} />
         ))}
       </ul>
     </section>
@@ -29,5 +25,4 @@ export const BurgerIngredientsTypes = React.forwardRef((props, ref) => {
 BurgerIngredientsTypes.propTypes = {
   data: PropTypes.arrayOf(dataPropTypes),
   title: PropTypes.string.isRequired,
-  openModal: PropTypes.func.isRequired,
 };

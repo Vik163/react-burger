@@ -1,6 +1,6 @@
-import { useEffect, useState, useRef, useCallback } from 'react';
-import { Link, Redirect } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
+import { useEffect, useState } from 'react';
+import { useLocation, Link } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 
 import profileStyles from './profile.module.css';
 
@@ -13,15 +13,13 @@ import {
 import { logout } from '../../services/actions/logout';
 import { updateUser } from '../../services/actions/update-user';
 
-export function Profile() {
+export function Profile({ children }) {
   const dispatch = useDispatch();
+  const { pathname } = useLocation();
   const userData = JSON.parse(localStorage.getItem('userData'));
 
-  const [isActive, setIsActive] = useState({
-    profile: true,
-    list: false,
-    exit: false,
-  });
+  const [isActive, setIsActive] = useState(false);
+  const [isValue, setIsValue] = useState(false);
   const [value, setValue] = useState({ name: '', email: '', password: '' });
 
   //Ввод данных и валидация
@@ -29,6 +27,7 @@ export function Profile() {
     const target = event.target;
     const valueItem = target.value;
     const name = target.name;
+    setIsValue(valueItem);
     setValue({ ...value, [name]: valueItem });
   };
 
@@ -45,19 +44,13 @@ export function Profile() {
     }
   }, []);
 
-  const activeLink = (e) => {
-    const target = e.currentTarget;
-    if (target.textContent === 'Профиль') {
-      setIsActive({ profile: true, list: false, exit: false });
-    } else if (target.textContent === 'История заказов') {
-      setIsActive({ profile: false, list: true, exit: false });
-    } else if (target.textContent === 'Выход') {
-      dispatch(logout());
-      setIsActive({ profile: false, list: false, exit: true });
-    }
+  const signout = () => {
+    dispatch(logout());
+    setIsActive(true);
   };
 
   const cancelIn = () => {
+    setIsValue(false);
     setValue({
       name: userData.name,
       email: userData.email,
@@ -73,24 +66,28 @@ export function Profile() {
   return (
     <div className={profileStyles.profile}>
       <ul className={profileStyles.nav}>
+        <Link to='/profile' className={profileStyles.link}>
+          <li
+            className={`${profileStyles.navItem} text text_type_main-medium`}
+            style={{ color: pathname === '/profile' ? 'white' : '#8585ad' }}
+          >
+            Профиль
+          </li>
+        </Link>
+        <Link to='/profile/orders' className={profileStyles.link}>
+          <li
+            className={`${profileStyles.navItem} text text_type_main-medium`}
+            style={{
+              color: pathname === '/profile/orders' ? 'white' : '#8585ad',
+            }}
+          >
+            История заказов
+          </li>
+        </Link>
         <li
           className={`${profileStyles.navItem} text text_type_main-medium`}
-          onClick={activeLink}
-          style={{ color: isActive.profile ? 'white' : '#8585ad' }}
-        >
-          Профиль
-        </li>
-        <li
-          className={`${profileStyles.navItem} text text_type_main-medium`}
-          onClick={activeLink}
-          style={{ color: isActive.list ? 'white' : '#8585ad' }}
-        >
-          История заказов
-        </li>
-        <li
-          className={`${profileStyles.navItem} text text_type_main-medium`}
-          onClick={activeLink}
-          style={{ color: isActive.exit ? 'white' : '#8585ad' }}
+          onClick={signout}
+          style={{ color: isActive ? 'white' : '#8585ad' }}
         >
           Выход
         </li>
@@ -101,53 +98,58 @@ export function Profile() {
           <br /> изменить свои персональные данные
         </li>
       </ul>
-      <form className={profileStyles.form} onSubmit={handleSubmit}>
-        <EmailInput
-          onChange={handleChange}
-          value={value.name ?? ''}
-          name={'name'}
-          placeholder='Имя'
-          error={false}
-          isIcon={true}
-          extraClass='mb-6'
-        />
-        <EmailInput
-          onChange={handleChange}
-          value={value.email ?? ''}
-          name={'email'}
-          placeholder='Логин'
-          isIcon={true}
-          extraClass='mb-6'
-          error={false}
-        />
-        <PasswordInput
-          type={'password'}
-          onChange={handleChange}
-          value={value.password ?? ''}
-          name={'password'}
-          icon='EditIcon'
-          error={false}
-        />
-        <div>
-          <Button
-            htmlType='button'
-            type='secondary'
-            size='medium'
-            onClick={cancelIn}
-          >
-            Отмена
-          </Button>
-          <Button
-            htmlType='submit'
-            type='primary'
-            size='medium'
-            disabled={false}
-            extraClass='mt-6'
-          >
-            Сохранить
-          </Button>
-        </div>
-      </form>
+      {!(pathname === '/profile/orders') && (
+        <form className={profileStyles.form} onSubmit={handleSubmit}>
+          <EmailInput
+            onChange={handleChange}
+            value={value.name ?? ''}
+            name={'name'}
+            placeholder='Имя'
+            error={false}
+            isIcon={true}
+            extraClass='mb-6'
+          />
+          <EmailInput
+            onChange={handleChange}
+            value={value.email ?? ''}
+            name={'email'}
+            placeholder='Логин'
+            isIcon={true}
+            extraClass='mb-6'
+            error={false}
+          />
+          <PasswordInput
+            type={'password'}
+            onChange={handleChange}
+            value={value.password ?? ''}
+            name={'password'}
+            icon='EditIcon'
+            error={false}
+          />
+          {isValue && (
+            <div>
+              <Button
+                htmlType='button'
+                type='secondary'
+                size='medium'
+                onClick={cancelIn}
+              >
+                Отмена
+              </Button>
+              <Button
+                htmlType='submit'
+                type='primary'
+                size='medium'
+                disabled={false}
+                extraClass='mt-6'
+              >
+                Сохранить
+              </Button>
+            </div>
+          )}
+        </form>
+      )}
+      {children}
     </div>
   );
 }

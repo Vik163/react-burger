@@ -18,16 +18,13 @@ export function logout() {
           deleteCookie('token');
           deleteCookie('refreshToken');
           localStorage.removeItem('userData');
-
           dispatch({
             type: LOGOUT_SUCCESS,
           });
         }
       })
       .catch((err) => {
-        if (err === 400) {
-          dispatch(addErrorLogout(err, 'Переданы некорректные данные'));
-        } else if (err === 404) {
+        if (err === 404) {
           dispatch(addErrorLogout(err, 'Страница не найдена'));
         } else {
           dispatch(addErrorLogout(err, 'Внутренняя ошибка сервера'));

@@ -10,9 +10,8 @@ import { CloseIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 
 import { ModalOverlay } from '../modal-overlay/modal-overlay';
 
-export const Modal = (props) => {
+export const Modal = ({ children, closeModal, isModal, title }) => {
   const history = useHistory();
-  const { children, closeModal, isModal, title } = props;
 
   //Корневой элемент
   const modalRoot = document.querySelector('#modals');

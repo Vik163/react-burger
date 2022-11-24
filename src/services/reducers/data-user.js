@@ -68,6 +68,7 @@ export const usersReducer = (state = initialState, action) => {
         ...state,
         updateUserFailed: false,
         updateUserRequest: false,
+        messageError: 'Данные пользователя успешно обновлены',
         loader: false,
       };
     }

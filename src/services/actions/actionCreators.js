@@ -84,8 +84,6 @@ export function forgotPasswordErrors(err, messageError) {
 }
 
 export function resetPasswordErrors(err, messageError) {
-  console.log(err);
-
   return {
     type: RESET_PASSWORD_FAILED,
     statusRequest: err,

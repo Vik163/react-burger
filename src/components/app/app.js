@@ -1,8 +1,9 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { Route, Switch, useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
+
 import appStyles from './app.module.css';
 
 import { AppHeader } from '../app-header/app-header.js';
@@ -17,16 +18,15 @@ import { getCookie } from '../../utils/cookie';
 import { getCards } from '../../services/actions/burger-ingredients';
 import { getUser } from '../../services/actions/get-user';
 import { requestToken } from '../../services/actions/update-token';
-import { deleteIngredientDetails } from '../../services/actions/ingredient-details';
 
 function App() {
   const dispatch = useDispatch();
   const history = useHistory();
-  // console.log(useSelector((store) => console.log(store)));
   const userData = JSON.parse(localStorage.getItem('userData'));
-
+  const token = getCookie('token');
   const { cards, messageError, loader, loggedIn } = useSelector((store) => ({
     cards: store.burgerIngredients.cards,
+    userData: store.dataUser.messageError,
     messageError:
       store.burgerIngredients.messageError ||
       store.orderDetails.messageError ||
@@ -35,23 +35,10 @@ function App() {
     loader: store.orderDetails.loader || store.burgerIngredients.loader,
     loggedIn: store.authorizationInfo.loggedIn,
   }));
-  const [isModal, setIsModal] = useState(false);
 
-  // console.log(userData);
-
-  const token = getCookie('token');
-
-  // Проверка авторизации ------------------------
-  const checkToken = () => {
-    if (token) {
-      // history.push('/');
-    } else {
-      dispatch(requestToken());
-    }
-  };
-
+  // Проверка токена ------------------------
   useEffect(() => {
-    checkToken();
+    !token && dispatch(requestToken());
   }, [token]);
   // ----------------------------------------------
 
@@ -64,29 +51,14 @@ function App() {
       if (!userData) {
         dispatch(getUser());
       }
-    } else {
-      // console.log('o');
-      // history.push('/');
     }
   }, [userData, loggedIn]);
-  // console.log(loggedIn);
 
   useEffect(() => {
     if (messageError) {
       history.push('/errors');
     }
-  }, [messageError]);
-
-  const openModal = () => {
-    console.log('i');
-    setIsModal(true);
-  };
-
-  const closeModal = () => {
-    setIsModal(false);
-    dispatch(deleteIngredientDetails());
-    history.push('/');
-  };
+  }, [messageError, userData]);
 
   return (
     <div className={appStyles.page} id='page'>
@@ -96,7 +68,7 @@ function App() {
           <DndProvider backend={HTML5Backend}>
             {cards.length > 0 && (
               <main className={appStyles.main}>
-                <BurgerIngredients openModal={openModal} />
+                <BurgerIngredients />
                 <BurgerConstructor />
               </main>
             )}
@@ -113,7 +85,7 @@ function App() {
             <ModalOverlay />
           </>
         )}
-        <ModalSwitch closeModal={closeModal} isModal={isModal} />
+        <ModalSwitch />
       </Switch>
     </div>
   );

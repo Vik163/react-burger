@@ -45,7 +45,6 @@ export function Login() {
     e.preventDefault();
     dispatch(authorization(value));
   };
-  // console.log(state);
 
   if (loggedIn) {
     return <Redirect to={state?.from || '/'} />;

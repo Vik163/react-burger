@@ -7,8 +7,7 @@ import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 
 import { BurgerIngredientsTypes } from './burger-ingredients-types/burger-ingredients-types.js';
 
-export function BurgerIngredients(props) {
-  const { openModal } = props;
+export function BurgerIngredients() {
   const { cards } = useSelector((store) => ({
     cards: store.burgerIngredients.cards,
   }));
@@ -94,26 +93,12 @@ export function BurgerIngredients(props) {
           className={ingredientsStyles.ingredients__container}
           onScroll={onScroll}
         >
-          {/* {isModal && ( */}
-
-          {/* )} */}
-          <BurgerIngredientsTypes
-            title='Булки'
-            data={bun}
-            ref={bunRef}
-            openModal={openModal}
-          />
-          <BurgerIngredientsTypes
-            title='Соусы'
-            data={sauce}
-            ref={sauceRef}
-            openModal={openModal}
-          />
+          <BurgerIngredientsTypes title='Булки' data={bun} ref={bunRef} />
+          <BurgerIngredientsTypes title='Соусы' data={sauce} ref={sauceRef} />
           <BurgerIngredientsTypes
             title='Начинки'
             data={filling}
             ref={fillingRef}
-            openModal={openModal}
           />
         </div>
       </section>

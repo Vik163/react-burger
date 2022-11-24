@@ -16,6 +16,7 @@ export function getUser() {
           localStorage.setItem('userData', JSON.stringify(data.user));
           dispatch({
             type: GET_USER_SUCCESS,
+            userData: data.user,
           });
         }
       })

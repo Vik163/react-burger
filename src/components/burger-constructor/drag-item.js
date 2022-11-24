@@ -2,6 +2,10 @@ import { useRef } from 'react';
 import { useDispatch } from 'react-redux';
 import { useDrag, useDrop } from 'react-dnd';
 
+import PropTypes from 'prop-types';
+
+import { dataPropTypes } from '../../utils/types';
+
 import constructorStyles from './burger-constructor.module.css';
 
 import {
@@ -66,4 +70,10 @@ export const DragCard = ({ item, index, deleteItem }) => {
       />
     </li>
   );
+};
+
+DragCard.propTypes = {
+  item: dataPropTypes.isRequired,
+  deleteItem: PropTypes.func.isRequired,
+  index: PropTypes.number.isRequired,
 };

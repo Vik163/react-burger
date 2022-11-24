@@ -1,4 +1,5 @@
-import { Switch, Route } from 'react-router-dom';
+import { Switch, Route, useHistory } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 
 import modalSwitchStyles from './modal-switch.module.css';
 
@@ -10,10 +11,21 @@ import { ForgotPassword } from '../forgot-password/forgot-password';
 import { Ingredient } from '../ingredient/ingredient';
 import { ProtectedRoute } from '../protected-route';
 import { IngredientDetails } from '../ingredient-details/ingredient-details';
+import { StoryOrders } from '../story-orders/story-orders';
 import { Modal } from '../modal/modal';
 
-export function ModalSwitch(props) {
-  const { closeModal, isModal } = props;
+import { deleteIngredientDetails } from '../../services/actions/ingredient-details';
+
+export function ModalSwitch() {
+  const dispatch = useDispatch();
+  const history = useHistory();
+  const isModal = JSON.parse(localStorage.getItem('modal'));
+
+  const closeModal = () => {
+    localStorage.removeItem('modal');
+    dispatch(deleteIngredientDetails());
+    history.push('/');
+  };
 
   return (
     <div className={modalSwitchStyles.overlay}>
@@ -47,7 +59,11 @@ export function ModalSwitch(props) {
           <Register />
         </Route>
         <ProtectedRoute path='/profile'>
-          <Profile />
+          <Profile>
+            <Route path='/profile/orders'>
+              <StoryOrders />
+            </Route>
+          </Profile>
         </ProtectedRoute>
       </Switch>
     </div>
