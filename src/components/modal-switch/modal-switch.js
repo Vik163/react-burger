@@ -3,12 +3,12 @@ import { useDispatch } from 'react-redux';
 
 import modalSwitchStyles from './modal-switch.module.css';
 
-import { Register } from '../register/register';
-import { Login } from '../login/login';
-import { Profile } from '../profile/profile';
-import { ResetPassword } from '../reset-password/reset-password';
-import { ForgotPassword } from '../forgot-password/forgot-password';
-import { Ingredient } from '../ingredient/ingredient';
+import { Register } from '../pages/register/register';
+import { Login } from '../pages/login/login';
+import { Profile } from '../pages/profile/profile';
+import { ResetPassword } from '../pages/reset-password/reset-password';
+import { ForgotPassword } from '../pages/forgot-password/forgot-password';
+import { Ingredient } from '../pages/ingredient/ingredient';
 import { ProtectedRoute } from '../protected-route';
 import { IngredientDetails } from '../ingredient-details/ingredient-details';
 import { StoryOrders } from '../story-orders/story-orders';
@@ -36,7 +36,7 @@ export function ModalSwitch() {
             isModal={isModal}
             title={'Детали ингредиента'}
           >
-            <Route path='/ingredients/:id' exact={true}>
+            <Route exact path='/ingredients/:id'>
               <IngredientDetails />
             </Route>
           </Modal>
@@ -46,19 +46,19 @@ export function ModalSwitch() {
             <IngredientDetails />
           </Ingredient>
         </Route>
-        <Route path='/forgot-password'>
+        <ProtectedRoute path='/forgot-password' onlyAuth={false}>
           <ForgotPassword />
-        </Route>
+        </ProtectedRoute>
         <Route path='/reset-password'>
           <ResetPassword />
         </Route>
-        <Route path='/sign-in'>
+        <ProtectedRoute path='/sign-in' onlyAuth={false}>
           <Login />
-        </Route>
-        <Route path='/sign-up'>
+        </ProtectedRoute>
+        <ProtectedRoute path='/sign-up' onlyAuth={false}>
           <Register />
-        </Route>
-        <ProtectedRoute path='/profile'>
+        </ProtectedRoute>
+        <ProtectedRoute path='/profile' onlyAuth={true}>
           <Profile>
             <Route path='/profile/orders'>
               <StoryOrders />

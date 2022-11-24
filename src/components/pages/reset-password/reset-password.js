@@ -9,7 +9,7 @@ import {
   Button,
 } from '@ya.praktikum/react-developer-burger-ui-components';
 
-import { resetPassword } from '../../services/actions/reset-password';
+import { resetPassword } from '../../../services/actions/reset-password';
 
 export function ResetPassword() {
   const dispatch = useDispatch();

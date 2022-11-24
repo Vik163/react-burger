@@ -33,15 +33,7 @@ class BurgerApi {
   forgotPassword(email) {
     return this._request('/password-reset', {
       method: 'POST',
-      mode: 'cors',
-      cache: 'no-cache',
-      credentials: 'same-origin',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: 'Bearer ' + getCookie('token'),
-      },
-      redirect: 'follow',
-      referrerPolicy: 'no-referrer',
+      headers: this._settings.headers,
       body: JSON.stringify({
         email: email,
       }),
@@ -51,15 +43,7 @@ class BurgerApi {
   resetPassword(form) {
     return this._request('/password-reset/reset', {
       method: 'POST',
-      mode: 'cors',
-      cache: 'no-cache',
-      credentials: 'same-origin',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: 'Bearer ' + getCookie('token'),
-      },
-      redirect: 'follow',
-      referrerPolicy: 'no-referrer',
+      headers: this._settings.headers,
       body: JSON.stringify({
         password: form.password,
         token: form.token,

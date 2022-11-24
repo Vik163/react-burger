@@ -17,7 +17,7 @@ export function authorization(form) {
           authToken = data.accessToken.split('Bearer ')[1];
         }
         if (authToken) {
-          document.cookie = `token=${authToken}; max-age=30`;
+          document.cookie = `token=${authToken}; max-age=1200`;
         }
         if (data.refreshToken) {
           document.cookie = `refreshToken=${data.refreshToken}`;

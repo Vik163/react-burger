@@ -9,7 +9,7 @@ import {
   Button,
 } from '@ya.praktikum/react-developer-burger-ui-components';
 
-import { authorization } from '../../services/actions/login';
+import { authorization } from '../../../services/actions/login';
 
 export function Login() {
   const dispatch = useDispatch();
@@ -45,10 +45,6 @@ export function Login() {
     e.preventDefault();
     dispatch(authorization(value));
   };
-
-  if (loggedIn) {
-    return <Redirect to={state?.from || '/'} />;
-  }
 
   return (
     <div className={loginStyles.login}>

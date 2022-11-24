@@ -9,7 +9,7 @@ import appStyles from './app.module.css';
 import { AppHeader } from '../app-header/app-header.js';
 import { BurgerConstructor } from '../burger-constructor/burger-constructor.js';
 import { BurgerIngredients } from '../burger-ingredients/burger-ingredients.js';
-import { ErrorsPage } from '../errors-page/errors-page';
+import { ErrorsPage } from '../pages/errors-page/errors-page';
 import { Preloader } from '../preloader/preloader';
 import { ModalOverlay } from '../modal-overlay/modal-overlay';
 import { ModalSwitch } from '../modal-switch/modal-switch';
@@ -37,8 +37,12 @@ function App() {
   }));
 
   // Проверка токена ------------------------
-  useEffect(() => {
+  const checkToken = () => {
     !token && dispatch(requestToken());
+  };
+
+  useEffect(() => {
+    checkToken();
   }, [token]);
   // ----------------------------------------------
 
@@ -49,10 +53,10 @@ function App() {
   useEffect(() => {
     if (loggedIn) {
       if (!userData) {
-        dispatch(getUser());
+        token ? dispatch(getUser()) : checkToken();
       }
     }
-  }, [userData, loggedIn]);
+  }, [userData, loggedIn, token]);
 
   useEffect(() => {
     if (messageError) {
@@ -64,7 +68,7 @@ function App() {
     <div className={appStyles.page} id='page'>
       <AppHeader />
       <Switch>
-        <Route exact={true} path='/'>
+        <Route exact path='/'>
           <DndProvider backend={HTML5Backend}>
             {cards.length > 0 && (
               <main className={appStyles.main}>

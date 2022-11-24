@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useLocation, Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 
@@ -10,16 +10,20 @@ import {
   Button,
 } from '@ya.praktikum/react-developer-burger-ui-components';
 
-import { logout } from '../../services/actions/logout';
-import { updateUser } from '../../services/actions/update-user';
+import { getCookie } from '../../../utils/cookie';
+import { requestToken } from '../../../services/actions/update-token';
+
+import { logout } from '../../../services/actions/logout';
+import { updateUser } from '../../../services/actions/update-user';
 
 export function Profile({ children }) {
   const dispatch = useDispatch();
   const { pathname } = useLocation();
   const userData = JSON.parse(localStorage.getItem('userData'));
-
+  const token = getCookie('token');
   const [isActive, setIsActive] = useState(false);
   const [isValue, setIsValue] = useState(false);
+  const [isUpdateToken, setIsUpdateToken] = useState(false);
   const [value, setValue] = useState({ name: '', email: '', password: '' });
 
   //Ввод данных и валидация
@@ -30,6 +34,13 @@ export function Profile({ children }) {
     setIsValue(valueItem);
     setValue({ ...value, [name]: valueItem });
   };
+
+  useEffect(() => {
+    if (isUpdateToken && token) {
+      dispatch(updateUser(value));
+      setIsUpdateToken(false);
+    }
+  }, [token]);
 
   // Сброс -------------------------------
   useEffect(() => {
@@ -60,7 +71,13 @@ export function Profile({ children }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(updateUser(value));
+
+    if (token) {
+      dispatch(updateUser(value));
+    } else {
+      setIsUpdateToken(true);
+      dispatch(requestToken());
+    }
   };
 
   return (

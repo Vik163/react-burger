@@ -9,7 +9,7 @@ import {
   Button,
 } from '@ya.praktikum/react-developer-burger-ui-components';
 
-import { registration } from '../../services/actions/register';
+import { registration } from '../../../services/actions/register';
 
 export function Register() {
   const dispatch = useDispatch();
@@ -49,10 +49,6 @@ export function Register() {
     e.preventDefault();
     dispatch(registration(value));
   };
-
-  if (loggedIn) {
-    return <Redirect to={state?.from || '/'} />;
-  }
 
   return (
     <div className={registerStyles.register}>
