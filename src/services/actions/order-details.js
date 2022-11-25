@@ -4,6 +4,9 @@ import { addErrorOrder } from './actionCreators';
 
 import { SEND_ORDER_REQUEST, SEND_ORDER_SUCCESS } from './constants';
 
+import { setIngredients, setBun } from './burger-constructor';
+import { setCardOrder } from './burger-constructor-card';
+
 export function sendOrder(bun, ingredients) {
   if (bun) {
     const order = {
@@ -15,14 +18,21 @@ export function sendOrder(bun, ingredients) {
       });
       burgerApi
         .sendOrder(order)
-        .then(
-          (result) =>
-            result &&
+        .then((result) => {
+          if (result) {
             dispatch({
               type: SEND_ORDER_SUCCESS,
               resultOrder: result,
-            })
-        )
+            });
+            dispatch(setCardOrder(null));
+            dispatch(setBun({ bun: null }));
+            dispatch(
+              setIngredients({
+                ingredients: [],
+              })
+            );
+          }
+        })
         .catch((err) => {
           if (err === 400) {
             dispatch(addErrorOrder(err, 'Переданы некорректные данные'));

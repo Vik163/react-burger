@@ -1,4 +1,5 @@
 import { useState, useEffect, useMemo } from 'react';
+import { useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { useDrop } from 'react-dnd';
 
@@ -21,15 +22,19 @@ import {
 } from '../../services/actions/burger-constructor';
 import { sendOrder } from '../../services/actions/order-details';
 
-export function BurgerConstructor(props) {
-  const { children } = props;
+export function BurgerConstructor({ children }) {
   const dispatch = useDispatch();
-  const { resultOrder, cardOrder, ingredients, bun } = useSelector((store) => ({
-    cardOrder: store.burgerConstructor.cardOrder,
-    bun: store.burgerConstructor.bun,
-    ingredients: store.burgerConstructor.ingredients,
-    resultOrder: store.orderDetails.resultOrder,
-  }));
+  const history = useHistory();
+  const { resultOrder, cardOrder, ingredients, bun, loggedIn } = useSelector(
+    (store) => ({
+      cardOrder: store.burgerConstructor.cardOrder,
+      bun: store.burgerConstructor.bun,
+      ingredients: store.burgerConstructor.ingredients,
+      resultOrder: store.orderDetails.resultOrder,
+      loggedIn: store.authorizationInfo.loggedIn,
+    })
+  );
+
   const [cards, seCards] = useState(ingredients);
   const [totalSum, setTotalSum] = useState(0);
   const [isModal, setIsModal] = useState(false);
@@ -69,17 +74,6 @@ export function BurgerConstructor(props) {
     seCards(ingredients);
   }, [ingredients]);
 
-  useEffect(() => {
-    if (resultOrder) {
-      dispatch(setBun({ bun: null }));
-      dispatch(
-        setIngredients({
-          ingredients: [],
-        })
-      );
-    }
-  }, [resultOrder]);
-
   //логика подсчета суммы----------------------------------------
   useMemo(() => {
     const totalSumIngredients =
@@ -96,9 +90,13 @@ export function BurgerConstructor(props) {
   }, [bun, cards]);
 
   const openModal = () => {
-    if (bun) {
-      setIsModal(true);
-      dispatch(sendOrder(bun, ingredients));
+    if (loggedIn) {
+      if (bun) {
+        setIsModal(true);
+        dispatch(sendOrder(bun, ingredients));
+      }
+    } else {
+      history.push('/sign-in');
     }
   };
 
@@ -111,7 +109,7 @@ export function BurgerConstructor(props) {
     if (e.target.closest('.constructor-element__action')) {
       dispatch(
         setIngredients({
-          ingredients: ingredients.filter((i) => !(i._id === id)),
+          ingredients: ingredients.filter((i) => !(i.uuid === id)),
         })
       );
     }
@@ -142,10 +140,10 @@ export function BurgerConstructor(props) {
           {cards &&
             cards.map((item, index) => (
               <DragCard
-                key={item.uuid ? item.uuid : item._id}
+                key={item.uuid}
                 index={index}
                 item={item}
-                deleteItem={deleteItem}
+                deleteItem={(e) => deleteItem(e, item.uuid)}
               >
                 {children}
               </DragCard>

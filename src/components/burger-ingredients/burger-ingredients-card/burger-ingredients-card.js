@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { useDrag } from 'react-dnd';
-import PropTypes from 'prop-types';
 
 import ingredientsCardStyles from './burger-ingredients-card.module.css';
 
@@ -14,9 +14,8 @@ import { setIngredientDetails } from '../../../services/actions/ingredient-detai
 
 import { dataPropTypes } from '../../../utils/types';
 
-export function BurgerIngredientsCard(props) {
+export function BurgerIngredientsCard({ card }) {
   const dispatch = useDispatch();
-  const { card, openModal } = props;
   const { bun, ingredients } = useSelector((store) => ({
     bun: store.burgerConstructor.bun,
     ingredients: store.burgerConstructor.ingredients,
@@ -45,17 +44,17 @@ export function BurgerIngredientsCard(props) {
 
   const openModalIngredients = () => {
     // Отправка данных в попап
-    openModal();
+    localStorage.setItem('modal', JSON.stringify(true));
     dispatch(setIngredientDetails(card));
   };
 
   return (
-    <>
-      <li
-        className={ingredientsCardStyles.card}
-        onClick={openModalIngredients}
-        ref={drag}
-      >
+    <Link
+      to={`/ingredients/${card._id}`}
+      className={ingredientsCardStyles.link}
+      onClick={openModalIngredients}
+    >
+      <li className={ingredientsCardStyles.card} ref={drag}>
         <div style={{ display: isCounter[card.name] > 0 ? 'block' : 'none' }}>
           <Counter count={isCounter[card.name]} size='default' />
         </div>
@@ -74,11 +73,10 @@ export function BurgerIngredientsCard(props) {
           {card.name}
         </p>
       </li>
-    </>
+    </Link>
   );
 }
 
 BurgerIngredientsCard.propTypes = {
   card: dataPropTypes.isRequired,
-  openModal: PropTypes.func.isRequired,
 };

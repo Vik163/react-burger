@@ -1,18 +1,13 @@
 import { useState, useRef, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 import ingredientsStyles from './burger-ingredients.module.css';
 
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 
 import { BurgerIngredientsTypes } from './burger-ingredients-types/burger-ingredients-types.js';
-import { IngredientDetails } from '../ingredient-details/ingredient-details';
-import { Modal } from '../modal/modal';
-
-import { deleteIngredientDetails } from '../../services/actions/ingredient-details';
 
 export function BurgerIngredients() {
-  const dispatch = useDispatch();
   const { cards } = useSelector((store) => ({
     cards: store.burgerIngredients.cards,
   }));
@@ -27,7 +22,6 @@ export function BurgerIngredients() {
 
   const [current, setCurrent] = useState('Булки');
   const [scroll, setScroll] = useState('Булки');
-  const [isModal, setIsModal] = useState(false);
 
   //Переход по ссылке между видами--------------------------------------------
   const clickTab = (e) => {
@@ -74,65 +68,40 @@ export function BurgerIngredients() {
     }
   }, [scroll]);
 
-  const openModal = () => {
-    setIsModal(true);
-  };
-
-  const closeModal = () => {
-    setIsModal(false);
-    dispatch(deleteIngredientDetails());
-  };
-
   return (
-    <section className={` ${ingredientsStyles.ingredients} mb-10`}>
-      <h1 className='text text_type_main-large mt-10 mb-7'>Соберите бургер</h1>
-      <nav className={ingredientsStyles.links} onClick={clickTab}>
-        <Tab value='Булки' active={current === 'Булки'} onClick={setCurrent}>
-          Булки
-        </Tab>
-        <Tab value='Соусы' active={current === 'Соусы'} onClick={setCurrent}>
-          Соусы
-        </Tab>
-        <Tab
-          value='Начинки'
-          active={current === 'Начинки'}
-          onClick={setCurrent}
-        >
-          Начинки
-        </Tab>
-      </nav>
-      <div
-        className={ingredientsStyles.ingredients__container}
-        onScroll={onScroll}
-      >
-        {isModal && (
-          <Modal
-            closeModal={closeModal}
-            isModal={isModal}
-            title={'Детали ингредиента'}
+    <>
+      <section className={` ${ingredientsStyles.ingredients} mb-10`}>
+        <h1 className='text text_type_main-large mt-10 mb-7'>
+          Соберите бургер
+        </h1>
+        <nav className={ingredientsStyles.links} onClick={clickTab}>
+          <Tab value='Булки' active={current === 'Булки'} onClick={setCurrent}>
+            Булки
+          </Tab>
+          <Tab value='Соусы' active={current === 'Соусы'} onClick={setCurrent}>
+            Соусы
+          </Tab>
+          <Tab
+            value='Начинки'
+            active={current === 'Начинки'}
+            onClick={setCurrent}
           >
-            <IngredientDetails />
-          </Modal>
-        )}
-        <BurgerIngredientsTypes
-          title='Булки'
-          data={bun}
-          ref={bunRef}
-          openModal={openModal}
-        />
-        <BurgerIngredientsTypes
-          title='Соусы'
-          data={sauce}
-          ref={sauceRef}
-          openModal={openModal}
-        />
-        <BurgerIngredientsTypes
-          title='Начинки'
-          data={filling}
-          ref={fillingRef}
-          openModal={openModal}
-        />
-      </div>
-    </section>
+            Начинки
+          </Tab>
+        </nav>
+        <div
+          className={ingredientsStyles.ingredients__container}
+          onScroll={onScroll}
+        >
+          <BurgerIngredientsTypes title='Булки' data={bun} ref={bunRef} />
+          <BurgerIngredientsTypes title='Соусы' data={sauce} ref={sauceRef} />
+          <BurgerIngredientsTypes
+            title='Начинки'
+            data={filling}
+            ref={fillingRef}
+          />
+        </div>
+      </section>
+    </>
   );
 }

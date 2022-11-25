@@ -1,3 +1,5 @@
+import { getCookie } from './cookie';
+
 class BurgerApi {
   constructor(settings) {
     this._settings = settings;
@@ -25,6 +27,27 @@ class BurgerApi {
       method: 'POST',
       headers: this._settings.headers,
       body: JSON.stringify(order),
+    });
+  }
+
+  forgotPassword(email) {
+    return this._request('/password-reset', {
+      method: 'POST',
+      headers: this._settings.headers,
+      body: JSON.stringify({
+        email: email,
+      }),
+    });
+  }
+
+  resetPassword(form) {
+    return this._request('/password-reset/reset', {
+      method: 'POST',
+      headers: this._settings.headers,
+      body: JSON.stringify({
+        password: form.password,
+        token: form.token,
+      }),
     });
   }
 }

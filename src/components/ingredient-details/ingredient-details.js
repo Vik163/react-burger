@@ -1,11 +1,16 @@
+import { useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
 import detailsStyles from './ingredient-details.module.css';
 
 export function IngredientDetails() {
-  const ingredientDetails = useSelector(
-    (store) => store.ingredientDetails.ingredientDetails
-  );
+  const { pathname } = useLocation();
+  const { card, cards } = useSelector((store) => ({
+    card: store.ingredientDetails.ingredientDetails,
+    cards: store.burgerIngredients.cards,
+  }));
+  const ingredientDetails =
+    cards.filter((item) => item._id === pathname.slice(13))[0] || card;
 
   return (
     <>
