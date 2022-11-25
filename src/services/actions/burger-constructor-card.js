@@ -14,4 +14,4 @@ export function setCardOrder(item) {
       cardOrder: null,
     };
   }
-
+}
