@@ -1,6 +1,6 @@
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState } from 'react';
 import { useLocation, Link } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 
 import profileStyles from './profile.module.css';
 
@@ -17,6 +17,9 @@ import { logout } from '../../../services/actions/logout';
 import { updateUser } from '../../../services/actions/update-user';
 
 export function Profile({ children }) {
+  const { updateUserSuccess } = useSelector((store) => ({
+    updateUserSuccess: store.dataUser.updateUserSuccess,
+  }));
   const dispatch = useDispatch();
   const { pathname } = useLocation();
   const userData = JSON.parse(localStorage.getItem('userData'));
@@ -163,6 +166,13 @@ export function Profile({ children }) {
                 Сохранить
               </Button>
             </div>
+          )}
+          {updateUserSuccess && (
+            <p
+              className={`${profileStyles.answer} text text_type_main-default mt-20`}
+            >
+              {updateUserSuccess}
+            </p>
           )}
         </form>
       )}

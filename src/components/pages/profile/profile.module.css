@@ -35,3 +35,7 @@
 .link {
   text-decoration: none;
 }
+
+.answer {
+  align-self: center;
+}

@@ -108,6 +108,13 @@ export function ResetPassword() {
           </Button>
         </Link>
       </p>
+      {resetPasswordAnswer && (
+        <p
+          className={`${resetPasswordStyles.text} text text_type_main-default mt-18`}
+        >
+          {resetPasswordAnswer}
+        </p>
+      )}
     </div>
   );
 }
