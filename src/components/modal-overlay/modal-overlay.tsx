@@ -1,13 +1,14 @@
+import { FC } from 'react';
 import { useHistory } from 'react-router-dom';
-
-import PropTypes from 'prop-types';
 
 import './modal-overlay.css';
 
-export function ModalOverlay({ closeModal }) {
+import { TCloseModal } from '../../utils/types'
+
+export const ModalOverlay:  FC<TCloseModal> = ({ closeModal }) => {
   const history = useHistory();
 
-  const closeOverlay = (e) => {
+  const closeOverlay = (e: { target: EventTarget; currentTarget: EventTarget; }) => {
     if (e.target === e.currentTarget) {
       closeModal();
       history.push('/');
@@ -17,6 +18,4 @@ export function ModalOverlay({ closeModal }) {
   return <div className='overlay' id='overlay' onClick={closeOverlay} />;
 }
 
-ModalOverlay.propTypes = {
-  closeModal: PropTypes.func,
-};
+

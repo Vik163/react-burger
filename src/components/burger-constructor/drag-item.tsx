@@ -1,10 +1,8 @@
-import { useRef } from 'react';
+import  React, { useRef, FC } from 'react';
 import { useDispatch } from 'react-redux';
 import { useDrag, useDrop } from 'react-dnd';
 
-import PropTypes from 'prop-types';
-
-import { dataPropTypes } from '../../utils/types';
+import { TCard } from '../../utils/types'
 
 import constructorStyles from './burger-constructor.module.css';
 
@@ -15,7 +13,13 @@ import {
 
 import { setCardMove } from '../../services/actions/move-item';
 
-export const DragCard = ({ item, index, deleteItem }) => {
+type TDragCard = {
+  item: TCard;
+  index: number;
+  deleteItem: (e: {target: EventTarget}, id: string) => void;
+};
+
+export const DragCard: FC<TDragCard> = ({ item, index, deleteItem }) => {
   const dispatch = useDispatch();
 
   const [{ isDragging }, dragRef] = useDrag({
@@ -28,10 +32,10 @@ export const DragCard = ({ item, index, deleteItem }) => {
 
   const [, dropRef] = useDrop({
     accept: 'itemConstructor',
-    hover: (item, monitor) => {
+    hover: (item: {index: number}, monitor: any) => {
       const dragIndex = item.index;
       const hoverIndex = index;
-      if (!ref.current || item.card || dragIndex === hoverIndex) {
+      if (!ref.current || dragIndex === hoverIndex) {
         return;
       }
 
@@ -51,8 +55,8 @@ export const DragCard = ({ item, index, deleteItem }) => {
   });
 
   // Объединяет два рефа в один (drag and drop)
-  const ref = useRef(null);
-  const dragDropRef = dragRef(dropRef(ref));
+  const ref = useRef<HTMLLIElement>(null);
+  const dragDropRef = dragRef(dropRef(ref)) as any;
 
   const opacity = isDragging ? 0 : 1;
   return (
@@ -72,8 +76,4 @@ export const DragCard = ({ item, index, deleteItem }) => {
   );
 };
 
-DragCard.propTypes = {
-  item: dataPropTypes.isRequired,
-  deleteItem: PropTypes.func.isRequired,
-  index: PropTypes.number.isRequired,
-};
+
