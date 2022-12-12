@@ -22,11 +22,7 @@ import {
 } from '../../services/actions/burger-constructor';
 import { sendOrder } from '../../services/actions/order-details';
 
-import { TChildren, TCard } from '../../utils/types'
-
-type TItem = {
-  card: TCard;
-}
+import { TChildren, TCard, TItem } from '../../utils/types'
 
 export const BurgerConstructor: FC<TChildren> = ({ children }) => {
   const dispatch = useDispatch();
@@ -41,7 +37,7 @@ export const BurgerConstructor: FC<TChildren> = ({ children }) => {
     })
   );
 
-  const [cards, seCards] = useState(ingredients);
+  const [cards, seCards] = useState<Array<TCard>>(ingredients);
   const [totalSum, setTotalSum] = useState(0);
   const [isModal, setIsModal] = useState(false);
 
@@ -99,6 +95,7 @@ export const BurgerConstructor: FC<TChildren> = ({ children }) => {
     if (loggedIn) {
       if (bun) {
         setIsModal(true);
+        // @ts-ignore
         dispatch(sendOrder(bun, ingredients));
       }
     } else {

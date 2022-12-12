@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, FC } from 'react';
 import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { useDrag } from 'react-dnd';
@@ -12,11 +12,12 @@ import {
 
 import { setIngredientDetails } from '../../../services/actions/ingredient-details';
 
-import { dataPropTypes } from '../../../utils/types';
 
-export function BurgerIngredientsCard({ card }) {
+import { TCard, TItem } from '../../../utils/types'
+
+export const BurgerIngredientsCard: FC<TItem> = ({ card }) => {
   const dispatch = useDispatch();
-  const { bun, ingredients } = useSelector((store) => ({
+  const { bun, ingredients } = useSelector((store: any) => ({
     bun: store.burgerConstructor.bun,
     ingredients: store.burgerConstructor.ingredients,
   }));
@@ -36,7 +37,7 @@ export function BurgerIngredientsCard({ card }) {
         }
       }
       if (ingredients) {
-        return ingredients.filter((i) => i.name === card.name).length;
+        return ingredients.filter((i: TCard) => i.name === card.name).length;
       }
     };
     card.name && setIsCounter({ ...isCounter, [card.name]: sameCards() });
@@ -77,6 +78,3 @@ export function BurgerIngredientsCard({ card }) {
   );
 }
 
-BurgerIngredientsCard.propTypes = {
-  card: dataPropTypes.isRequired,
-};

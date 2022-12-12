@@ -1,6 +1,6 @@
 import { auth } from '../../utils/auth';
 
-import { deleteCookie } from '../../utils/cookie';
+import { getCookie } from '../../utils/cookie';
 
 import { addErrorLogout } from './actionCreators';
 
@@ -15,8 +15,10 @@ export function logout() {
       .signOut()
       .then((data) => {
         if (data.success) {
-          deleteCookie('token');
-          deleteCookie('refreshToken');
+          document.cookie = `token=${getCookie('token')}; max-age=0`;
+          document.cookie = `refreshToken=${getCookie(
+            'refreshToken'
+          )}; max-age=0`;
           localStorage.removeItem('userData');
           dispatch({
             type: LOGOUT_SUCCESS,

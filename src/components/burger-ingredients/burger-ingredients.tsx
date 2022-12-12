@@ -5,53 +5,54 @@ import ingredientsStyles from './burger-ingredients.module.css';
 
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 
-import { BurgerIngredientsTypes } from './burger-ingredients-types/burger-ingredients-types.js';
+import { BurgerIngredientsTypes } from './burger-ingredients-types/burger-ingredients-types';
 
-export function BurgerIngredients() {
-  const { cards } = useSelector((store) => ({
+import { TCard } from '../../utils/types'
+
+
+export const BurgerIngredients = () => {
+  const { cards } = useSelector((store: any) => ({
     cards: store.burgerIngredients.cards,
   }));
-  const bunRef = useRef();
-  const sauceRef = useRef();
-  const fillingRef = useRef();
+  const bunRef = useRef<HTMLElement>(null);
+  const sauceRef = useRef<HTMLElement>(null);
+  const fillingRef = useRef<HTMLElement>(null);
 
   // Данные по видам--------------------------------------------
-  const sauce = cards.filter((item) => item.type === 'sauce');
-  const bun = cards.filter((item) => item.type === 'bun');
-  const filling = cards.filter((item) => item.type === 'main');
+  const sauce = cards.filter((item: TCard) => item.type === 'sauce');
+  const bun = cards.filter((item: TCard) => item.type === 'bun');
+  const filling = cards.filter((item: TCard) => item.type === 'main');
 
   const [current, setCurrent] = useState('Булки');
-  const [scroll, setScroll] = useState('Булки');
+  const [scroll, setScroll] = useState(0);
 
   //Переход по ссылке между видами--------------------------------------------
-  const clickTab = (e) => {
-    const tab = e.target.textContent;
+  const clickTab = (e: {target: EventTarget}) => {
+    const tab = (e.target as HTMLElement).textContent;
     if (tab === 'Булки') {
-      bunRef.current.scrollIntoView({ block: 'start', behavior: 'smooth' });
+      (bunRef.current as HTMLElement).scrollIntoView({ block: 'start', behavior: 'smooth' });
     } else if (tab === 'Соусы') {
-      sauceRef.current.scrollIntoView({ block: 'start', behavior: 'smooth' });
+      (sauceRef.current as HTMLElement).scrollIntoView({ block: 'start', behavior: 'smooth' });
     } else if (tab === 'Начинки') {
-      fillingRef.current.scrollIntoView({ block: 'start', behavior: 'smooth' });
+      (fillingRef.current as HTMLElement).scrollIntoView({ block: 'start', behavior: 'smooth' });
     }
   };
 
-  const onScroll = (e) => {
-    const scroll = e.currentTarget.scrollTop;
+  const onScroll = (e: {currentTarget: EventTarget}) => {
+    const scroll = (e.currentTarget as HTMLElement).scrollTop;
     setScroll(scroll);
   };
 
   const positionBlocks = () => {
-    if (bunRef.current) {
-      const positionBun = bunRef.current.offsetTop;
-      const positionSauce = sauceRef.current.offsetTop;
-      const positionFilling = fillingRef.current.offsetTop;
+      const positionBun = (bunRef.current as HTMLElement).offsetTop;
+      const positionSauce = (sauceRef.current as HTMLElement).offsetTop;
+      const positionFilling = (fillingRef.current as HTMLElement).offsetTop;
       const position = {
         bun: (positionSauce - positionBun) / 1.7,
         sauce:
           positionSauce - positionBun + (positionFilling - positionSauce) / 1.7,
       };
       return position;
-    }
   };
 
   useEffect(() => {
