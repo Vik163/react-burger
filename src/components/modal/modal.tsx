@@ -14,7 +14,7 @@ export const Modal: FC<TModal> = ({ children, closeModal, isModal, title }) => {
   const history = useHistory();
 
   //Корневой элемент
-  const modalRoot = document.querySelector('#modals') as Element;
+  const modalRoot = document.querySelector('#modals') as HTMLElement;
 
   useEffect(() => {
     if (!isModal) return;

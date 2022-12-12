@@ -7,7 +7,7 @@ import { HTML5Backend } from 'react-dnd-html5-backend';
 import appStyles from './app.module.css';
 
 import { AppHeader } from '../app-header/app-header.js';
-import { BurgerConstructor } from '../burger-constructor/burger-constructor.js';
+import { BurgerConstructor } from '../burger-constructor/burger-constructor.tsx';
 import { BurgerIngredients } from '../burger-ingredients/burger-ingredients.js';
 import { ErrorsPage } from '../pages/errors-page/errors-page';
 import { Preloader } from '../preloader/preloader';

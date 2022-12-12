@@ -16,13 +16,14 @@ export const dataPropTypes = PropTypes.shape({
 
 export type TCard = {
   readonly _id: string;
+  readonly uuid: string;
   readonly name: string;
   readonly type: string;
   readonly proteins: number;
   readonly fat: number;
   readonly carbohydrates: number;
   readonly calories: number;
-  price: number;
+  readonly price: number;
   readonly image: string;
   readonly image_mobile: string;
   readonly image_large: string;
@@ -32,9 +33,12 @@ export type TCloseModal = {
   closeModal: () => void, 
 };
 
+export type TChildren = {
+  children: JSX.Element[] | JSX.Element
+} ;
+
 export type TModal = {
   readonly isModal: boolean; 
-  readonly title: string;
-  children: JSX.Element[] | JSX.Element
-} & TCloseModal;
+  readonly title?: string;
+} & TCloseModal & TChildren;
 

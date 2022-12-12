@@ -2,7 +2,7 @@ import  React, { useRef, FC } from 'react';
 import { useDispatch } from 'react-redux';
 import { useDrag, useDrop } from 'react-dnd';
 
-import { TCard } from '../../utils/types'
+import { TCard, TChildren } from '../../utils/types'
 
 import constructorStyles from './burger-constructor.module.css';
 
@@ -17,7 +17,7 @@ type TDragCard = {
   item: TCard;
   index: number;
   deleteItem: (e: {target: EventTarget}, id: string) => void;
-};
+} & TChildren;
 
 export const DragCard: FC<TDragCard> = ({ item, index, deleteItem }) => {
   const dispatch = useDispatch();
