@@ -7,8 +7,8 @@ import { BurgerIngredientsCard } from '../burger-ingredients-card/burger-ingredi
 import { TCard } from '../../../utils/types'
 
 type TProps = {
-  title: string; 
-  data: Array<TCard>
+  readonly title: string; 
+  readonly data: Array<TCard>
 }
 type IngredientsTypesProps = React.PropsWithChildren<TProps>
 

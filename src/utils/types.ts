@@ -14,7 +14,7 @@ export type TCard = {
 };
 
 export type TItem = {
-  card: TCard;
+  readonly card: TCard;
 }
 
 export type TCloseModal = {
@@ -34,8 +34,8 @@ export type TModal = {
 
 export type TProtected = {
   children: JSX.Element[] | JSX.Element;
-  onlyAuth: boolean;
-  path: string;
+  readonly onlyAuth: boolean;
+  readonly path: string;
 }
 
 export type TLocation = {
