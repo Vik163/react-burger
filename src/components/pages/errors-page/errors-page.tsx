@@ -6,7 +6,7 @@ import errorsStyles from './errors-page.module.css';
 import { Button } from '@ya.praktikum/react-developer-burger-ui-components';
 
 export function ErrorsPage() {
-  const { statusRequest, messageError } = useSelector((store) => ({
+  const { statusRequest, messageError } = useSelector((store: any) => ({
     statusRequest:
       store.burgerIngredients.statusRequest ||
       store.orderDetails.statusRequest ||

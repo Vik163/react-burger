@@ -11,24 +11,29 @@ import {
 
 import { resetPassword } from '../../../services/actions/reset-password';
 
+type TResetPassword = {
+  password: string;
+  token: string; 
+}
+
 export function ResetPassword() {
   const dispatch = useDispatch();
   const { resetPasswordAnswer, forgotPasswordAnswer } = useSelector(
-    (store) => ({
+    (store: any) => ({
       resetPasswordAnswer: store.dataUser.resetPasswordAnswer,
       forgotPasswordAnswer: store.dataUser.forgotPasswordAnswer,
     })
   );
   const [toggle, setToggle] = useState(false);
-  const [value, setValue] = useState({ password: '', token: '' });
-  const inputRef = useRef(null);
+  const [value, setValue] = useState<TResetPassword>({ password: '', token: '' });
+  const inputRef = useRef<HTMLInputElement>(null);
   const onIconClick = () => {
-    setTimeout(() => inputRef.current.focus(), 0);
+    setTimeout(() => (inputRef.current as HTMLInputElement).focus(), 0);
     setToggle(!toggle);
   };
 
   //Ввод данных и валидация
-  const handleChange = (event) => {
+  const handleChange = (event: { target: HTMLInputElement; }) => {
     const target = event.target;
     const valueItem = target.value;
     const name = target.name;
@@ -42,8 +47,9 @@ export function ResetPassword() {
     }
   }, [resetPasswordAnswer]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: { preventDefault: () => void; }) => {
     e.preventDefault();
+      // @ts-ignore
     dispatch(resetPassword(value));
   };
 
@@ -75,7 +81,6 @@ export function ResetPassword() {
           type={'text'}
           placeholder={'Введите код из письма'}
           onChange={handleChange}
-          icon={''}
           value={value.token ?? ''}
           name={'token'}
           error={false}

@@ -35,3 +35,8 @@
 .link {
   text-decoration: none;
 }
+
+.caption {
+  color: rgb(133, 180, 250);
+  align-self: center;
+}

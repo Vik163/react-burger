@@ -1,33 +1,38 @@
 import { useEffect, useState, useRef } from 'react';
-import { Link, Redirect, useLocation } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 
-import loginStyles from './login.module.css';
+import registerStyles from './register.module.css';
 
 import {
   Input,
   Button,
 } from '@ya.praktikum/react-developer-burger-ui-components';
 
-import { authorization } from '../../../services/actions/login';
+import { registration } from '../../../services/actions/register';
 
-export function Login() {
+import { TDataRegister } from '../../../utils/types'
+
+
+export function Register() {
   const dispatch = useDispatch();
-  const { state } = useLocation();
-  const { formReset, loggedIn } = useSelector((store) => ({
+  const { formReset } = useSelector((store: any) => ({
     formReset: store.authorizationInfo.formReset,
-    loggedIn: store.authorizationInfo.loggedIn,
   }));
+  const [value, setValue] = useState<TDataRegister>({
+    name: '',
+    email: '',
+    password: '',
+  });
+  const inputRef = useRef<HTMLInputElement>(null);
   const [toggle, setToggle] = useState(false);
-  const [value, setValue] = useState({ email: '', password: '' });
-  const inputRef = useRef(null);
   const onIconClick = () => {
-    setTimeout(() => inputRef.current.focus(), 0);
+    setTimeout(() => (inputRef.current as HTMLInputElement).focus(), 0);
     setToggle(!toggle);
   };
 
   //Ввод данных
-  const handleChange = (event) => {
+  const handleChange = (event: { target: HTMLInputElement; }) => {
     const target = event.target;
     const valueItem = target.value;
     const name = target.name;
@@ -37,26 +42,38 @@ export function Login() {
   // Сброс -------------------------------
   useEffect(() => {
     if (formReset) {
-      setValue({ email: '', password: '' });
+      setValue({ name: '', email: '', password: '' });
     }
   }, [formReset]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: { preventDefault: () => void; }) => {
     e.preventDefault();
-    dispatch(authorization(value));
+    // @ts-ignore
+    dispatch(registration(value));
   };
 
   return (
-    <div className={loginStyles.login}>
-      <h2 className={`${loginStyles.title} text text_type_main-medium`}>
-        Вход
+    <div className={registerStyles.register}>
+      <h2 className={`${registerStyles.title} text text_type_main-medium`}>
+        Регистрация
       </h2>
-      <form className={loginStyles.form} onSubmit={handleSubmit}>
+      <form className={registerStyles.form} onSubmit={handleSubmit}>
+        <Input
+          type={'text'}
+          placeholder={'Имя'}
+          onChange={handleChange}
+          value={value.name ?? ''}
+          name={'name'}
+          error={false}
+          ref={inputRef}
+          errorText={'Ошибка'}
+          size={'default'}
+          extraClass='ml-1 mb-6'
+        />
         <Input
           type={'email'}
           placeholder={'E-mail'}
           onChange={handleChange}
-          icon={''}
           value={value.email ?? ''}
           name={'email'}
           error={false}
@@ -79,39 +96,22 @@ export function Login() {
           size={'default'}
           extraClass='ml-1 mb-6'
         />
-        <Button
-          htmlType='submit'
-          type='primary'
-          size='medium'
-          disabled={false}
-          extraClass={loginStyles.button}
-        >
-          Войти
+        <Button htmlType='submit' type='primary' size='medium' disabled={false}>
+          Зарегистрироваться
         </Button>
       </form>
-      <p className={`${loginStyles.caption} text text_type_main-default mt-20`}>
-        Вы — новый пользователь?
-        <Link to='/sign-up'>
+      <p
+        className={`${registerStyles.caption} text text_type_main-default mt-20`}
+      >
+        Уже зарегистрированы?
+        <Link to='/sign-in'>
           <Button
             htmlType='button'
             type='secondary'
             size='medium'
-            extraClass='pl-2 pb-2'
+            extraClass='pl-2'
           >
-            Зарегистрироваться
-          </Button>
-        </Link>
-      </p>
-      <p className={`${loginStyles.caption} text text_type_main-default `}>
-        Забыли пароль?
-        <Link to='/forgot-password'>
-          <Button
-            htmlType='button'
-            type='secondary'
-            size='medium'
-            extraClass='pl-2 pt-2'
-          >
-            Восстановить пароль
+            Войти
           </Button>
         </Link>
       </p>

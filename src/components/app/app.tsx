@@ -5,12 +5,11 @@ import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 
 import appStyles from './app.module.css';
-import { AppHeader } from '../app-header/app-header.tsx';
-import { BurgerConstructor } from '../burger-constructor/burger-constructor.tsx';
-import { BurgerIngredients } from '../burger-ingredients/burger-ingredients.tsx';
+import { AppHeader } from '../app-header/app-header';
+import { BurgerConstructor } from '../burger-constructor/burger-constructor';
+import { BurgerIngredients } from '../burger-ingredients/burger-ingredients';
 import { ErrorsPage } from '../pages/errors-page/errors-page';
 import { Preloader } from '../preloader/preloader';
-import { ModalOverlay } from '../modal-overlay/modal-overlay';
 import { ModalSwitch } from '../modal-switch/modal-switch';
 import { getCookie } from '../../utils/cookie';
 
@@ -21,9 +20,9 @@ import { requestToken } from '../../services/actions/update-token';
 function App() {
   const dispatch = useDispatch();
   const history = useHistory();
-  const userData = JSON.parse(localStorage.getItem('userData'));
+  const userData = JSON.parse(`${localStorage.getItem('userData')}`);
   const token = getCookie('token');
-  const { cards, messageError, loader, loggedIn } = useSelector((store) => ({
+  const { cards, messageError, loader, loggedIn } = useSelector((store: any) => ({
     cards: store.burgerIngredients.cards,
     userData: store.dataUser.messageError,
     messageError:
@@ -37,6 +36,7 @@ function App() {
 
   // Проверка токена ------------------------
   const checkToken = () => {
+    // @ts-ignore
     !token && dispatch(requestToken());
   };
 
@@ -46,12 +46,14 @@ function App() {
   // ----------------------------------------------
 
   useEffect(() => {
+    // @ts-ignore
     dispatch(getCards());
   }, []);
 
   useEffect(() => {
     if (loggedIn) {
       if (!userData) {
+        // @ts-ignore
         token ? dispatch(getUser()) : checkToken();
       }
     }
@@ -66,6 +68,7 @@ function App() {
   return (
     <div className={appStyles.page} id='page'>
       <AppHeader />
+      {loader && <Preloader />}
       <Switch>
         <Route exact path='/'>
           <DndProvider backend={HTML5Backend}>
@@ -81,12 +84,6 @@ function App() {
           <Route path='/errors'>
             <ErrorsPage />
           </Route>
-        )}
-        {loader && (
-          <>
-            <Preloader />
-            <ModalOverlay />
-          </>
         )}
         <ModalSwitch />
       </Switch>

@@ -22,7 +22,7 @@ export type TCloseModal = {
 };
 
 export type TChildren = {
-  children: JSX.Element[] | JSX.Element
+  children?: JSX.Element[] | JSX.Element
 } ;
 
 export type TModal = {
@@ -30,3 +30,26 @@ export type TModal = {
   readonly title?: string;
 } & TCloseModal & TChildren;
 
+
+
+export type TProtected = {
+  children: JSX.Element[] | JSX.Element;
+  onlyAuth: boolean;
+  path: string;
+}
+
+export type TLocation = {
+  from: {
+    hash: string;
+    key: string;
+    pathname: string;
+    search: string;
+    state: string | undefined
+  }
+} | undefined
+
+export type TDataRegister = {
+  name: string; 
+  email: string; 
+  password: string;
+}

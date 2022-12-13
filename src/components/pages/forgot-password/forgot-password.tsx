@@ -13,7 +13,7 @@ import { forgotPassword } from '../../../services/actions/forgot-password';
 
 export function ForgotPassword() {
   const dispatch = useDispatch();
-  const { forgotPasswordAnswer } = useSelector((store) => ({
+  const { forgotPasswordAnswer } = useSelector((store: any) => ({
     forgotPasswordAnswer: store.dataUser.forgotPasswordAnswer,
   }));
 
@@ -26,9 +26,9 @@ export function ForgotPassword() {
     }
   }, [forgotPasswordAnswer]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: { preventDefault: () => void; }) => {
     e.preventDefault();
-
+    // @ts-ignore
     dispatch(forgotPassword(value));
   };
 
@@ -48,7 +48,6 @@ export function ForgotPassword() {
           type={'email'}
           placeholder={'Укажите e-mail'}
           onChange={(e) => setValue(e.target.value)}
-          icon={''}
           value={value ?? ''}
           name={'email'}
           error={false}

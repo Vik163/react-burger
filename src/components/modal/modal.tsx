@@ -6,9 +6,9 @@ import modal from './modal.module.css';
 
 import { CloseIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 
-import { TModal } from '../../utils/types'
-
 import { ModalOverlay } from '../modal-overlay/modal-overlay';
+
+import { TModal } from '../../utils/types'
 
 export const Modal: FC<TModal> = ({ children, closeModal, isModal, title }) => {
   const history = useHistory();

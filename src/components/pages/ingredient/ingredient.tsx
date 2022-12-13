@@ -1,13 +1,15 @@
-import { useEffect } from 'react';
+import { useEffect, FC } from 'react';
 import { useHistory } from 'react-router-dom';
 
 import stylesIngredient from './ingredient.module.css';
 
-export const Ingredient = ({ children }) => {
+import { TChildren } from '../../../utils/types'
+
+export const Ingredient: FC<TChildren> = ({ children }) => {
   const history = useHistory();
 
   useEffect(() => {
-    const closeByEscape = (e) => {
+    const closeByEscape = (e: { key: string; }) => {
       if (e.key === 'Escape') {
         history.push('/');
       }

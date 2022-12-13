@@ -3,14 +3,17 @@ import { useSelector } from 'react-redux';
 
 import detailsStyles from './ingredient-details.module.css';
 
+import { TCard } from '../../utils/types'
+
+
 export function IngredientDetails() {
   const { pathname } = useLocation();
-  const { card, cards } = useSelector((store) => ({
+  const { card, cards } = useSelector((store: any) => ({
     card: store.ingredientDetails.ingredientDetails,
     cards: store.burgerIngredients.cards,
   }));
   const ingredientDetails =
-    cards.filter((item) => item._id === pathname.slice(13))[0] || card;
+    cards.filter((item: TCard) => item._id === pathname.slice(13))[0] || card;
 
   return (
     <>

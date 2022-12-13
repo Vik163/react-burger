@@ -19,7 +19,7 @@ import { deleteIngredientDetails } from '../../services/actions/ingredient-detai
 export function ModalSwitch() {
   const dispatch = useDispatch();
   const history = useHistory();
-  const isModal = JSON.parse(localStorage.getItem('modal'));
+  const isModal = JSON.parse(`${localStorage.getItem('modal')}`);
 
   const closeModal = () => {
     localStorage.removeItem('modal');

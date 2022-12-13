@@ -1,6 +1,6 @@
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, FC } from 'react';
 import { useLocation, Link } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import profileStyles from './profile.module.css';
 
@@ -16,18 +16,23 @@ import { requestToken } from '../../../services/actions/update-token';
 import { logout } from '../../../services/actions/logout';
 import { updateUser } from '../../../services/actions/update-user';
 
-export function Profile({ children }) {
+import { TChildren, TDataRegister } from '../../../utils/types'
+
+export const Profile: FC<TChildren> = ({ children }) => {
   const dispatch = useDispatch();
   const { pathname } = useLocation();
-  const userData = JSON.parse(localStorage.getItem('userData'));
+  const userData = JSON.parse(`${localStorage.getItem('userData')}`);
   const token = getCookie('token');
   const [isActive, setIsActive] = useState(false);
-  const [isValue, setIsValue] = useState(false);
+  const [isValue, setIsValue] = useState('');
   const [isUpdateToken, setIsUpdateToken] = useState(false);
-  const [value, setValue] = useState({ name: '', email: '', password: '' });
+  const [value, setValue] = useState<TDataRegister>({ name: '', email: '', password: '' });
+  const { updateUserAnswer } = useSelector((store: any) => ({
+    updateUserAnswer: store.dataUser.updateUserAnswer,
+  }));
 
   //Ввод данных и валидация
-  const handleChange = (event) => {
+  const handleChange = (event: { target: HTMLInputElement; }) => {
     const target = event.target;
     const valueItem = target.value;
     const name = target.name;
@@ -37,6 +42,7 @@ export function Profile({ children }) {
 
   useEffect(() => {
     if (isUpdateToken && token) {
+      // @ts-ignore
       dispatch(updateUser(value));
       setIsUpdateToken(false);
     }
@@ -56,12 +62,13 @@ export function Profile({ children }) {
   }, []);
 
   const signout = () => {
+    // @ts-ignore
     dispatch(logout());
     setIsActive(true);
   };
 
   const cancelIn = () => {
-    setIsValue(false);
+    setIsValue('');
     setValue({
       name: userData.name,
       email: userData.email,
@@ -69,13 +76,15 @@ export function Profile({ children }) {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: { preventDefault: () => void; }) => {
     e.preventDefault();
 
     if (token) {
+      // @ts-ignore
       dispatch(updateUser(value));
     } else {
       setIsUpdateToken(true);
+      // @ts-ignore
       dispatch(requestToken());
     }
   };
@@ -122,9 +131,13 @@ export function Profile({ children }) {
             value={value.name ?? ''}
             name={'name'}
             placeholder='Имя'
-            error={false}
             isIcon={true}
             extraClass='mb-6'
+            // Добавил пропсы вложенного компонента input
+            // ближе к макету
+
+            // @ts-ignore
+            error={false}
           />
           <EmailInput
             onChange={handleChange}
@@ -133,15 +146,14 @@ export function Profile({ children }) {
             placeholder='Логин'
             isIcon={true}
             extraClass='mb-6'
-            error={false}
           />
           <PasswordInput
-            type={'password'}
             onChange={handleChange}
             value={value.password ?? ''}
             name={'password'}
             icon='EditIcon'
-            error={false}
+            // @ts-ignore
+            type={'password'}
           />
           {isValue && (
             <div>
@@ -164,6 +176,7 @@ export function Profile({ children }) {
               </Button>
             </div>
           )}
+          { updateUserAnswer && <p className={`${profileStyles.caption} text text_type_main-default mt-20`}>Данные успешно обновлены</p>}
         </form>
       )}
       {children}

@@ -1,22 +1,27 @@
 import { getCookie } from './cookie';
 
 class Auth {
-  constructor(settings) {
+  private _settings: {
+    baseUrl: string; headers: {
+      'Content-Type': string;
+    };
+  };
+  constructor(settings: { baseUrl: string; headers: { 'Content-Type': string; }; }) {
     this._settings = settings;
   }
 
   // Проверка полученного ответа -------------------------
-  _checkResponse(res) {
+  _checkResponse(res: any) {
     return res.ok ? res.json() : Promise.reject(res.status);
   }
 
-  _request(url, options) {
+  _request(url: string, options: any) {
     return fetch(`${this._settings.baseUrl}${url}`, options).then(
       this._checkResponse
     );
   }
 
-  signUp(form) {
+  signUp(form: {name: string; password: string; email: string}) {
     return this._request('/register', {
       method: 'POST',
       headers: this._settings.headers,
@@ -28,7 +33,7 @@ class Auth {
     });
   }
 
-  signIn(form) {
+  signIn(form: {password: string; email: string}) {
     return this._request('/login', {
       method: 'POST',
       headers: this._settings.headers,
@@ -73,7 +78,7 @@ class Auth {
     });
   }
 
-  updateUser(form) {
+  updateUser(form: {name: string; password: string; email: string}) {
     return this._request('/user', {
       method: 'PATCH',
       mode: 'cors',
