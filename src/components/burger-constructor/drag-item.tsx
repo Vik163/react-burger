@@ -13,12 +13,7 @@ import {
 
 import { setCardMove } from '../../services/actions/move-item';
 
-type TDragCard = {
-  item: TCard;
-  index: number;
-  deleteItem: (e: {target: EventTarget}, id: string) => void;
-} & TChildren;
-
+import { TDragCard } from '../../utils/types'
 
 export const DragCard: FC<TDragCard> = ({ item, index, deleteItem }) => {
   const dispatch = useDispatch();
@@ -33,7 +28,7 @@ export const DragCard: FC<TDragCard> = ({ item, index, deleteItem }) => {
 
   const [, dropRef] = useDrop({
     accept: 'itemConstructor',
-    hover: (item: {index: number}, monitor: any) => {
+    hover: (item: {index: number}, monitor) => {
       const dragIndex = item.index;
       const hoverIndex = index;
       if (!ref.current || dragIndex === hoverIndex) {
@@ -44,7 +39,7 @@ export const DragCard: FC<TDragCard> = ({ item, index, deleteItem }) => {
       const hoverBoundingRect = ref.current?.getBoundingClientRect();
       const hoverMiddleY =
         (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
-      const hoverActualY = monitor.getClientOffset().y - hoverBoundingRect.top;
+      const hoverActualY = monitor.getClientOffset()!.y - hoverBoundingRect.top;
 
       // Перетаскивание продолжается только если hover меньше middle Y
       if (dragIndex < hoverIndex && hoverActualY < hoverMiddleY) return;
@@ -57,13 +52,13 @@ export const DragCard: FC<TDragCard> = ({ item, index, deleteItem }) => {
 
   // Объединяет два рефа в один (drag and drop)
   const ref = useRef<HTMLLIElement>(null);
-  const dragDropRef = dragRef(dropRef(ref)) as any;
+  dragRef(dropRef(ref));
 
   const opacity = isDragging ? 0 : 1;
   return (
     <li
       className={constructorStyles.constructor__item}
-      ref={dragDropRef}
+      ref={ref}
       style={{ opacity }}
       onClick={(e) => deleteItem(e, item._id)}
     >

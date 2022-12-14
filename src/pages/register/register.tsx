@@ -2,29 +2,27 @@ import { useEffect, useState, useRef, FormEvent } from 'react';
 import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 
-import loginStyles from './login.module.css';
+import registerStyles from './register.module.css';
 
 import {
   Input,
   Button,
 } from '@ya.praktikum/react-developer-burger-ui-components';
 
-import { authorization } from '../../../services/actions/login';
-import { useForm } from '../../hooks/use-form';
+import { registration } from '../../services/actions/register';
+import { useForm } from '../../components/hooks/use-form';
 
-type TLogin = {
-  email: string; 
-  password: string;
-}
+import { TDataRegister } from '../../utils/types'
 
-export function Login() {
+
+export function Register() {
   const dispatch = useDispatch();
   const { formReset } = useSelector((store: any) => ({
     formReset: store.authorizationInfo.formReset,
   }));
-  const [toggle, setToggle] = useState(false);
-  const {values, handleChange, setValues} = useForm<TLogin>({ email: '', password: '' });
+  const {values, handleChange, setValues} = useForm<TDataRegister>({ name: '', email: '', password: '' });
   const inputRef = useRef<HTMLInputElement>(null);
+  const [toggle, setToggle] = useState(false);
   const onIconClick = () => {
     setTimeout(() => (inputRef.current as HTMLInputElement).focus(), 0);
     setToggle(!toggle);
@@ -33,22 +31,34 @@ export function Login() {
   // Сброс -------------------------------
   useEffect(() => {
     if (formReset) {
-      setValues({ email: '', password: '' });
+      setValues({ name: '', email: '', password: '' });
     }
   }, [formReset]);
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     // @ts-ignore
-    dispatch(authorization(values));
+    dispatch(registration(value));
   };
 
   return (
-    <div className={loginStyles.login}>
-      <h2 className={`${loginStyles.title} text text_type_main-medium`}>
-        Вход
+    <div className={registerStyles.register}>
+      <h2 className={`${registerStyles.title} text text_type_main-medium`}>
+        Регистрация
       </h2>
-      <form className={loginStyles.form} onSubmit={handleSubmit}>
+      <form className={registerStyles.form} onSubmit={handleSubmit}>
+        <Input
+          type={'text'}
+          placeholder={'Имя'}
+          onChange={handleChange}
+          value={values.name ?? ''}
+          name={'name'}
+          error={false}
+          ref={inputRef}
+          errorText={'Ошибка'}
+          size={'default'}
+          extraClass='ml-1 mb-6'
+        />
         <Input
           type={'email'}
           placeholder={'E-mail'}
@@ -75,39 +85,22 @@ export function Login() {
           size={'default'}
           extraClass='ml-1 mb-6'
         />
-        <Button
-          htmlType='submit'
-          type='primary'
-          size='medium'
-          disabled={false}
-          extraClass={loginStyles.button}
-        >
-          Войти
+        <Button htmlType='submit' type='primary' size='medium' disabled={false}>
+          Зарегистрироваться
         </Button>
       </form>
-      <p className={`${loginStyles.caption} text text_type_main-default mt-20`}>
-        Вы — новый пользователь?
-        <Link to='/sign-up'>
+      <p
+        className={`${registerStyles.caption} text text_type_main-default mt-20`}
+      >
+        Уже зарегистрированы?
+        <Link to='/sign-in'>
           <Button
             htmlType='button'
             type='secondary'
             size='medium'
-            extraClass='pl-2 pb-2'
+            extraClass='pl-2'
           >
-            Зарегистрироваться
-          </Button>
-        </Link>
-      </p>
-      <p className={`${loginStyles.caption} text text_type_main-default `}>
-        Забыли пароль?
-        <Link to='/forgot-password'>
-          <Button
-            htmlType='button'
-            type='secondary'
-            size='medium'
-            extraClass='pl-2 pt-2'
-          >
-            Восстановить пароль
+            Войти
           </Button>
         </Link>
       </p>

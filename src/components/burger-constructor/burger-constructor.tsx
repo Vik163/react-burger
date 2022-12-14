@@ -20,7 +20,7 @@ import {
   setIngredients,
   setBun,
 } from '../../services/actions/burger-constructor';
-import { sendOrder } from '../../services/actions/order-details';
+import { sendOrder, deleteResultOrder } from '../../services/actions/order-details';
 
 import { TChildren, TCard, TItem } from '../../utils/types'
 
@@ -108,6 +108,7 @@ export const BurgerConstructor: FC<TChildren> = ({ children }) => {
 
   const closeModal = () => {
     setIsModal(false);
+    dispatch(deleteResultOrder());
   };
 
   //Удаление из заказа--------------------------------------
@@ -139,9 +140,7 @@ export const BurgerConstructor: FC<TChildren> = ({ children }) => {
         )}
         <div className={constructorStyles.constructor__scrollbar}>
           {isModal && (
-            <Modal 
-              closeModal={closeModal} title='Детали ингредиента'
-            >
+            <Modal closeModal={closeModal}>
               <OrderDetails />
             </Modal>
           )}

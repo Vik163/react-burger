@@ -1,4 +1,4 @@
-import { useEffect, useState, FC } from 'react';
+import { useEffect, FC, SyntheticEvent, } from 'react';
 import ReactDOM from 'react-dom';
 
 import modal from './modal.module.css';
@@ -26,9 +26,15 @@ export const Modal: FC<TModal> = ({ children, closeModal, title }) => {
   }, []);
 
 
+  const closeOverlay = (e: SyntheticEvent) => {
+    if (e.target === e.currentTarget) {
+      closeModal()    }
+  };
+
+
   return ReactDOM.createPortal(
     <>
-      <ModalOverlay />
+      <ModalOverlay closeOverlay={closeOverlay} />
       <div className={modal.modal}>
         <div className={`${modal.title_container} ml-10 mt-10 mr-10`} 
         >

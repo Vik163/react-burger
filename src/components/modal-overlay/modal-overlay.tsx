@@ -1,16 +1,10 @@
-import { MouseEventHandler } from 'react';
-import { useHistory } from 'react-router-dom';
+import { FC } from 'react';
 
 import './modal-overlay.css';
 
-export const ModalOverlay = () => {
-  const history = useHistory();
+import { TCloseOverlay } from '../../utils/types'
 
-  const closeOverlay: MouseEventHandler<HTMLDivElement> = (e) => {
-    if (e.target === e.currentTarget) {
-      history.push('/');
-    }
-  };
+export const ModalOverlay: FC<TCloseOverlay> = ({ closeOverlay }) => {
 
   return <div className='overlay' id='overlay' onClick={closeOverlay} />;
 }

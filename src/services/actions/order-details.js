@@ -2,7 +2,11 @@ import { burgerApi } from '../../utils/burger-api';
 
 import { addErrorOrder } from './actionCreators';
 
-import { SEND_ORDER_REQUEST, SEND_ORDER_SUCCESS } from './constants';
+import {
+  SEND_ORDER_REQUEST,
+  SEND_ORDER_SUCCESS,
+  DELETE_RESULT_ORDER,
+} from './constants';
 
 import { setIngredients, setBun } from './burger-constructor';
 import { setCardOrder } from './burger-constructor-card';
@@ -41,5 +45,12 @@ export function sendOrder(bun, ingredients) {
           dispatch(addErrorOrder(err, 'Внутренняя ошибка сервера'));
         }
       });
+  };
+}
+
+export function deleteResultOrder() {
+  return {
+    type: DELETE_RESULT_ORDER,
+    resultOrder: null,
   };
 }

@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, SyntheticEvent } from 'react';
 import { useSelector } from 'react-redux';
 
 import ingredientsStyles from './burger-ingredients.module.css';
@@ -27,7 +27,7 @@ export const BurgerIngredients = () => {
   const [scroll, setScroll] = useState(0);
 
   //Переход по ссылке между видами--------------------------------------------
-  const clickTab = (e: {target: EventTarget}) => {
+  const clickTab = (e: SyntheticEvent) => {
     const tab = (e.target as HTMLElement).textContent;
     if (tab === 'Булки') {
       (bunRef.current as HTMLElement).scrollIntoView({ block: 'start', behavior: 'smooth' });
@@ -38,7 +38,7 @@ export const BurgerIngredients = () => {
     }
   };
 
-  const onScroll = (e: {currentTarget: EventTarget}) => {
+  const onScroll = (e: SyntheticEvent) => {
     const scroll = (e.currentTarget as HTMLElement).scrollTop;
     setScroll(scroll);
   };

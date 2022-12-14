@@ -1,4 +1,5 @@
 import * as H from 'history' 
+import { SyntheticEvent } from 'react';
 
 export type TCard = {
   readonly _id: string;
@@ -23,6 +24,10 @@ export type TCloseModal = {
   closeModal: () => void | undefined, 
 };
 
+export type TCloseOverlay = {
+  closeOverlay: (e: SyntheticEvent) => void, 
+};
+
 export type TChildren = {
   children?: JSX.Element[] | JSX.Element
 } ;
@@ -32,7 +37,7 @@ export type TModalState = {
 } ;
 
 export type TModal = {
-  title: string;
+  title?: string;
 } & TCloseModal & TChildren;
 
 export type TProtected = {
@@ -56,3 +61,9 @@ export type TDataRegister = {
   email: string; 
   password: string;
 }
+
+export type TDragCard = {
+  item: TCard;
+  index: number;
+  deleteItem: (e: {target: EventTarget}, id: string) => void;
+} & TChildren;

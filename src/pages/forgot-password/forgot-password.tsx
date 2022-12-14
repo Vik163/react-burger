@@ -9,7 +9,7 @@ import {
   Button,
 } from '@ya.praktikum/react-developer-burger-ui-components';
 
-import { forgotPassword } from '../../../services/actions/forgot-password';
+import { forgotPassword } from '../../services/actions/forgot-password';
 
 export function ForgotPassword() {
   const dispatch = useDispatch();

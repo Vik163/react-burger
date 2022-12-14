@@ -10,13 +10,13 @@ import {
   Button,
 } from '@ya.praktikum/react-developer-burger-ui-components';
 
-import { getCookie } from '../../../utils/cookie';
-import { requestToken } from '../../../services/actions/update-token';
+import { getCookie } from '../../utils/cookie';
+import { requestToken } from '../../services/actions/update-token';
 
-import { logout } from '../../../services/actions/logout';
-import { updateUser } from '../../../services/actions/update-user';
+import { logout } from '../../services/actions/logout';
+import { updateUser } from '../../services/actions/update-user';
 
-import { TChildren, TDataRegister } from '../../../utils/types'
+import { TChildren, TDataRegister } from '../../utils/types'
 
 export const Profile: FC<TChildren> = ({ children }) => {
   const dispatch = useDispatch();
@@ -82,6 +82,8 @@ export const Profile: FC<TChildren> = ({ children }) => {
     if (token) {
       // @ts-ignore
       dispatch(updateUser(value));
+      setIsValue('');
+
     } else {
       setIsUpdateToken(true);
       // @ts-ignore
@@ -173,7 +175,13 @@ export const Profile: FC<TChildren> = ({ children }) => {
               </Button>
             </div>
           )}
-          { updateUserAnswer && <p className={`${profileStyles.caption} text text_type_main-default mt-20`}>Данные успешно обновлены</p>}
+          { (updateUserAnswer && !isValue) && 
+            <p 
+              className={`${profileStyles.caption} text text_type_main-default mt-20`}
+            >
+              Данные успешно обновлены
+            </p>
+            }
         </form>
       )}
       {children}

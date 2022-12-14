@@ -9,8 +9,8 @@ import {
   Button,
 } from '@ya.praktikum/react-developer-burger-ui-components';
 
-import { resetPassword } from '../../../services/actions/reset-password';
-import { useForm } from '../../hooks/use-form';
+import { resetPassword } from '../../services/actions/reset-password';
+import { useForm } from '../../components/hooks/use-form';
 
 type TResetPassword = {
   password: string;
