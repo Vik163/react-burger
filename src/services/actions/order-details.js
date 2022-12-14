@@ -19,7 +19,6 @@ export function sendOrder(bun, ingredients) {
       .sendOrder(order)
       .then((result) => {
         if (result) {
-          // localStorage.setItem('modal', JSON.stringify(true));
           dispatch({
             type: SEND_ORDER_SUCCESS,
             resultOrder: result,

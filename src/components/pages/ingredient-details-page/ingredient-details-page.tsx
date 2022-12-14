@@ -1,10 +1,9 @@
-import { useEffect, FC } from 'react';
+import stylesIngredient from './ingredient-details-page.module.css';
 
-import stylesIngredient from './ingredient.module.css';
+import { IngredientDetails } from '../../ingredient-details/ingredient-details';
 
-import { TChildren } from '../../../utils/types'
 
-export const Ingredient: FC<TChildren> = ({ children }) => {
+export const IngredientDetailsPage = () => {
 
   return (
     <div 
@@ -13,7 +12,7 @@ export const Ingredient: FC<TChildren> = ({ children }) => {
       <div className={stylesIngredient.title}>
         <p className='text text_type_main-large'>Детали ингредиента</p>
       </div>
-      {children}
+      <IngredientDetails />
     </div>
   );
 };

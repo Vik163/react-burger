@@ -1,3 +1,5 @@
+import * as H from 'history' 
+
 export type TCard = {
   readonly _id: string;
   readonly uuid: string;
@@ -25,7 +27,13 @@ export type TChildren = {
   children?: JSX.Element[] | JSX.Element
 } ;
 
-export type TModal = TCloseModal & TChildren;
+export type TModalState = {
+  background: H.Location;
+} ;
+
+export type TModal = {
+  title: string;
+} & TCloseModal & TChildren;
 
 export type TProtected = {
   children: JSX.Element[] | JSX.Element;

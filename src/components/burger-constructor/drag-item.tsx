@@ -1,4 +1,4 @@
-import  React, { useRef, FC } from 'react';
+import  React, { useRef, FC, RefObject } from 'react';
 import { useDispatch } from 'react-redux';
 import { useDrag, useDrop } from 'react-dnd';
 
@@ -18,6 +18,7 @@ type TDragCard = {
   index: number;
   deleteItem: (e: {target: EventTarget}, id: string) => void;
 } & TChildren;
+
 
 export const DragCard: FC<TDragCard> = ({ item, index, deleteItem }) => {
   const dispatch = useDispatch();

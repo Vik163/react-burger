@@ -17,19 +17,22 @@ import { ResetPassword } from '../pages/reset-password/reset-password';
 import { ForgotPassword } from '../pages/forgot-password/forgot-password';
 import { ProtectedRoute } from '../protected-route';
 import { IngredientDetails } from '../ingredient-details/ingredient-details';
+import { IngredientDetailsPage } from '../pages/ingredient-details-page/ingredient-details-page';
 import { StoryOrders } from '../story-orders/story-orders';
-import { Modal } from '../modal/modal';import { getCookie } from '../../utils/cookie';
+import { Modal } from '../modal/modal';
+import { getCookie } from '../../utils/cookie';
 
 import { getCards } from '../../services/actions/burger-ingredients';
 import { getUser } from '../../services/actions/get-user';
 import { requestToken } from '../../services/actions/update-token';
 import { deleteIngredientDetails } from '../../services/actions/ingredient-details';
 
+import { TModalState } from '../../utils/types'
+
 function App() {
   const dispatch = useDispatch();
   const history = useHistory();
-  const location = useLocation();
-              // @ts-ignore
+  const location = useLocation<TModalState>();
   const background = location.state && location.state.background ;
   const userData = JSON.parse(`${localStorage.getItem('userData')}`);
   const token = getCookie('token');
@@ -116,7 +119,7 @@ function App() {
           </Profile>
         </ProtectedRoute>
         <Route path='/ingredients/:id' exact>
-          <IngredientDetails />
+          <IngredientDetailsPage />
         </Route>
         {messageError && (
           <Route path='/errors'>
@@ -126,7 +129,7 @@ function App() {
       </Switch>
       {background && (
             <Route path='/ingredients/:id' exact>
-                <Modal closeModal={handleModalClose}>
+                <Modal closeModal={handleModalClose} title='Детали ингредиента'>
                   <IngredientDetails />
                 </Modal>
             </Route>

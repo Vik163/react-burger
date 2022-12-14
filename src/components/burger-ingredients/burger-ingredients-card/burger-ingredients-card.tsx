@@ -13,7 +13,7 @@ import {
 import { setIngredientDetails } from '../../../services/actions/ingredient-details';
 
 
-import { TCard, TItem } from '../../../utils/types'
+import { TCard, TItem, TModalState } from '../../../utils/types'
 
 export const BurgerIngredientsCard: FC<TItem> = ({ card }) => {
   const dispatch = useDispatch();
@@ -46,12 +46,11 @@ export const BurgerIngredientsCard: FC<TItem> = ({ card }) => {
 
   const openModalIngredients = () => {
     // Отправка данных в попап
-    localStorage.setItem('modal', JSON.stringify(true));
     dispatch(setIngredientDetails(card));
   };
 
   return (
-    <Link
+    <Link<TModalState>
       to={{
         pathname: `/ingredients/${card._id}`,
         state: { background: location },
