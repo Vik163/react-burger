@@ -1,4 +1,4 @@
-import { useEffect, useState, FC } from 'react';
+import { useEffect, useState, FC, ChangeEvent, FormEvent } from 'react';
 import { useLocation, Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -32,7 +32,7 @@ export const Profile: FC<TChildren> = ({ children }) => {
   }));
 
   //Ввод данных и валидация
-  const handleChange = (event: { target: HTMLInputElement; }) => {
+  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     const target = event.target;
     const valueItem = target.value;
     const name = target.name;
@@ -76,7 +76,7 @@ export const Profile: FC<TChildren> = ({ children }) => {
     });
   };
 
-  const handleSubmit = (e: { preventDefault: () => void; }) => {
+  const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
 
     if (token) {
@@ -133,9 +133,6 @@ export const Profile: FC<TChildren> = ({ children }) => {
             placeholder='Имя'
             isIcon={true}
             extraClass='mb-6'
-            // Добавил пропсы вложенного компонента input
-            // ближе к макету
-
             // @ts-ignore
             error={false}
           />

@@ -18,19 +18,14 @@ export type TItem = {
 }
 
 export type TCloseModal = {
-  closeModal: () => void, 
+  closeModal: () => void | undefined, 
 };
 
 export type TChildren = {
   children?: JSX.Element[] | JSX.Element
 } ;
 
-export type TModal = {
-  readonly isModal: boolean; 
-  readonly title?: string;
-} & TCloseModal & TChildren;
-
-
+export type TModal = TCloseModal & TChildren;
 
 export type TProtected = {
   children: JSX.Element[] | JSX.Element;

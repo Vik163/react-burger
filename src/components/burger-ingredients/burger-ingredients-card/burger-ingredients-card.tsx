@@ -1,5 +1,5 @@
 import { useEffect, useState, FC } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { useDrag } from 'react-dnd';
 
@@ -17,6 +17,7 @@ import { TCard, TItem } from '../../../utils/types'
 
 export const BurgerIngredientsCard: FC<TItem> = ({ card }) => {
   const dispatch = useDispatch();
+  const location = useLocation();
   const { bun, ingredients } = useSelector((store: any) => ({
     bun: store.burgerConstructor.bun,
     ingredients: store.burgerConstructor.ingredients,
@@ -51,9 +52,13 @@ export const BurgerIngredientsCard: FC<TItem> = ({ card }) => {
 
   return (
     <Link
-      to={`/ingredients/${card._id}`}
+      to={{
+        pathname: `/ingredients/${card._id}`,
+        state: { background: location },
+      }}
       className={ingredientsCardStyles.link}
       onClick={openModalIngredients}
+
     >
       <li className={ingredientsCardStyles.card} ref={drag}>
         <div style={{ display: isCounter[card.name] > 0 ? 'block' : 'none' }}>

@@ -39,7 +39,7 @@ export const BurgerConstructor: FC<TChildren> = ({ children }) => {
 
   const [cards, seCards] = useState<Array<TCard>>(ingredients);
   const [totalSum, setTotalSum] = useState(0);
-  const [isModal, setIsModal] = useState(false);
+  // const [isModal, setIsModal] = useState(false);
 
   const [, drop] = useDrop({
     accept: 'item',
@@ -91,10 +91,9 @@ export const BurgerConstructor: FC<TChildren> = ({ children }) => {
     }
   }, [bun, cards]);
 
-  const openModal = () => {
+  const sendOrderClick = () => {
     if (loggedIn) {
       if (bun) {
-        setIsModal(true);
         // @ts-ignore
         dispatch(sendOrder(bun, ingredients));
       }
@@ -103,9 +102,9 @@ export const BurgerConstructor: FC<TChildren> = ({ children }) => {
     }
   };
 
-  const closeModal = () => {
-    setIsModal(false);
-  };
+  // const closeModal = () => {
+  //   setIsModal(false);
+  // };
 
   //Удаление из заказа--------------------------------------
   const deleteItem = (e: {target: EventTarget}, id: string) => {
@@ -135,11 +134,13 @@ export const BurgerConstructor: FC<TChildren> = ({ children }) => {
           </li>
         )}
         <div className={constructorStyles.constructor__scrollbar}>
-          {isModal && resultOrder && (
-            <Modal closeModal={closeModal} isModal={isModal}>
+          {/* {resultOrder && (
+            <Modal 
+            // closeModal={closeModal} isModal={isModal}
+            >
               <OrderDetails />
             </Modal>
-          )}
+          )} */}
           {cards &&
             cards.map((item: TCard, index: number) => (
               <DragCard
@@ -171,7 +172,7 @@ export const BurgerConstructor: FC<TChildren> = ({ children }) => {
           type='primary'
           size='large'
           htmlType='submit'
-          onClick={openModal}
+          onClick={sendOrderClick}
         >
           Оформить заказ
         </Button>

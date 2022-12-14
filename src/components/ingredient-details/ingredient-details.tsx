@@ -1,19 +1,22 @@
-import { useLocation } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
 import detailsStyles from './ingredient-details.module.css';
 
 import { TCard } from '../../utils/types'
 
+type TId = {
+  id: string;
+}
 
 export function IngredientDetails() {
-  const { pathname } = useLocation();
+  const { id } = useParams<TId>();
   const { card, cards } = useSelector((store: any) => ({
     card: store.ingredientDetails.ingredientDetails,
     cards: store.burgerIngredients.cards,
   }));
   const ingredientDetails =
-    cards.filter((item: TCard) => item._id === pathname.slice(13))[0] || card;
+    cards.filter((item: TCard) => item._id === id)[0] || card;
 
   return (
     <>

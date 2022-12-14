@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, FormEvent } from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 
@@ -26,7 +26,7 @@ export function ForgotPassword() {
     }
   }, [forgotPasswordAnswer]);
 
-  const handleSubmit = (e: { preventDefault: () => void; }) => {
+  const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     // @ts-ignore
     dispatch(forgotPassword(value));

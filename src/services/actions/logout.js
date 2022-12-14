@@ -1,4 +1,4 @@
-import { auth } from '../../utils/auth';
+import { burgerApi } from '../../utils/burger-api';
 
 import { getCookie } from '../../utils/cookie';
 
@@ -11,7 +11,7 @@ export function logout() {
     dispatch({
       type: LOGOUT_REQUEST,
     });
-    auth
+    burgerApi
       .signOut()
       .then((data) => {
         if (data.success) {

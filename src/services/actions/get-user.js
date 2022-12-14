@@ -1,4 +1,4 @@
-import { auth } from '../../utils/auth';
+import { burgerApi } from '../../utils/burger-api';
 
 import { addErrorGetUser } from './actionCreators';
 
@@ -9,7 +9,7 @@ export function getUser() {
     dispatch({
       type: GET_USER_REQUEST,
     });
-    auth
+    burgerApi
       .getUser()
       .then((data) => {
         if (data.success) {

@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, FormEvent } from 'react';
 import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 
@@ -10,6 +10,7 @@ import {
 } from '@ya.praktikum/react-developer-burger-ui-components';
 
 import { registration } from '../../../services/actions/register';
+import { useForm } from '../../hooks/use-form';
 
 import { TDataRegister } from '../../../utils/types'
 
@@ -19,11 +20,7 @@ export function Register() {
   const { formReset } = useSelector((store: any) => ({
     formReset: store.authorizationInfo.formReset,
   }));
-  const [value, setValue] = useState<TDataRegister>({
-    name: '',
-    email: '',
-    password: '',
-  });
+  const {values, handleChange, setValues} = useForm<TDataRegister>({ name: '', email: '', password: '' });
   const inputRef = useRef<HTMLInputElement>(null);
   const [toggle, setToggle] = useState(false);
   const onIconClick = () => {
@@ -31,22 +28,14 @@ export function Register() {
     setToggle(!toggle);
   };
 
-  //Ввод данных
-  const handleChange = (event: { target: HTMLInputElement; }) => {
-    const target = event.target;
-    const valueItem = target.value;
-    const name = target.name;
-    setValue({ ...value, [name]: valueItem });
-  };
-
   // Сброс -------------------------------
   useEffect(() => {
     if (formReset) {
-      setValue({ name: '', email: '', password: '' });
+      setValues({ name: '', email: '', password: '' });
     }
   }, [formReset]);
 
-  const handleSubmit = (e: { preventDefault: () => void; }) => {
+  const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     // @ts-ignore
     dispatch(registration(value));
@@ -62,7 +51,7 @@ export function Register() {
           type={'text'}
           placeholder={'Имя'}
           onChange={handleChange}
-          value={value.name ?? ''}
+          value={values.name ?? ''}
           name={'name'}
           error={false}
           ref={inputRef}
@@ -74,7 +63,7 @@ export function Register() {
           type={'email'}
           placeholder={'E-mail'}
           onChange={handleChange}
-          value={value.email ?? ''}
+          value={values.email ?? ''}
           name={'email'}
           error={false}
           ref={inputRef}
@@ -87,7 +76,7 @@ export function Register() {
           placeholder={'Пароль'}
           onChange={handleChange}
           icon={!toggle ? 'ShowIcon' : 'HideIcon'}
-          value={value.password ?? ''}
+          value={values.password ?? ''}
           name={'password'}
           error={false}
           ref={inputRef}

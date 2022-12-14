@@ -1,4 +1,4 @@
-import { auth } from '../../utils/auth';
+import { burgerApi } from '../../utils/burger-api';
 
 import { updateUserErrors } from './actionCreators';
 
@@ -9,7 +9,7 @@ export function updateUser(form) {
     dispatch({
       type: UPDATE_USER_REQUEST,
     });
-    auth
+    burgerApi
       .updateUser(form)
       .then((data) => {
         if (data.success) {

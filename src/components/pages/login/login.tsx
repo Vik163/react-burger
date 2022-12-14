@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, FormEvent } from 'react';
 import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 
@@ -10,6 +10,7 @@ import {
 } from '@ya.praktikum/react-developer-burger-ui-components';
 
 import { authorization } from '../../../services/actions/login';
+import { useForm } from '../../hooks/use-form';
 
 type TLogin = {
   email: string; 
@@ -22,32 +23,24 @@ export function Login() {
     formReset: store.authorizationInfo.formReset,
   }));
   const [toggle, setToggle] = useState(false);
-  const [value, setValue] = useState<TLogin>({ email: '', password: '' });
+  const {values, handleChange, setValues} = useForm<TLogin>({ email: '', password: '' });
   const inputRef = useRef<HTMLInputElement>(null);
   const onIconClick = () => {
     setTimeout(() => (inputRef.current as HTMLInputElement).focus(), 0);
     setToggle(!toggle);
   };
 
-  //Ввод данных
-  const handleChange = (event: { target: HTMLInputElement; }) => {
-    const target = event.target;
-    const valueItem = target.value;
-    const name = target.name;
-    setValue({ ...value, [name]: valueItem });
-  };
-
   // Сброс -------------------------------
   useEffect(() => {
     if (formReset) {
-      setValue({ email: '', password: '' });
+      setValues({ email: '', password: '' });
     }
   }, [formReset]);
 
-  const handleSubmit = (e: { preventDefault: () => void; }) => {
+  const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     // @ts-ignore
-    dispatch(authorization(value));
+    dispatch(authorization(values));
   };
 
   return (
@@ -60,7 +53,7 @@ export function Login() {
           type={'email'}
           placeholder={'E-mail'}
           onChange={handleChange}
-          value={value.email ?? ''}
+          value={values.email ?? ''}
           name={'email'}
           error={false}
           ref={inputRef}
@@ -73,7 +66,7 @@ export function Login() {
           placeholder={'Пароль'}
           onChange={handleChange}
           icon={!toggle ? 'ShowIcon' : 'HideIcon'}
-          value={value.password ?? ''}
+          value={values.password ?? ''}
           name={'password'}
           error={false}
           ref={inputRef}

@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, FormEvent } from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 
@@ -10,6 +10,7 @@ import {
 } from '@ya.praktikum/react-developer-burger-ui-components';
 
 import { resetPassword } from '../../../services/actions/reset-password';
+import { useForm } from '../../hooks/use-form';
 
 type TResetPassword = {
   password: string;
@@ -25,32 +26,25 @@ export function ResetPassword() {
     })
   );
   const [toggle, setToggle] = useState(false);
-  const [value, setValue] = useState<TResetPassword>({ password: '', token: '' });
+  const {values, handleChange, setValues} = useForm<TResetPassword>({ password: '', token: '' });
+
   const inputRef = useRef<HTMLInputElement>(null);
   const onIconClick = () => {
     setTimeout(() => (inputRef.current as HTMLInputElement).focus(), 0);
     setToggle(!toggle);
   };
 
-  //Ввод данных и валидация
-  const handleChange = (event: { target: HTMLInputElement; }) => {
-    const target = event.target;
-    const valueItem = target.value;
-    const name = target.name;
-    setValue({ ...value, [name]: valueItem });
-  };
-
   // Сброс -------------------------------
   useEffect(() => {
     if (resetPasswordAnswer) {
-      setValue({ password: '', token: '' });
+      setValues({ password: '', token: '' });
     }
   }, [resetPasswordAnswer]);
 
-  const handleSubmit = (e: { preventDefault: () => void; }) => {
+  const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
       // @ts-ignore
-    dispatch(resetPassword(value));
+    dispatch(resetPassword(values));
   };
 
   if (!forgotPasswordAnswer) {
@@ -68,7 +62,7 @@ export function ResetPassword() {
           placeholder={'Введите новый пароль'}
           onChange={handleChange}
           icon={!toggle ? 'ShowIcon' : 'HideIcon'}
-          value={value.password ?? ''}
+          value={values.password ?? ''}
           name={'password'}
           error={false}
           ref={inputRef}
@@ -81,7 +75,7 @@ export function ResetPassword() {
           type={'text'}
           placeholder={'Введите код из письма'}
           onChange={handleChange}
-          value={value.token ?? ''}
+          value={values.token ?? ''}
           name={'token'}
           error={false}
           errorText={'Ошибка'}

@@ -1,16 +1,16 @@
-import { FC } from 'react';
+import { FC, MouseEventHandler } from 'react';
 import { useHistory } from 'react-router-dom';
 
 import './modal-overlay.css';
 
 import { TCloseModal } from '../../utils/types'
 
-export const ModalOverlay:  FC<TCloseModal> = ({ closeModal }) => {
+export const ModalOverlay = () => {
   const history = useHistory();
 
-  const closeOverlay = (e: { target: EventTarget; currentTarget: EventTarget; }) => {
+  const closeOverlay: MouseEventHandler<HTMLDivElement> = (e) => {
     if (e.target === e.currentTarget) {
-      closeModal();
+      // localStorage.removeItem('modal');
       history.push('/');
     }
   };
