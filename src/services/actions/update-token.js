@@ -1,4 +1,4 @@
-import { auth } from '../../utils/auth';
+import { burgerApi } from '../../utils/burger-api';
 
 import { updateToken } from './actionCreators';
 
@@ -9,7 +9,7 @@ export function requestToken() {
     dispatch({
       type: TOKEN_REQUEST,
     });
-    auth
+    burgerApi
       .updateToken()
       .then((data) => {
         let authToken;

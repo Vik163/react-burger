@@ -2,6 +2,7 @@ import {
   SEND_ORDER_REQUEST,
   SEND_ORDER_SUCCESS,
   SEND_ORDER_FAILED,
+  DELETE_RESULT_ORDER,
 } from '../actions/constants';
 
 const initialState = {
@@ -39,6 +40,12 @@ export const orderDetailsReducer = (state = initialState, action) => {
         messageError: action.messageError,
         dataOrderRequest: false,
         loader: false,
+      };
+    }
+    case DELETE_RESULT_ORDER: {
+      return {
+        ...state,
+        resultOrder: action.resultOrder,
       };
     }
     default: {

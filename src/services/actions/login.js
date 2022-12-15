@@ -1,4 +1,4 @@
-import { auth } from '../../utils/auth';
+import { burgerApi } from '../../utils/burger-api';
 
 import { addErrorLogin } from './actionCreators';
 
@@ -9,7 +9,7 @@ export function authorization(form) {
     dispatch({
       type: LOGIN_REQUEST,
     });
-    auth
+    burgerApi
       .signIn(form)
       .then((data) => {
         let authToken;

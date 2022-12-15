@@ -19,14 +19,14 @@ const initialState = {
   forgotPasswordAnswer: false,
   resetPasswordRequest: false,
   resetPasswordFailed: false,
-  resetPasswordAnswer: '',
+  resetPasswordAnswer: false,
   getUserRequest: false,
   updateUserRequest: false,
-  updateUserSuccess: false,
   getUserFailed: false,
   updateUserFailed: false,
   statusRequest: null,
   messageError: '',
+  updateUserAnswer: '',
   loader: false,
 };
 
@@ -69,7 +69,7 @@ export const usersReducer = (state = initialState, action) => {
         ...state,
         updateUserFailed: false,
         updateUserRequest: false,
-        updateUserSuccess: 'Данные пользователя успешно обновлены',
+        updateUserAnswer: 'Данные пользователя успешно обновлены',
         loader: false,
       };
     }
@@ -121,7 +121,8 @@ export const usersReducer = (state = initialState, action) => {
         ...state,
         resetPasswordFailed: false,
         resetPasswordRequest: false,
-        resetPasswordAnswer: 'Пароль успешно обновлен',
+        resetPasswordAnswer: true,
+        messageError: 'Пароль успешно обновлен',
         loader: false,
       };
     }

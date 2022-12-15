@@ -1,4 +1,4 @@
-import { auth } from '../../utils/auth';
+import { burgerApi } from '../../utils/burger-api';
 
 import { addErrorRegister } from './actionCreators';
 
@@ -9,7 +9,7 @@ export function registration(form) {
     dispatch({
       type: REGISTER_REQUEST,
     });
-    auth
+    burgerApi
       .signUp(form)
       .then((data) => {
         let authToken;

@@ -1,0 +1,42 @@
+.profile {
+  position: relative;
+  display: flex;
+  align-self: center;
+  width: 100%;
+  height: calc(100vh - 88px);
+  color: white;
+}
+
+.nav {
+  list-style: none;
+  width: 320px;
+  padding: 0;
+  margin: 120px 60px 0 20px;
+}
+
+.navItem {
+  height: 64px;
+  color: #8585ad;
+  cursor: pointer;
+}
+
+.text {
+  color: #8585ad;
+  cursor: default;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  margin-top: 120px;
+}
+
+.link {
+  text-decoration: none;
+}
+
+.caption {
+  color: rgb(133, 180, 250);
+  align-self: center;
+}
