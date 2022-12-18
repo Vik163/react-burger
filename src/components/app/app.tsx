@@ -18,6 +18,7 @@ import { ForgotPassword } from '../../pages/forgot-password/forgot-password';
 import { ProtectedRoute } from '../protected-route';
 import { IngredientDetails } from '../ingredient-details/ingredient-details';
 import { IngredientDetailsPage } from '../../pages/ingredient-details-page/ingredient-details-page';
+import { OrderDetailsPage } from '../../pages/order-details-page/order-details-page';
 import { StoryOrders } from '../story-orders/story-orders';
 import { OrderFeed } from '../../pages/order-feed/order-feed';
 import { Modal } from '../modal/modal';
@@ -102,33 +103,41 @@ function App() {
             )}
           </DndProvider>
         </Route>
-        <ProtectedRoute path='/feed' onlyAuth={true}>
+        <ProtectedRoute path='/feed' onlyAuth={true} exact>
           <OrderFeed />
         </ProtectedRoute>
-        <ProtectedRoute path='/forgot-password' onlyAuth={false}>
+        <ProtectedRoute path='/forgot-password' onlyAuth={false} exact>
           <ForgotPassword />
         </ProtectedRoute>
         <Route path='/reset-password'>
           <ResetPassword />
         </Route>
-        <ProtectedRoute path='/sign-in' onlyAuth={false}>
+        <ProtectedRoute path='/sign-in' onlyAuth={false} exact>
           <Login />
         </ProtectedRoute>
-        <ProtectedRoute path='/sign-up' onlyAuth={false}>
+        <ProtectedRoute path='/sign-up' onlyAuth={false} exact>
           <Register />
         </ProtectedRoute>
-        <ProtectedRoute path='/profile' onlyAuth={true}>
+        <ProtectedRoute path='/profile' onlyAuth={true} exact>
+          <Profile />
+        </ProtectedRoute>
+        <ProtectedRoute path='/profile/orders' onlyAuth={true} exact>
           <Profile>
-            <Route path='/profile/orders'>
-              <StoryOrders />
-            </Route>
+            <StoryOrders />
           </Profile>
         </ProtectedRoute>
+
+        <Route path='/feed/:id' exact>
+          <OrderDetailsPage />
+        </Route>
+        <Route path='/profile/orders/:id' exact>
+          <OrderDetailsPage />
+        </Route>
         <Route path='/ingredients/:id' exact>
           <IngredientDetailsPage />
         </Route>
         {messageError && (
-          <Route path='/errors'>
+          <Route path='/errors' exact>
             <ErrorsPage />
           </Route>
         )}

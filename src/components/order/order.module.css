@@ -20,6 +20,11 @@
   height: 64px;
 }
 
+.link {
+  text-decoration: none;
+  color: white;
+}
+
 .container_type_image {
   position: absolute;
   left: 0;
