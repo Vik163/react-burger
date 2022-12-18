@@ -17,6 +17,21 @@
   width: 580px;
   height: 852px;
   margin-left: 56px;
+}
 
-  border: 1px solid red;
+.container_type_process {
+  display: flex;
+  justify-content: space-between;
+}
+
+.container_type_numbers {
+  box-sizing: border-box;
+  width: 272px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.numbers {
+  color: #00cccc;
 }

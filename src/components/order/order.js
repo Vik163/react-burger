@@ -1,11 +1,17 @@
+import { useLocation, Link } from 'react-router-dom';
+
 import orderStyles from './order.module.css';
 
-import { ScrollContainer } from '../../components/scroll-container/scroll-container';
+import { CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 
 export function Order({ card }) {
-  console.log(card);
+  const { pathname } = useLocation();
+
   return (
-    <section className={orderStyles.order}>
+    <section
+      className={orderStyles.order}
+      style={{ width: pathname === '/profile/orders' && 844 }}
+    >
       <div className={orderStyles.container_type_date}>
         <p className='text text_type_digits-default'>{card.number}</p>
         <p className='text text_type_main-default text_color_inactive'>
@@ -17,15 +23,12 @@ export function Order({ card }) {
       >
         {card.name}
       </h1>
-      <div className={orderStyles.list}>
-        <ScrollContainer></ScrollContainer>
-      </div>
       <div className={orderStyles.container_type_total}>
         <ul className={orderStyles.container_type_image}>
-          {card.orders.map((item, index) => {
-            if (index < 6) {
-              return (
-                <>
+          {card.orders.map(
+            (item, index) =>
+              index < 6 && (
+                <div key={item._id}>
                   {index > 4 && (
                     <p
                       className={`${orderStyles.mask} text text_type_main-default`}
@@ -33,7 +36,6 @@ export function Order({ card }) {
                   )}
                   <li
                     className={orderStyles.item}
-                    key={item._id}
                     style={{
                       zIndex: !(index === 5) && 100 - index,
                       left: 48 * index,
@@ -45,11 +47,12 @@ export function Order({ card }) {
                       alt={item.name}
                     />
                   </li>
-                </>
-              );
-            }
-          })}
+                </div>
+              )
+          )}
         </ul>
+        <p className='text text_type_digits-default mr-2'>{card.totalSum}</p>
+        <CurrencyIcon type='primary' />
       </div>
     </section>
   );
