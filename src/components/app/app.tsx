@@ -19,6 +19,7 @@ import { ProtectedRoute } from '../protected-route';
 import { IngredientDetails } from '../ingredient-details/ingredient-details';
 import { IngredientDetailsPage } from '../../pages/ingredient-details-page/ingredient-details-page';
 import { StoryOrders } from '../story-orders/story-orders';
+import { OrderFeed } from '../../pages/order-feed/order-feed';
 import { Modal } from '../modal/modal';
 import { getCookie } from '../../utils/cookie';
 
@@ -27,26 +28,28 @@ import { getUser } from '../../services/actions/get-user';
 import { requestToken } from '../../services/actions/update-token';
 import { deleteIngredientDetails } from '../../services/actions/ingredient-details';
 
-import { TModalState } from '../../utils/types'
+import { TModalState } from '../../utils/types';
 
 function App() {
   const dispatch = useDispatch();
   const history = useHistory();
   const location = useLocation<TModalState>();
-  const background = location.state && location.state.background ;
+  const background = location.state && location.state.background;
   const userData = JSON.parse(`${localStorage.getItem('userData')}`);
   const token = getCookie('token');
-  const { cards, messageError, loader, loggedIn } = useSelector((store: any) => ({
-    cards: store.burgerIngredients.cards,
-    userData: store.dataUser.messageError,
-    messageError:
-      store.burgerIngredients.messageError ||
-      store.orderDetails.messageError ||
-      store.authorizationInfo.messageError ||
-      store.dataUser.messageError,
-    loader: store.orderDetails.loader || store.burgerIngredients.loader,
-    loggedIn: store.authorizationInfo.loggedIn,
-  }));
+  const { cards, messageError, loader, loggedIn } = useSelector(
+    (store: any) => ({
+      cards: store.burgerIngredients.cards,
+      userData: store.dataUser.messageError,
+      messageError:
+        store.burgerIngredients.messageError ||
+        store.orderDetails.messageError ||
+        store.authorizationInfo.messageError ||
+        store.dataUser.messageError,
+      loader: store.orderDetails.loader || store.burgerIngredients.loader,
+      loggedIn: store.authorizationInfo.loggedIn,
+    })
+  );
 
   // Проверка токена ------------------------
   const checkToken = () => {
@@ -99,6 +102,9 @@ function App() {
             )}
           </DndProvider>
         </Route>
+        <ProtectedRoute path='/feed' onlyAuth={true}>
+          <OrderFeed />
+        </ProtectedRoute>
         <ProtectedRoute path='/forgot-password' onlyAuth={false}>
           <ForgotPassword />
         </ProtectedRoute>
@@ -128,13 +134,12 @@ function App() {
         )}
       </Switch>
       {background && (
-            <Route path='/ingredients/:id' exact>
-                <Modal closeModal={handleModalClose} title='Детали ингредиента'>
-                  <IngredientDetails />
-                </Modal>
-            </Route>
-          )
-        }
+        <Route path='/ingredients/:id' exact>
+          <Modal closeModal={handleModalClose} title='Детали ингредиента'>
+            <IngredientDetails />
+          </Modal>
+        </Route>
+      )}
     </div>
   );
 }

@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo, FC } from 'react';
 import { useHistory } from 'react-router-dom';
-import { useSelector, useDispatch  } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { useDrop } from 'react-dnd';
 
 import constructorStyles from './burger-constructor.module.css';
@@ -14,15 +14,19 @@ import {
 import { Modal } from '../modal/modal';
 import { OrderDetails } from '../order-details/order-details';
 import { DragCard } from './drag-item';
+import { ScrollContainer } from '../scroll-container/scroll-container';
 
 import { setCardOrder } from '../../services/actions/burger-constructor-card';
 import {
   setIngredients,
   setBun,
 } from '../../services/actions/burger-constructor';
-import { sendOrder, deleteResultOrder } from '../../services/actions/order-details';
+import {
+  sendOrder,
+  deleteResultOrder,
+} from '../../services/actions/order-details';
 
-import { TChildren, TCard, TItem } from '../../utils/types'
+import { TChildren, TCard, TItem } from '../../utils/types';
 
 export const BurgerConstructor: FC<TChildren> = ({ children }) => {
   const dispatch = useDispatch();
@@ -83,7 +87,8 @@ export const BurgerConstructor: FC<TChildren> = ({ children }) => {
   //логика подсчета суммы----------------------------------------
   useMemo(() => {
     const totalSumIngredients =
-      cards && cards.reduce((sum: number, current: TCard) => sum + current.price, 0);
+      cards &&
+      cards.reduce((sum: number, current: TCard) => sum + current.price, 0);
     if (bun || cards) {
       if (bun && !cards) {
         setTotalSum(bun.price * 2);
@@ -112,7 +117,7 @@ export const BurgerConstructor: FC<TChildren> = ({ children }) => {
   };
 
   //Удаление из заказа--------------------------------------
-  const deleteItem = (e: {target: EventTarget}, id: string) => {
+  const deleteItem = (e: { target: EventTarget }, id: string) => {
     if ((e.target as HTMLElement).closest('.constructor-element__action')) {
       dispatch(
         setIngredients({
@@ -124,6 +129,11 @@ export const BurgerConstructor: FC<TChildren> = ({ children }) => {
 
   return (
     <section className={`${constructorStyles.constructor}`} ref={drop}>
+      {isModal && (
+        <Modal closeModal={closeModal}>
+          <OrderDetails />
+        </Modal>
+      )}
       <ul
         className={` ${constructorStyles.constructor__container} mt-25 mb-10 ml-4`}
       >
@@ -139,22 +149,19 @@ export const BurgerConstructor: FC<TChildren> = ({ children }) => {
           </li>
         )}
         <div className={constructorStyles.constructor__scrollbar}>
-          {isModal && (
-            <Modal closeModal={closeModal}>
-              <OrderDetails />
-            </Modal>
-          )}
-          {cards &&
-            cards.map((item: TCard, index: number) => (
-              <DragCard
-                key={item.uuid}
-                index={index}
-                item={item}
-                deleteItem={(e) => deleteItem(e, item.uuid)}
-              >
-                {children}
-              </DragCard>
-            ))}
+          <ScrollContainer>
+            {cards &&
+              cards.map((item: TCard, index: number) => (
+                <DragCard
+                  key={item.uuid}
+                  index={index}
+                  item={item}
+                  deleteItem={(e) => deleteItem(e, item.uuid)}
+                >
+                  {children}
+                </DragCard>
+              ))}
+          </ScrollContainer>
         </div>
         {bun && !(bun.length === 0) && (
           <li className={constructorStyles.constructor__item}>
@@ -182,4 +189,4 @@ export const BurgerConstructor: FC<TChildren> = ({ children }) => {
       </div>
     </section>
   );
-}
+};

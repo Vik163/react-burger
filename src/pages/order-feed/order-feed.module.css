@@ -1,0 +1,22 @@
+.orders {
+  width: 1240px;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.title {
+  width: 800px;
+}
+
+.list {
+  width: 602px;
+  height: 852px;
+}
+
+.report {
+  width: 580px;
+  height: 852px;
+  margin-left: 56px;
+
+  border: 1px solid red;
+}
