@@ -16,33 +16,6 @@
   width: 100%;
 }
 
-.container_type_card {
-  width: 608px;
-  height: 64px;
-  display: grid;
-  grid-template-columns: 64px 320px 1fr;
-  align-items: center;
-  gap: 16px;
-}
-
-.item {
-  position: relative;
-  width: 60px;
-  height: 60px;
-  object-fit: cover;
-  background: linear-gradient(#1c1c21, #1c1c21) padding-box,
-    linear-gradient(45deg, #801ab2, #4c4cff) border-box;
-  border: 2px solid transparent;
-  border-radius: 50%;
-}
-
-.image {
-  position: absolute;
-  top: 1px;
-  left: -27px;
-  height: 58px;
-}
-
 .container_type_date {
   display: flex;
   margin-top: 40px;

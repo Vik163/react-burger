@@ -16,6 +16,15 @@ export type TCard = {
   readonly image_large: string;
 };
 
+export type TOrderItem = {
+  readonly _id: string;
+  readonly name: string;
+  readonly date: string;
+  readonly number: string;
+  readonly totalSum: number;
+  orders: Array<TCard>;
+};
+
 export type TItem = {
   readonly card: TCard;
 };
@@ -48,17 +57,9 @@ export type TProtected = {
   exact?: boolean;
 };
 
-export type TLocation =
-  | {
-      from: {
-        hash: string;
-        key: string;
-        pathname: string;
-        search: string;
-        state: string | undefined;
-      };
-    }
-  | undefined;
+export type TLocation = {
+  from: { pathname: string };
+};
 
 export type TDataRegister = {
   name: string;

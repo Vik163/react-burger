@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import storyOrdersStyles from './story-orders.module.css';
 
 import { ScrollContainer } from '../../components/scroll-container/scroll-container';
-import { Order } from '../../components/order/order';
+import { OrderItem } from '../../components/order-item/order-item';
 
 export function StoryOrders() {
   const { cards } = useSelector((store) => ({
@@ -11,7 +11,7 @@ export function StoryOrders() {
   }));
   const ordersFeed = [
     {
-      _id: 1,
+      _id: '1',
       number: '#345396',
       date: 'Сегодня, 16:20 i-GMT+3',
       name: 'Death Star Starship Main бургер',
@@ -19,7 +19,7 @@ export function StoryOrders() {
       totalSum: 609,
     },
     {
-      _id: 2,
+      _id: '2',
       number: '#dfgdtfghfg',
       date: 'Сегодня, 16:20 i-GMT+3',
       name: 'Interstellar бургер',
@@ -27,7 +27,7 @@ export function StoryOrders() {
       totalSum: 609,
     },
     {
-      _id: 3,
+      _id: '3',
       number: '#456657gasd',
       date: 'Сегодня, 16:20 i-GMT+3',
       name: 'Black Hole Singularity острый бургер',
@@ -35,7 +35,7 @@ export function StoryOrders() {
       totalSum: 609,
     },
     {
-      _id: 4,
+      _id: '4',
       number: 'a4w545g',
       date: 'Сегодня, 16:20 i-GMT+3',
       name: 'Supernova Infinity бургер',
@@ -43,7 +43,7 @@ export function StoryOrders() {
       totalSum: 609,
     },
     {
-      _id: 5,
+      _id: '5',
       number: 'ae454',
       date: 'Сегодня, 16:20 i-GMT+3',
       name: 'Death Star Starship Main бургер',
@@ -56,7 +56,7 @@ export function StoryOrders() {
     <div className={storyOrdersStyles.orders}>
       <ScrollContainer>
         {ordersFeed &&
-          ordersFeed.map((card) => <Order key={card._id} card={card} />)}
+          ordersFeed.map((card) => <OrderItem key={card._id} card={card} />)}
       </ScrollContainer>
     </div>
   );

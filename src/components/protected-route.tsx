@@ -2,9 +2,13 @@ import { FC } from 'react';
 import { Route, Redirect, useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
-import { TProtected, TLocation } from '../utils/types'
+import { TProtected, TLocation } from '../utils/types';
 
-export const ProtectedRoute: FC<TProtected> = ({ children, onlyAuth, ...rest }) => {
+export const ProtectedRoute: FC<TProtected> = ({
+  children,
+  onlyAuth,
+  ...rest
+}) => {
   const { state } = useLocation();
   const { loggedIn } = useSelector((store: any) => ({
     loggedIn: store.authorizationInfo.loggedIn,
@@ -13,7 +17,11 @@ export const ProtectedRoute: FC<TProtected> = ({ children, onlyAuth, ...rest }) 
   if (!onlyAuth) {
     return (
       <Route {...rest}>
-        {!loggedIn ? children : <Redirect to={(state as TLocation)?.from || '/'} />}
+        {!loggedIn ? (
+          children
+        ) : (
+          <Redirect to={(state as TLocation)?.from || '/'} />
+        )}
       </Route>
     );
   } else {

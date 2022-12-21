@@ -6,10 +6,13 @@ import orderDetailsPageStyles from './order-details-page.module.css';
 import { CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 
 import { ScrollContainer } from '../../components/scroll-container/scroll-container';
+import { OrderItemElement } from '../../components/order-item-element/order-item-element';
+
+import { TCard } from '../../utils/types';
 
 export function OrderDetailsPage() {
-  const { id } = useParams();
-  const { cards } = useSelector((store) => ({
+  const { id } = useParams<{ id: string }>();
+  const { cards } = useSelector((store: any) => ({
     cards: store.burgerIngredients.cards,
   }));
 
@@ -82,29 +85,8 @@ export function OrderDetailsPage() {
       <div className={orderDetailsPageStyles.container_type_orders}>
         <ScrollContainer>
           {cards &&
-            cards.map((card) => (
-              <li
-                className={orderDetailsPageStyles.container_type_card}
-                key={card._id}
-                card={card}
-              >
-                <div className={orderDetailsPageStyles.item}>
-                  <img
-                    className={orderDetailsPageStyles.image}
-                    src={card.image}
-                    alt={card.name}
-                  />
-                </div>
-                <p className='text text_type_main-default'>{card.name}</p>
-                <div className={orderDetailsPageStyles.container_type_price}>
-                  <p className='text text_type_digits-default mr-2'>
-                    {card.type === 'bun'
-                      ? `2 x ${card.price}`
-                      : `1 x ${card.price}`}
-                  </p>
-                  <CurrencyIcon type='primary' />
-                </div>
-              </li>
+            cards.map((card: TCard) => (
+              <OrderItemElement key={card._id} card={card} />
             ))}
         </ScrollContainer>
       </div>

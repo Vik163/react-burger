@@ -1,10 +1,17 @@
+import { FC } from 'react';
 import { useLocation, Link } from 'react-router-dom';
 
-import orderStyles from './order.module.css';
+import orderStyles from './order-item.module.css';
 
 import { CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 
-export function Order({ card }) {
+import { TOrderItem } from '../../utils/types';
+
+type TOrderCard = {
+  card: TOrderItem;
+};
+
+export const OrderItem: FC<TOrderCard> = ({ card }) => {
   const { pathname } = useLocation();
 
   return (
@@ -18,7 +25,11 @@ export function Order({ card }) {
     >
       <section
         className={orderStyles.order}
-        style={{ width: pathname === '/profile/orders' && 844 }}
+        style={
+          {
+            width: pathname === '/profile/orders' && 844,
+          } as React.CSSProperties
+        }
       >
         <div className={orderStyles.container_type_date}>
           <p className='text text_type_digits-default'>{card.number}</p>
@@ -44,10 +55,12 @@ export function Order({ card }) {
                     )}
                     <li
                       className={orderStyles.item}
-                      style={{
-                        zIndex: !(index === 5) && 100 - index,
-                        left: 48 * index,
-                      }}
+                      style={
+                        {
+                          zIndex: !(index === 5) && 100 - index,
+                          left: 48 * index,
+                        } as React.CSSProperties
+                      }
                     >
                       <img
                         className={orderStyles.image}
@@ -65,4 +78,4 @@ export function Order({ card }) {
       </section>
     </Link>
   );
-}
+};

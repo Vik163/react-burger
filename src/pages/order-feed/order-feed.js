@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import orderFeedStyles from './order-feed.module.css';
 
 import { ScrollContainer } from '../../components/scroll-container/scroll-container';
-import { Order } from '../../components/order/order';
+import { OrderItem } from '../../components/order-item/order-item';
 
 export function OrderFeed() {
   const { cards } = useSelector((store) => ({
@@ -62,7 +62,7 @@ export function OrderFeed() {
       <div className={orderFeedStyles.list}>
         <ScrollContainer>
           {ordersFeed &&
-            ordersFeed.map((card) => <Order key={card._id} card={card} />)}
+            ordersFeed.map((card) => <OrderItem key={card._id} card={card} />)}
         </ScrollContainer>
       </div>
       <div className={orderFeedStyles.report}>
