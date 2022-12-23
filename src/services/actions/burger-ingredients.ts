@@ -3,9 +3,10 @@ import { burgerApi } from '../../utils/burger-api';
 import { addErrorIngredients } from './actionCreators';
 
 import { GET_CARDS_REQUEST, GET_CARDS_SUCCESS } from './constants';
+import { AppDispatch } from '../../utils/types';
 
 export function getCards() {
-  return function (dispatch) {
+  return function (dispatch: AppDispatch) {
     dispatch({
       type: GET_CARDS_REQUEST,
     });

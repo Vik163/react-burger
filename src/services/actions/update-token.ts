@@ -4,8 +4,10 @@ import { updateToken } from './actionCreators';
 
 import { TOKEN_REQUEST, TOKEN_SUCCESS } from './constants';
 
+import { AppDispatch } from '../../utils/types';
+
 export function requestToken() {
-  return function (dispatch) {
+  return function (dispatch: AppDispatch) {
     dispatch({
       type: TOKEN_REQUEST,
     });

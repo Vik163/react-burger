@@ -3,9 +3,10 @@ import { burgerApi } from '../../utils/burger-api';
 import { addErrorGetUser } from './actionCreators';
 
 import { GET_USER_REQUEST, GET_USER_SUCCESS } from './constants';
+import { AppDispatch } from '../../utils/types';
 
 export function getUser() {
-  return function (dispatch) {
+  return function (dispatch: AppDispatch) {
     dispatch({
       type: GET_USER_REQUEST,
     });

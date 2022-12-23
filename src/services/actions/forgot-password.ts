@@ -3,9 +3,10 @@ import { burgerApi } from '../../utils/burger-api';
 import { forgotPasswordErrors } from './actionCreators';
 
 import { FORGOT_PASSWORD_REQUEST, FORGOT_PASSWORD_SUCCESS } from './constants';
+import { AppDispatch } from '../../utils/types';
 
-export function forgotPassword(email) {
-  return function (dispatch) {
+export function forgotPassword(email: string) {
+  return function (dispatch: AppDispatch) {
     dispatch({
       type: FORGOT_PASSWORD_REQUEST,
     });

@@ -1,6 +1,7 @@
 import { INGREDIENT_DETAILS, DELETE_INGREDIENT_DETAILS } from './constants';
+import { TCard } from '../../utils/types';
 
-export function setIngredientDetails(ingredientDetails) {
+export function setIngredientDetails(ingredientDetails: TCard) {
   localStorage.setItem('card', JSON.stringify(ingredientDetails));
 
   return {

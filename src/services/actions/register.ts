@@ -4,8 +4,10 @@ import { addErrorRegister } from './actionCreators';
 
 import { REGISTER_REQUEST, REGISTER_SUCCESS } from './constants';
 
-export function registration(form) {
-  return function (dispatch) {
+import { AppDispatch, TRegister } from '../../utils/types';
+
+export function registration(form: TRegister) {
+  return function (dispatch: AppDispatch) {
     dispatch({
       type: REGISTER_REQUEST,
     });

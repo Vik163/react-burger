@@ -3,9 +3,15 @@ import { burgerApi } from '../../utils/burger-api';
 import { resetPasswordErrors } from './actionCreators';
 
 import { RESET_PASSWORD_REQUEST, RESET_PASSWORD_SUCCESS } from './constants';
+import { AppDispatch } from '../../utils/types';
 
-export function resetPassword(form) {
-  return function (dispatch) {
+type TResetPassword = {
+  password: string;
+  token: string;
+};
+
+export function resetPassword(form: TResetPassword) {
+  return function (dispatch: AppDispatch) {
     dispatch({
       type: RESET_PASSWORD_REQUEST,
     });

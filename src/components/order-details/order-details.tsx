@@ -1,4 +1,4 @@
-import { useSelector } from 'react-redux';
+import { useSelector } from '../../utils/hooks';
 
 import detailsStyles from './order-details.module.css';
 
@@ -6,7 +6,7 @@ import ok from '../../images/ok.png';
 
 export function OrderDetails() {
   const resultOrder = useSelector(
-    (store: any) => store.orderDetails.resultOrder.order.number
+    (store) => store.orderDetails.resultOrder.order.number
   );
 
   return (

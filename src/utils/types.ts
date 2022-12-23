@@ -1,5 +1,15 @@
 import * as H from 'history';
 import { SyntheticEvent } from 'react';
+import { ThunkAction } from 'redux-thunk';
+import { Action, ActionCreator } from 'redux';
+import { store } from '../services/store';
+import { TTypesActions } from '../services/actions/actions-types';
+
+export type RootState = ReturnType<typeof store.getState>;
+export type AppDispatch = typeof store.dispatch;
+export type AppThunk<ReturnType = void> = ActionCreator<
+  ThunkAction<ReturnType, Action, RootState, TTypesActions>
+>;
 
 export type TCard = {
   readonly _id: string;
@@ -72,3 +82,22 @@ export type TDragCard = {
   index: number;
   deleteItem: (e: { target: EventTarget }, id: string) => void;
 } & TChildren;
+
+export type TLogin = {
+  readonly email: string;
+  readonly password: string;
+};
+
+export type TRegister = {
+  readonly name: string;
+} & TLogin;
+
+export type TResultOrder = {
+  readonly name: string;
+  readonly order: { number: number };
+  readonly success: boolean;
+};
+
+export type TOrder = {
+  ingredients: string[];
+};

@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo, FC } from 'react';
 import { useHistory } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from '../../utils/hooks';
 import { useDrop } from 'react-dnd';
 
 import constructorStyles from './burger-constructor.module.css';
@@ -32,7 +32,7 @@ export const BurgerConstructor: FC<TChildren> = ({ children }) => {
   const dispatch = useDispatch();
   const history = useHistory();
   const { resultOrder, cardOrder, ingredients, bun, loggedIn } = useSelector(
-    (store: any) => ({
+    (store) => ({
       cardOrder: store.burgerConstructor.cardOrder,
       bun: store.burgerConstructor.bun,
       ingredients: store.burgerConstructor.ingredients,
@@ -94,7 +94,7 @@ export const BurgerConstructor: FC<TChildren> = ({ children }) => {
         setTotalSum(bun.price * 2);
       } else if (!bun && cards) {
         setTotalSum(totalSumIngredients);
-      } else {
+      } else if (bun && cards) {
         setTotalSum(totalSumIngredients + bun.price * 2);
       }
     }
@@ -103,7 +103,6 @@ export const BurgerConstructor: FC<TChildren> = ({ children }) => {
   const sendOrderClick = () => {
     if (loggedIn) {
       if (bun) {
-        // @ts-ignore
         dispatch(sendOrder(bun, ingredients));
       }
     } else {
@@ -137,7 +136,7 @@ export const BurgerConstructor: FC<TChildren> = ({ children }) => {
       <ul
         className={` ${constructorStyles.constructor__container} mt-25 mb-10 ml-4`}
       >
-        {bun && !(bun.length === 0) && (
+        {bun && (
           <li className={constructorStyles.constructor__item}>
             <ConstructorElement
               type='top'
@@ -163,7 +162,7 @@ export const BurgerConstructor: FC<TChildren> = ({ children }) => {
               ))}
           </ScrollContainer>
         </div>
-        {bun && !(bun.length === 0) && (
+        {bun && (
           <li className={constructorStyles.constructor__item}>
             <ConstructorElement
               type='bottom'

@@ -3,8 +3,10 @@ import {
   GET_CARDS_REQUEST,
   GET_CARDS_SUCCESS,
 } from '../actions/constants';
+import { TIngredientsInitialState } from './reducers-types';
+import { TTypesActions } from '../actions/actions-types';
 
-const initialState = {
+const initialState: TIngredientsInitialState = {
   cards: [],
   cardsRequest: false,
   cardsFailed: false,
@@ -13,7 +15,10 @@ const initialState = {
   loader: false,
 };
 
-export const burgerIngredientsReducer = (state = initialState, action) => {
+export const burgerIngredientsReducer = (
+  state = initialState,
+  action: TTypesActions
+): TIngredientsInitialState => {
   switch (action.type) {
     case GET_CARDS_REQUEST: {
       return {

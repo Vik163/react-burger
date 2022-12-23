@@ -1,4 +1,6 @@
 import { getCookie } from '../../utils/cookie';
+import { TAuthorizationInitialState } from './reducers-types';
+import { TTypesActions } from '../actions/actions-types';
 
 import {
   LOGIN_REQUEST,
@@ -15,7 +17,7 @@ import {
   TOKEN_FAILED,
 } from '../actions/constants';
 
-const initialState = {
+const initialState: TAuthorizationInitialState = {
   loggedIn: getCookie('token') ? true : false,
   registerRequest: false,
   registerFailed: false,
@@ -31,7 +33,10 @@ const initialState = {
   loader: false,
 };
 
-export const authorizationReducer = (state = initialState, action) => {
+export const authorizationReducer = (
+  state = initialState,
+  action: TTypesActions
+): TAuthorizationInitialState => {
   switch (action.type) {
     case REGISTER_REQUEST: {
       return {

@@ -1,12 +1,12 @@
 import { Link } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useSelector } from '../../utils/hooks';
 
 import errorsStyles from './errors-page.module.css';
 
 import { Button } from '@ya.praktikum/react-developer-burger-ui-components';
 
 export function ErrorsPage() {
-  const { statusRequest, messageError } = useSelector((store: any) => ({
+  const { statusRequest, messageError } = useSelector((store) => ({
     statusRequest:
       store.burgerIngredients.statusRequest ||
       store.orderDetails.statusRequest ||

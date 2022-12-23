@@ -3,9 +3,10 @@ import { burgerApi } from '../../utils/burger-api';
 import { addErrorLogin } from './actionCreators';
 
 import { LOGIN_REQUEST, LOGIN_SUCCESS } from './constants';
+import { AppDispatch, TLogin } from '../../utils/types';
 
-export function authorization(form) {
-  return function (dispatch) {
+export function authorization(form: TLogin) {
+  return function (dispatch: AppDispatch) {
     dispatch({
       type: LOGIN_REQUEST,
     });

@@ -1,6 +1,6 @@
 import { useEffect, useState, FC } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from '../../../utils/hooks';
 import { useDrag } from 'react-dnd';
 
 import ingredientsCardStyles from './burger-ingredients-card.module.css';
@@ -12,13 +12,12 @@ import {
 
 import { setIngredientDetails } from '../../../services/actions/ingredient-details';
 
-
-import { TCard, TItem, TModalState } from '../../../utils/types'
+import { TCard, TItem, TModalState } from '../../../utils/types';
 
 export const BurgerIngredientsCard: FC<TItem> = ({ card }) => {
   const dispatch = useDispatch();
   const location = useLocation();
-  const { bun, ingredients } = useSelector((store: any) => ({
+  const { bun, ingredients } = useSelector((store) => ({
     bun: store.burgerConstructor.bun,
     ingredients: store.burgerConstructor.ingredients,
   }));
@@ -40,6 +39,7 @@ export const BurgerIngredientsCard: FC<TItem> = ({ card }) => {
       if (ingredients) {
         return ingredients.filter((i: TCard) => i.name === card.name).length;
       }
+      return 0;
     };
     card.name && setIsCounter({ ...isCounter, [card.name]: sameCards() });
   }, [bun, ingredients]);
@@ -57,7 +57,6 @@ export const BurgerIngredientsCard: FC<TItem> = ({ card }) => {
       }}
       className={ingredientsCardStyles.link}
       onClick={openModalIngredients}
-
     >
       <li className={ingredientsCardStyles.card} ref={drag}>
         <div style={{ display: isCounter[card.name] > 0 ? 'block' : 'none' }}>
@@ -80,5 +79,4 @@ export const BurgerIngredientsCard: FC<TItem> = ({ card }) => {
       </li>
     </Link>
   );
-}
-
+};

@@ -1,5 +1,5 @@
 import { useParams } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useSelector } from '../../utils/hooks';
 
 import orderDetailsPageStyles from './order-details-page.module.css';
 
@@ -12,7 +12,7 @@ import { TCard } from '../../utils/types';
 
 export function OrderDetailsPage() {
   const { id } = useParams<{ id: string }>();
-  const { cards } = useSelector((store: any) => ({
+  const { cards } = useSelector((store) => ({
     cards: store.burgerIngredients.cards,
   }));
 

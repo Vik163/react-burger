@@ -1,6 +1,6 @@
 import { useEffect, useState, FC, ChangeEvent, FormEvent } from 'react';
 import { useLocation, Link } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from '../../utils/hooks';
 
 import profileStyles from './profile.module.css';
 
@@ -31,7 +31,7 @@ export const Profile: FC<TChildren> = ({ children }) => {
     email: '',
     password: '',
   });
-  const { updateUserAnswer } = useSelector((store: any) => ({
+  const { updateUserAnswer } = useSelector((store) => ({
     updateUserAnswer: store.dataUser.updateUserAnswer,
   }));
 
@@ -46,7 +46,6 @@ export const Profile: FC<TChildren> = ({ children }) => {
 
   useEffect(() => {
     if (isUpdateToken && token) {
-      // @ts-ignore
       dispatch(updateUser(value));
       setIsUpdateToken(false);
     }
@@ -66,7 +65,6 @@ export const Profile: FC<TChildren> = ({ children }) => {
   }, []);
 
   const signout = () => {
-    // @ts-ignore
     dispatch(logout());
     setIsActive(true);
   };
@@ -84,12 +82,10 @@ export const Profile: FC<TChildren> = ({ children }) => {
     e.preventDefault();
 
     if (token) {
-      // @ts-ignore
       dispatch(updateUser(value));
       setIsValue('');
     } else {
       setIsUpdateToken(true);
-      // @ts-ignore
       dispatch(requestToken());
     }
   };

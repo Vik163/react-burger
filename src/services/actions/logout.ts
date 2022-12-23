@@ -6,8 +6,10 @@ import { addErrorLogout } from './actionCreators';
 
 import { LOGOUT_REQUEST, LOGOUT_SUCCESS } from './constants';
 
+import { AppDispatch } from '../../utils/types';
+
 export function logout() {
-  return function (dispatch) {
+  return function (dispatch: AppDispatch) {
     dispatch({
       type: LOGOUT_REQUEST,
     });

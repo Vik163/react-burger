@@ -11,7 +11,7 @@ import {
   RESET_PASSWORD_FAILED,
 } from './constants';
 
-export const addErrorOrder = (err, messageError) => {
+export const addErrorOrder = (err: string, messageError: string) => {
   return {
     type: SEND_ORDER_FAILED,
     statusRequest: err,
@@ -19,7 +19,7 @@ export const addErrorOrder = (err, messageError) => {
   };
 };
 
-export function addErrorIngredients(err, messageError) {
+export function addErrorIngredients(err: string, messageError: string) {
   return {
     type: GET_CARDS_FAILED,
     statusRequest: err,
@@ -27,7 +27,7 @@ export function addErrorIngredients(err, messageError) {
   };
 }
 
-export function addErrorRegister(err, messageError) {
+export function addErrorRegister(err: string, messageError: string) {
   return {
     type: REGISTER_FAILED,
     statusRequest: err,
@@ -35,7 +35,7 @@ export function addErrorRegister(err, messageError) {
   };
 }
 
-export function addErrorLogin(err, messageError) {
+export function addErrorLogin(err: string, messageError: string) {
   return {
     type: LOGIN_FAILED,
     statusRequest: err,
@@ -43,7 +43,7 @@ export function addErrorLogin(err, messageError) {
   };
 }
 
-export function addErrorLogout(err, messageError) {
+export function addErrorLogout(err: string, messageError: string) {
   return {
     type: LOGOUT_FAILED,
     statusRequest: err,
@@ -51,7 +51,7 @@ export function addErrorLogout(err, messageError) {
   };
 }
 
-export function addErrorGetUser(err, messageError) {
+export function addErrorGetUser(err: string, messageError: string) {
   return {
     type: GET_USER_FAILED,
     statusRequest: err,
@@ -59,7 +59,7 @@ export function addErrorGetUser(err, messageError) {
   };
 }
 
-export function updateToken(err, messageError) {
+export function updateToken(err: string, messageError: string) {
   return {
     type: TOKEN_FAILED,
     statusRequest: err,
@@ -67,7 +67,7 @@ export function updateToken(err, messageError) {
   };
 }
 
-export function updateUserErrors(err, messageError) {
+export function updateUserErrors(err: string, messageError: string) {
   return {
     type: UPDATE_USER_FAILED,
     statusRequest: err,
@@ -75,7 +75,7 @@ export function updateUserErrors(err, messageError) {
   };
 }
 
-export function forgotPasswordErrors(err, messageError) {
+export function forgotPasswordErrors(err: string, messageError: string) {
   return {
     type: FORGOT_PASSWORD_FAILED,
     statusRequest: err,
@@ -83,7 +83,7 @@ export function forgotPasswordErrors(err, messageError) {
   };
 }
 
-export function resetPasswordErrors(err, messageError) {
+export function resetPasswordErrors(err: string, messageError: string) {
   return {
     type: RESET_PASSWORD_FAILED,
     statusRequest: err,

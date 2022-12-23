@@ -3,9 +3,10 @@ import { burgerApi } from '../../utils/burger-api';
 import { updateUserErrors } from './actionCreators';
 
 import { UPDATE_USER_REQUEST, UPDATE_USER_SUCCESS } from './constants';
+import { AppDispatch, TRegister } from '../../utils/types';
 
-export function updateUser(form) {
-  return function (dispatch) {
+export function updateUser(form: TRegister) {
+  return function (dispatch: AppDispatch) {
     dispatch({
       type: UPDATE_USER_REQUEST,
     });

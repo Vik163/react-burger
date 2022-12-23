@@ -12,8 +12,10 @@ import {
   RESET_PASSWORD_SUCCESS,
   RESET_PASSWORD_FAILED,
 } from '../actions/constants';
+import { TDataUserInitialState } from './reducers-types';
+import { TTypesActions } from '../actions/actions-types';
 
-const initialState = {
+const initialState: TDataUserInitialState = {
   forgotPasswordRequest: false,
   forgotPasswordFailed: false,
   forgotPasswordAnswer: false,
@@ -30,7 +32,10 @@ const initialState = {
   loader: false,
 };
 
-export const usersReducer = (state = initialState, action) => {
+export const usersReducer = (
+  state = initialState,
+  action: TTypesActions
+): TDataUserInitialState => {
   switch (action.type) {
     case GET_USER_REQUEST: {
       return {

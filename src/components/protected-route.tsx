@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import { Route, Redirect, useLocation } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useSelector } from '../utils/hooks';
 
 import { TProtected, TLocation } from '../utils/types';
 
@@ -10,7 +10,7 @@ export const ProtectedRoute: FC<TProtected> = ({
   ...rest
 }) => {
   const { state } = useLocation();
-  const { loggedIn } = useSelector((store: any) => ({
+  const { loggedIn } = useSelector((store) => ({
     loggedIn: store.authorizationInfo.loggedIn,
   }));
 

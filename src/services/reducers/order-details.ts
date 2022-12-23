@@ -4,8 +4,10 @@ import {
   SEND_ORDER_FAILED,
   DELETE_RESULT_ORDER,
 } from '../actions/constants';
+import { TOrderDetailsInitialState } from './reducers-types';
+import { TTypesActions } from '../actions/actions-types';
 
-const initialState = {
+const initialState: TOrderDetailsInitialState = {
   dataOrderRequest: false,
   dataOrderFailed: false,
   resultOrder: null,
@@ -14,7 +16,10 @@ const initialState = {
   loader: false,
 };
 
-export const orderDetailsReducer = (state = initialState, action) => {
+export const orderDetailsReducer = (
+  state = initialState,
+  action: TTypesActions
+): TOrderDetailsInitialState => {
   switch (action.type) {
     case SEND_ORDER_REQUEST: {
       return {

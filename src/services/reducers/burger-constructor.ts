@@ -4,16 +4,21 @@ import {
   CARD_ORDER,
   CARD_MOVE,
 } from '../actions/constants';
+import { TConstructorInitialState } from './reducers-types';
+import { TTypesActions } from '../actions/actions-types';
 
-const initialState = {
+const initialState: TConstructorInitialState = {
   cardOrder: null,
-  bun: JSON.parse(localStorage.getItem('bun')) || null,
-  ingredients: JSON.parse(localStorage.getItem('ingredients')) || [],
+  bun: JSON.parse(localStorage.getItem('bun') as string) || null,
+  ingredients: JSON.parse(localStorage.getItem('ingredients') as string) || [],
   dragIndex: null,
   hoverIndex: null,
 };
 
-export const burgerConstructorReducer = (state = initialState, action) => {
+export const burgerConstructorReducer = (
+  state = initialState,
+  action: TTypesActions
+): TConstructorInitialState => {
   switch (action.type) {
     case CARD_MOVE:
       const ingredients = [...state.ingredients];

@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { Route, Switch, useHistory, useLocation } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from '../../utils/hooks';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 
@@ -38,23 +38,20 @@ function App() {
   const background = location.state && location.state.background;
   const userData = JSON.parse(`${localStorage.getItem('userData')}`);
   const token = getCookie('token');
-  const { cards, messageError, loader, loggedIn } = useSelector(
-    (store: any) => ({
-      cards: store.burgerIngredients.cards,
-      userData: store.dataUser.messageError,
-      messageError:
-        store.burgerIngredients.messageError ||
-        store.orderDetails.messageError ||
-        store.authorizationInfo.messageError ||
-        store.dataUser.messageError,
-      loader: store.orderDetails.loader || store.burgerIngredients.loader,
-      loggedIn: store.authorizationInfo.loggedIn,
-    })
-  );
+  const { cards, messageError, loader, loggedIn } = useSelector((store) => ({
+    cards: store.burgerIngredients.cards,
+    userData: store.dataUser.messageError,
+    messageError:
+      store.burgerIngredients.messageError ||
+      store.orderDetails.messageError ||
+      store.authorizationInfo.messageError ||
+      store.dataUser.messageError,
+    loader: store.orderDetails.loader || store.burgerIngredients.loader,
+    loggedIn: store.authorizationInfo.loggedIn,
+  }));
 
   // Проверка токена ------------------------
   const checkToken = () => {
-    // @ts-ignore
     !token && dispatch(requestToken());
   };
 
@@ -64,14 +61,12 @@ function App() {
   // ----------------------------------------------
 
   useEffect(() => {
-    // @ts-ignore
     dispatch(getCards());
   }, []);
 
   useEffect(() => {
     if (loggedIn) {
       if (!userData) {
-        // @ts-ignore
         token ? dispatch(getUser()) : checkToken();
       }
     }

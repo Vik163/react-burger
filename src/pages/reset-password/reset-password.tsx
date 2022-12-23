@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef, FormEvent } from 'react';
 import { Link, Redirect } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from '../../utils/hooks';
 
 import resetPasswordStyles from './reset-password.module.css';
 
@@ -14,19 +14,22 @@ import { useForm } from '../../components/hooks/use-form';
 
 type TResetPassword = {
   password: string;
-  token: string; 
-}
+  token: string;
+};
 
 export function ResetPassword() {
   const dispatch = useDispatch();
   const { resetPasswordAnswer, forgotPasswordAnswer } = useSelector(
-    (store: any) => ({
+    (store) => ({
       resetPasswordAnswer: store.dataUser.resetPasswordAnswer,
       forgotPasswordAnswer: store.dataUser.forgotPasswordAnswer,
     })
   );
   const [toggle, setToggle] = useState(false);
-  const {values, handleChange, setValues} = useForm<TResetPassword>({ password: '', token: '' });
+  const { values, handleChange, setValues } = useForm<TResetPassword>({
+    password: '',
+    token: '',
+  });
 
   const inputRef = useRef<HTMLInputElement>(null);
   const onIconClick = () => {
@@ -43,7 +46,6 @@ export function ResetPassword() {
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-      // @ts-ignore
     dispatch(resetPassword(values));
   };
 
