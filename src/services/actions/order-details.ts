@@ -34,7 +34,7 @@ export type TSendOrderAction =
   | TSendOrderFailedAction
   | TDeleteResultOrderAction;
 
-export function sendOrder(bun: TCard, ingredients: Array<TCard>) {
+export const sendOrder = (bun: TCard, ingredients: Array<TCard>) => {
   const ingredientsId = ingredients.map((item) => item._id);
   const order = {
     ingredients: [bun._id, ...ingredientsId, bun._id],
@@ -71,7 +71,7 @@ export function sendOrder(bun: TCard, ingredients: Array<TCard>) {
         }
       });
   };
-}
+};
 
 export function deleteResultOrder() {
   return {
