@@ -3,7 +3,36 @@ import { SyntheticEvent } from 'react';
 import { ThunkAction } from 'redux-thunk';
 import { Action, ActionCreator } from 'redux';
 import { store } from '../services/store';
-import { TTypesActions } from '../services/actions/actions-types';
+import { TCardOder } from '../services/actions/burger-constructor-card';
+import { TBurgerConstructor } from '../services/actions/burger-constructor';
+import { TBurgerIngredientsAction } from '../services/actions/burger-ingredients';
+import { TForgotPasswordAction } from '../services/actions/forgot-password';
+import { TGetUserAction } from '../services/actions/get-user';
+import { TIngredientDetailsAction } from '../services/actions/ingredient-details';
+import { TLoginAction } from '../services/actions/login';
+import { TLogoutAction } from '../services/actions/logout';
+import { TCardMove } from '../services/actions/move-item';
+import { TSendOrderAction } from '../services/actions/order-details';
+import { TRegisterAction } from '../services/actions/register';
+import { TResetPasswordAction } from '../services/actions/reset-password';
+import { TTokenAction } from '../services/actions/update-token';
+import { TUpdateUserAction } from '../services/actions/update-user';
+
+export type TTypesActions =
+  | TCardOder
+  | TBurgerConstructor
+  | TBurgerIngredientsAction
+  | TForgotPasswordAction
+  | TGetUserAction
+  | TIngredientDetailsAction
+  | TLoginAction
+  | TLogoutAction
+  | TCardMove
+  | TSendOrderAction
+  | TRegisterAction
+  | TResetPasswordAction
+  | TTokenAction
+  | TUpdateUserAction;
 
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
@@ -12,6 +41,7 @@ export type AppThunk<ReturnType = void> = ActionCreator<
 >;
 
 export type TCard = {
+  length: number;
   readonly _id: string;
   readonly uuid: string;
   readonly name: string;

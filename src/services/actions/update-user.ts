@@ -4,6 +4,21 @@ import { updateUserErrors } from './actionCreators';
 
 import { UPDATE_USER_REQUEST, UPDATE_USER_SUCCESS } from './constants';
 import { AppDispatch, TRegister } from '../../utils/types';
+import { TUpdateUserFailedAction } from './actionCreators';
+
+export type TUpdateUserRequestAction = {
+  readonly type: typeof UPDATE_USER_REQUEST;
+};
+
+export type TUpdateUserSuccessAction = {
+  readonly type: typeof UPDATE_USER_SUCCESS;
+  readonly updateUserAnswer?: string;
+};
+
+export type TUpdateUserAction =
+  | TUpdateUserRequestAction
+  | TUpdateUserSuccessAction
+  | TUpdateUserFailedAction;
 
 export function updateUser(form: TRegister) {
   return function (dispatch: AppDispatch) {

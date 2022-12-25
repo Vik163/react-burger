@@ -2,8 +2,12 @@ import {
   INGREDIENT_DETAILS,
   DELETE_INGREDIENT_DETAILS,
 } from '../actions/constants';
-import { TIngredientDetailsInitialState } from './reducers-types';
-import { TTypesActions } from '../actions/actions-types';
+import { TCard } from '../../utils/types';
+import { TTypesActions } from '../../utils/types';
+
+export type TIngredientDetailsInitialState = {
+  ingredientDetails: TCard | {};
+};
 
 const initialState: TIngredientDetailsInitialState = {
   ingredientDetails: JSON.parse(localStorage.getItem('card') as string) || {},

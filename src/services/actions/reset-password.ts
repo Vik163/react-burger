@@ -4,11 +4,26 @@ import { resetPasswordErrors } from './actionCreators';
 
 import { RESET_PASSWORD_REQUEST, RESET_PASSWORD_SUCCESS } from './constants';
 import { AppDispatch } from '../../utils/types';
+import { TResetPasswordFailedAction } from './actionCreators';
 
 type TResetPassword = {
   password: string;
   token: string;
 };
+
+export type TResetPasswordRequestAction = {
+  readonly type: typeof RESET_PASSWORD_REQUEST;
+};
+
+export type TResetPasswordSuccessAction = {
+  readonly type: typeof RESET_PASSWORD_SUCCESS;
+  readonly messageError?: string;
+};
+
+export type TResetPasswordAction =
+  | TResetPasswordRequestAction
+  | TResetPasswordSuccessAction
+  | TResetPasswordFailedAction;
 
 export function resetPassword(form: TResetPassword) {
   return function (dispatch: AppDispatch) {

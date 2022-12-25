@@ -11,6 +11,28 @@ import { TCard, AppDispatch, TOrder } from '../../utils/types';
 
 import { setIngredients, setBun } from './burger-constructor';
 import { setCardOrder } from './burger-constructor-card';
+import { TResultOrder } from '../../utils/types';
+import { TSendOrderFailedAction } from './actionCreators';
+
+export type TSendOrderRequestAction = {
+  readonly type: typeof SEND_ORDER_REQUEST;
+};
+
+export type TSendOrderSuccessAction = {
+  readonly type: typeof SEND_ORDER_SUCCESS;
+  readonly resultOrder: TResultOrder;
+};
+
+export type TDeleteResultOrderAction = {
+  readonly type: typeof DELETE_RESULT_ORDER;
+  readonly resultOrder: null;
+};
+
+export type TSendOrderAction =
+  | TSendOrderRequestAction
+  | TSendOrderSuccessAction
+  | TSendOrderFailedAction
+  | TDeleteResultOrderAction;
 
 export function sendOrder(bun: TCard, ingredients: Array<TCard>) {
   const ingredientsId = ingredients.map((item) => item._id);

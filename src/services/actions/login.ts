@@ -4,6 +4,20 @@ import { addErrorLogin } from './actionCreators';
 
 import { LOGIN_REQUEST, LOGIN_SUCCESS } from './constants';
 import { AppDispatch, TLogin } from '../../utils/types';
+import { TLoginFailedAction } from './actionCreators';
+
+export type TLoginRequestAction = {
+  readonly type: typeof LOGIN_REQUEST;
+};
+
+export type TLoginSuccessAction = {
+  readonly type: typeof LOGIN_SUCCESS;
+};
+
+export type TLoginAction =
+  | TLoginRequestAction
+  | TLoginSuccessAction
+  | TLoginFailedAction;
 
 export function authorization(form: TLogin) {
   return function (dispatch: AppDispatch) {

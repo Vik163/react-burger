@@ -4,6 +4,20 @@ import { forgotPasswordErrors } from './actionCreators';
 
 import { FORGOT_PASSWORD_REQUEST, FORGOT_PASSWORD_SUCCESS } from './constants';
 import { AppDispatch } from '../../utils/types';
+import { TForgotPasswordFailedAction } from './actionCreators';
+
+export type TForgotPasswordRequest = {
+  readonly type: typeof FORGOT_PASSWORD_REQUEST;
+};
+
+export type TForgotPasswordSuccessAction = {
+  readonly type: typeof FORGOT_PASSWORD_SUCCESS;
+};
+
+export type TForgotPasswordAction =
+  | TForgotPasswordRequest
+  | TForgotPasswordSuccessAction
+  | TForgotPasswordFailedAction;
 
 export function forgotPassword(email: string) {
   return function (dispatch: AppDispatch) {

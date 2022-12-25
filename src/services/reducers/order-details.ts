@@ -4,8 +4,17 @@ import {
   SEND_ORDER_FAILED,
   DELETE_RESULT_ORDER,
 } from '../actions/constants';
-import { TOrderDetailsInitialState } from './reducers-types';
-import { TTypesActions } from '../actions/actions-types';
+import { TResultOrder } from '../../utils/types';
+import { TTypesActions } from '../../utils/types';
+
+export type TOrderDetailsInitialState = {
+  dataOrderRequest: boolean;
+  dataOrderFailed: boolean;
+  resultOrder: null | TResultOrder;
+  statusRequest: string | null;
+  messageError: string;
+  loader: boolean;
+};
 
 const initialState: TOrderDetailsInitialState = {
   dataOrderRequest: false,

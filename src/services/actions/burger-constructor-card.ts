@@ -4,6 +4,11 @@ import { CARD_ORDER } from './constants';
 
 import { TCard } from '../../utils/types';
 
+export type TCardOder = {
+  readonly type: typeof CARD_ORDER;
+  readonly cardOrder: TCard | null;
+};
+
 export function setCardOrder(item: TCard | null) {
   if (item) {
     return {

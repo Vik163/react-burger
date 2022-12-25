@@ -4,6 +4,20 @@ import { addErrorGetUser } from './actionCreators';
 
 import { GET_USER_REQUEST, GET_USER_SUCCESS } from './constants';
 import { AppDispatch } from '../../utils/types';
+import { TGetUserFailedAction } from './actionCreators';
+
+export type TGetUserRequest = {
+  readonly type: typeof GET_USER_REQUEST;
+};
+
+export type TGetUserSuccessAction = {
+  readonly type: typeof GET_USER_SUCCESS;
+};
+
+export type TGetUserAction =
+  | TGetUserRequest
+  | TGetUserSuccessAction
+  | TGetUserFailedAction;
 
 export function getUser() {
   return function (dispatch: AppDispatch) {

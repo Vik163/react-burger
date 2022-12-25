@@ -3,8 +3,17 @@ import {
   GET_CARDS_REQUEST,
   GET_CARDS_SUCCESS,
 } from '../actions/constants';
-import { TIngredientsInitialState } from './reducers-types';
-import { TTypesActions } from '../actions/actions-types';
+import { TCard } from '../../utils/types';
+import { TTypesActions } from '../../utils/types';
+
+export type TIngredientsInitialState = {
+  cards: Array<TCard> | [];
+  cardsRequest: boolean;
+  cardsFailed: boolean;
+  statusRequest: string | null;
+  messageError: string;
+  loader: boolean;
+};
 
 const initialState: TIngredientsInitialState = {
   cards: [],

@@ -4,8 +4,16 @@ import {
   CARD_ORDER,
   CARD_MOVE,
 } from '../actions/constants';
-import { TConstructorInitialState } from './reducers-types';
-import { TTypesActions } from '../actions/actions-types';
+import { TCard } from '../../utils/types';
+import { TTypesActions } from '../../utils/types';
+
+export type TConstructorInitialState = {
+  cardOrder: TCard | null;
+  bun: TCard | null;
+  ingredients: Array<TCard> | [];
+  dragIndex: null;
+  hoverIndex: null;
+};
 
 const initialState: TConstructorInitialState = {
   cardOrder: null,

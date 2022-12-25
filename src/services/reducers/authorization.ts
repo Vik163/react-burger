@@ -1,6 +1,5 @@
 import { getCookie } from '../../utils/cookie';
-import { TAuthorizationInitialState } from './reducers-types';
-import { TTypesActions } from '../actions/actions-types';
+import { TTypesActions } from '../../utils/types';
 
 import {
   LOGIN_REQUEST,
@@ -16,6 +15,22 @@ import {
   TOKEN_SUCCESS,
   TOKEN_FAILED,
 } from '../actions/constants';
+
+export type TAuthorizationInitialState = {
+  loggedIn: boolean;
+  registerRequest: boolean;
+  registerFailed: boolean;
+  loginRequest: boolean;
+  loginFailed: boolean;
+  logoutRequest: boolean;
+  logoutFailed: boolean;
+  tokenRequest: boolean;
+  tokenFailed: boolean;
+  statusRequest: null | string;
+  messageError: string;
+  formReset: boolean;
+  loader: boolean;
+};
 
 const initialState: TAuthorizationInitialState = {
   loggedIn: getCookie('token') ? true : false,

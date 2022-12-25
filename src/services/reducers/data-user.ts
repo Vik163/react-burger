@@ -12,8 +12,24 @@ import {
   RESET_PASSWORD_SUCCESS,
   RESET_PASSWORD_FAILED,
 } from '../actions/constants';
-import { TDataUserInitialState } from './reducers-types';
-import { TTypesActions } from '../actions/actions-types';
+import { TTypesActions } from '../../utils/types';
+
+export type TDataUserInitialState = {
+  forgotPasswordRequest: boolean;
+  forgotPasswordFailed: boolean;
+  forgotPasswordAnswer: boolean;
+  resetPasswordRequest: boolean;
+  resetPasswordFailed: boolean;
+  resetPasswordAnswer: boolean;
+  getUserRequest: boolean;
+  updateUserRequest: boolean;
+  getUserFailed: boolean;
+  updateUserFailed: boolean;
+  statusRequest: string | null;
+  messageError: string;
+  updateUserAnswer: string;
+  loader: boolean;
+};
 
 const initialState: TDataUserInitialState = {
   forgotPasswordRequest: false,

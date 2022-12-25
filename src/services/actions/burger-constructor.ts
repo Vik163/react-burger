@@ -2,6 +2,18 @@ import { DATA_INGREDIENTS, DATA_BUN } from './constants';
 
 import { TCard } from '../../utils/types';
 
+export type TDataIngredients = {
+  readonly type: typeof DATA_INGREDIENTS;
+  readonly ingredients: Array<TCard> | [];
+};
+
+export type TDataBun = {
+  readonly type: typeof DATA_BUN;
+  readonly bun: TCard | null;
+};
+
+export type TBurgerConstructor = TDataIngredients | TDataBun;
+
 type TBun = {
   bun: TCard | null;
 };

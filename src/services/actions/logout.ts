@@ -7,6 +7,20 @@ import { addErrorLogout } from './actionCreators';
 import { LOGOUT_REQUEST, LOGOUT_SUCCESS } from './constants';
 
 import { AppDispatch } from '../../utils/types';
+import { TLogoutFailedAction } from './actionCreators';
+
+export type TLogoutRequestAction = {
+  readonly type: typeof LOGOUT_REQUEST;
+};
+
+export type TLogoutSuccessAction = {
+  readonly type: typeof LOGOUT_SUCCESS;
+};
+
+export type TLogoutAction =
+  | TLogoutRequestAction
+  | TLogoutSuccessAction
+  | TLogoutFailedAction;
 
 export function logout() {
   return function (dispatch: AppDispatch) {

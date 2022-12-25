@@ -5,6 +5,20 @@ import { addErrorRegister } from './actionCreators';
 import { REGISTER_REQUEST, REGISTER_SUCCESS } from './constants';
 
 import { AppDispatch, TRegister } from '../../utils/types';
+import { TRegisterFailedAction } from './actionCreators';
+
+export type TRegisterRequestAction = {
+  readonly type: typeof REGISTER_REQUEST;
+};
+
+export type TRegisterSuccessAction = {
+  readonly type: typeof REGISTER_SUCCESS;
+};
+
+export type TRegisterAction =
+  | TRegisterRequestAction
+  | TRegisterSuccessAction
+  | TRegisterFailedAction;
 
 export function registration(form: TRegister) {
   return function (dispatch: AppDispatch) {
