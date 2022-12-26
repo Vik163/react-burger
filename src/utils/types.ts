@@ -1,7 +1,6 @@
 import * as H from 'history';
 import { SyntheticEvent } from 'react';
-import { ThunkAction, ThunkDispatch } from 'redux-thunk';
-import { Action, ActionCreator } from 'redux';
+import { ThunkDispatch } from 'redux-thunk';
 import { store } from '../services/store';
 import { TCardOder } from '../services/actions/burger-constructor-card';
 import { TBurgerConstructor } from '../services/actions/burger-constructor';
@@ -17,6 +16,7 @@ import { TRegisterAction } from '../services/actions/register';
 import { TResetPasswordAction } from '../services/actions/reset-password';
 import { TTokenAction } from '../services/actions/update-token';
 import { TUpdateUserAction } from '../services/actions/update-user';
+import { TWsConnection } from '../services/actions/ws-order-feed';
 
 export type TTypesActions =
   | TCardOder
@@ -32,7 +32,8 @@ export type TTypesActions =
   | TRegisterAction
   | TResetPasswordAction
   | TTokenAction
-  | TUpdateUserAction;
+  | TUpdateUserAction
+  | TWsConnection;
 
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
@@ -55,12 +56,13 @@ export type TCard = {
 };
 
 export type TOrderItem = {
-  readonly _id: string;
-  readonly name: string;
-  readonly date: string;
-  readonly number: string;
-  readonly totalSum: number;
-  orders: Array<TCard>;
+  _id: string;
+  number: number;
+  createdAt: string;
+  name: string;
+  ingredients: string[];
+  status: string;
+  updatedAt: string;
 };
 
 export type TItem = {

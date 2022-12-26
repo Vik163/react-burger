@@ -28,6 +28,7 @@ import { getCards } from '../../services/actions/burger-ingredients';
 import { getUser } from '../../services/actions/get-user';
 import { requestToken } from '../../services/actions/update-token';
 import { deleteIngredientDetails } from '../../services/actions/ingredient-details';
+import { WS_CONNECTION_START } from '../../services/actions/constants';
 
 import { TModalState } from '../../utils/types';
 
@@ -65,6 +66,10 @@ function App() {
   }, []);
 
   useEffect(() => {
+    dispatch({ type: WS_CONNECTION_START });
+  }, []);
+
+  useEffect(() => {
     if (loggedIn) {
       if (!userData) {
         token ? dispatch(getUser()) : checkToken();
@@ -98,9 +103,12 @@ function App() {
             )}
           </DndProvider>
         </Route>
-        <ProtectedRoute path='/feed' onlyAuth={true} exact>
+        <Route path='/feed' exact>
           <OrderFeed />
-        </ProtectedRoute>
+        </Route>
+        <Route path='/feed/:id' exact>
+          <OrderDetailsPage />
+        </Route>
         <ProtectedRoute path='/forgot-password' onlyAuth={false} exact>
           <ForgotPassword />
         </ProtectedRoute>
@@ -121,10 +129,6 @@ function App() {
             <StoryOrders />
           </Profile>
         </ProtectedRoute>
-
-        <Route path='/feed/:id' exact>
-          <OrderDetailsPage />
-        </Route>
         <Route path='/profile/orders/:id' exact>
           <OrderDetailsPage />
         </Route>
@@ -143,6 +147,17 @@ function App() {
             <IngredientDetails />
           </Modal>
         </Route>
+      )}
+      {background && (
+        <Route
+          path='/feed/:id'
+          exact
+          render={() => (
+            <Modal closeModal={handleModalClose} title='Детали ингредиента'>
+              <OrderDetailsPage />
+            </Modal>
+          )}
+        />
       )}
     </div>
   );

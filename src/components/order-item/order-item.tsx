@@ -5,7 +5,8 @@ import orderStyles from './order-item.module.css';
 
 import { CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 
-import { TOrderItem } from '../../utils/types';
+import { TOrderItem, TCard } from '../../utils/types';
+import { useSelector } from '../../utils/hooks';
 
 type TOrderCard = {
   card: TOrderItem;
@@ -13,15 +14,43 @@ type TOrderCard = {
 
 export const OrderItem: FC<TOrderCard> = ({ card }) => {
   const { pathname } = useLocation();
+  const location = useLocation();
+  const { cards } = useSelector((store) => ({
+    cards: store.burgerIngredients.cards,
+  }));
+  const date = new Date(card.createdAt);
+
+  const dateOrder = date.toLocaleString('ru', {
+    day: '2-digit',
+    weekday: 'long',
+    hour: 'numeric',
+    minute: 'numeric',
+  });
+
+  const cardsFeed =
+    cards &&
+    cards.filter((item) => {
+      return card.ingredients.some((id: string) => item._id === id);
+    });
+
+  const totalSum =
+    cardsFeed &&
+    cardsFeed.reduce(
+      (sum: number, current: TCard) =>
+        sum + (current.type === 'bun' ? current.price * 2 : current.price),
+      0
+    );
 
   return (
     <Link
       className={orderStyles.link}
-      to={
-        pathname === '/feed'
-          ? `/feed/${card._id}`
-          : `/profile/orders/${card._id}`
-      }
+      to={{
+        pathname:
+          pathname === '/feed'
+            ? `/feed/${card._id}`
+            : `/profile/orders/${card._id}`,
+        state: { background: location },
+      }}
     >
       <section
         className={orderStyles.order}
@@ -32,9 +61,9 @@ export const OrderItem: FC<TOrderCard> = ({ card }) => {
         }
       >
         <div className={orderStyles.container_type_date}>
-          <p className='text text_type_digits-default'>{card.number}</p>
+          <p className='text text_type_digits-default'>{`#${card.number}`}</p>
           <p className='text text_type_main-default text_color_inactive'>
-            {card.date}.
+            {dateOrder}.
           </p>
         </div>
         <h1
@@ -44,14 +73,14 @@ export const OrderItem: FC<TOrderCard> = ({ card }) => {
         </h1>
         <div className={orderStyles.container_type_total}>
           <ul className={orderStyles.container_type_image}>
-            {card.orders.map(
+            {cardsFeed.map(
               (item, index) =>
                 index < 6 && (
                   <div key={item._id}>
                     {index > 4 && (
                       <p
                         className={`${orderStyles.mask} text text_type_main-default`}
-                      >{`+${card.orders.length - 5}`}</p>
+                      >{`+${cardsFeed.length - 5}`}</p>
                     )}
                     <li
                       className={orderStyles.item}
@@ -72,7 +101,7 @@ export const OrderItem: FC<TOrderCard> = ({ card }) => {
                 )
             )}
           </ul>
-          <p className='text text_type_digits-default mr-2'>{card.totalSum}</p>
+          <p className='text text_type_digits-default mr-2'>{totalSum}</p>
           <CurrencyIcon type='primary' />
         </div>
       </section>

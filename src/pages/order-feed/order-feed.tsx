@@ -1,14 +1,19 @@
-import { useSelector } from 'react-redux';
+import { useEffect } from 'react';
+import { useSelector } from '../../utils/hooks';
 
 import orderFeedStyles from './order-feed.module.css';
 
 import { ScrollContainer } from '../../components/scroll-container/scroll-container';
 import { OrderItem } from '../../components/order-item/order-item';
+import { TOrderItem } from '../../utils/types';
 
 export function OrderFeed() {
-  const { cards } = useSelector((store) => ({
+  const { cards, orders } = useSelector((store) => ({
     cards: store.burgerIngredients.cards,
+    orders: store.OrderFeed.data,
   }));
+
+  console.log(orders);
   const ordersFeed = [
     {
       _id: 1,
@@ -61,33 +66,35 @@ export function OrderFeed() {
       </p>
       <div className={orderFeedStyles.list}>
         <ScrollContainer>
-          {ordersFeed &&
-            ordersFeed.map((card) => <OrderItem key={card._id} card={card} />)}
+          {orders &&
+            orders.orders.map((card: TOrderItem) => (
+              <OrderItem key={card._id} card={card} />
+            ))}
         </ScrollContainer>
       </div>
       <div className={orderFeedStyles.report}>
         <div className={orderFeedStyles.container_type_process}>
           <ul className={orderFeedStyles.container_type_numbers}>
             <p className='text text_type_main-medium mb-6'>Готовы:</p>
-            {ordersFeed &&
-              ordersFeed.map((card) => (
+            {orders &&
+              orders.orders.map((card: TOrderItem) => (
                 <li
                   className={`${orderFeedStyles.numbers} text text_type_digits-default mb-2`}
                   key={card._id}
                 >
-                  {card.number}
+                  {card.status === 'done' && card.number}
                 </li>
               ))}
           </ul>
           <ul className={orderFeedStyles.container_type_numbers}>
             <p className='text text_type_main-medium mb-6'>В работе:</p>
-            {ordersFeed &&
-              ordersFeed.map((card) => (
+            {orders &&
+              orders.orders.map((card: TOrderItem) => (
                 <li
                   className='text text_type_digits-default mb-2'
                   key={card._id}
                 >
-                  {card.number}
+                  {!(card.status === 'done') && card.number}
                 </li>
               ))}
           </ul>
@@ -95,11 +102,11 @@ export function OrderFeed() {
         <p className='text text_type_main-medium mt-15'>
           Выполнено за все время:
         </p>
-        <p className='text text_type_digits-large'>28 752</p>
+        <p className='text text_type_digits-large'>{orders.total}</p>
         <p className='text text_type_main-medium mt-15'>
           Выполнено за сегодня:
         </p>
-        <p className='text text_type_digits-large'>752</p>
+        <p className='text text_type_digits-large'>{orders.totalToday}</p>
       </div>
     </section>
   );
