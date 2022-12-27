@@ -5,6 +5,7 @@ import {
   WS_CONNECTION_CLOSED,
   WS_GET_MESSAGE,
 } from './constants';
+import { TWsProfile } from '../../utils/types';
 
 export type TWsConnectionStart = {
   readonly type: typeof WS_CONNECTION_START;
@@ -16,7 +17,7 @@ export type TWsConnectionSuccess = {
 
 export type TWsConnectionError = {
   readonly type: typeof WS_CONNECTION_ERROR;
-  readonly payload: any;
+  readonly payload: Event;
 };
 
 export type TWsConnectionClosed = {
@@ -25,7 +26,7 @@ export type TWsConnectionClosed = {
 
 export type TWsGetMessage = {
   readonly type: typeof WS_GET_MESSAGE;
-  readonly payload: any;
+  readonly payload: TWsProfile;
 };
 
 export type TWsConnection =

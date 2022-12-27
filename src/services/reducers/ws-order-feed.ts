@@ -5,16 +5,24 @@ import {
   WS_GET_MESSAGE,
 } from '../actions/constants';
 import type { TWsConnection } from '../actions/ws-order-feed';
+import { TWsProfile } from '../../utils/types';
 
-const initialState = {
+export type TWsOrderProfileInitialState = {
+  wsConnected: boolean;
+  data: TWsProfile | null;
+  error: undefined | Event;
+};
+
+const initialState: TWsOrderProfileInitialState = {
   wsConnected: false,
-  data: '',
+  data: null,
+  error: undefined,
 };
 
 export const wsOrderFeedReducer = (
   state = initialState,
   action: TWsConnection
-) => {
+): TWsOrderProfileInitialState => {
   switch (action.type) {
     case WS_CONNECTION_SUCCESS:
       return {

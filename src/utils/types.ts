@@ -1,5 +1,5 @@
 import * as H from 'history';
-import { ReactChild, ReactFragment, ReactPortal, SyntheticEvent } from 'react';
+import { SyntheticEvent } from 'react';
 import { ThunkDispatch } from 'redux-thunk';
 import { store } from '../services/store';
 import { TCardOder } from '../services/actions/burger-constructor-card';

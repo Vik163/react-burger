@@ -19,15 +19,16 @@ export function OrderProcessDetails({ modal }: TIsModal) {
 
   const { cards, orders, ordersProfile } = useSelector((store) => ({
     cards: store.burgerIngredients.cards,
-    orders: store.orderFeed.data.orders,
+    orders: store.orderFeed.data as TWsProfile,
     ordersProfile: store.ordersProfile.data as TWsProfile,
   }));
 
-  const ordersProfileConnected = ordersProfile.orders;
+  const ordersProfileConnected = ordersProfile && ordersProfile.orders;
+  const ordersConnected = orders && orders.orders;
 
   const orderDetailsCard =
     pathname.includes('/feed') && orders
-      ? orders.filter((item: { _id: string }) => item._id === id)[0]
+      ? ordersConnected.filter((item: { _id: string }) => item._id === id)[0]
       : ordersProfile &&
         ordersProfileConnected.filter(
           (item: { _id: string }) => item._id === id

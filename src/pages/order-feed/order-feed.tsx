@@ -5,20 +5,20 @@ import orderFeedStyles from './order-feed.module.css';
 
 import { ScrollContainer } from '../../components/scroll-container/scroll-container';
 import { OrderItem } from '../../components/order-item/order-item';
-import { TOrderItem } from '../../utils/types';
+import { TOrderItem, TWsProfile } from '../../utils/types';
 import { WS_CONNECTION_START } from '../../services/actions/constants';
 
 export function OrderFeed() {
   const dispatch = useDispatch();
   const { orders } = useSelector((store) => ({
-    orders: store.orderFeed.data,
+    orders: store.orderFeed.data as TWsProfile,
   }));
 
   useEffect(() => {
     dispatch({ type: WS_CONNECTION_START });
   }, []);
 
-  const ordersFeed = orders.orders;
+  const ordersFeed = orders && orders.orders;
 
   return (
     <section className={orderFeedStyles.orders}>
@@ -71,11 +71,13 @@ export function OrderFeed() {
         <p className='text text_type_main-medium mt-15'>
           Выполнено за все время:
         </p>
-        <p className='text text_type_digits-large'>{orders.total}</p>
+        <p className='text text_type_digits-large'>{orders && orders.total}</p>
         <p className='text text_type_main-medium mt-15'>
           Выполнено за сегодня:
         </p>
-        <p className='text text_type_digits-large'>{orders.totalToday}</p>
+        <p className='text text_type_digits-large'>
+          {orders && orders.totalToday}
+        </p>
       </div>
     </section>
   );

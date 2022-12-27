@@ -65,14 +65,14 @@ function App() {
       store.dataUser.messageError,
     loader: store.orderDetails.loader || store.burgerIngredients.loader,
     loggedIn: store.authorizationInfo.loggedIn,
-    orders: store.orderFeed.data.orders,
+    orders: store.orderFeed.data as TWsProfile,
     wsConnected: store.orderFeed.wsConnected,
     ordersProfile: store.ordersProfile.data as TWsProfile,
     wsProfileConnected: store.ordersProfile.wsProfileConnected,
-    errorProfileConnected: store.ordersProfile.error,
   }));
 
   const ordersProfileConnected = ordersProfile && ordersProfile.orders;
+  const ordersConnected = orders && orders.orders;
 
   // Проверка токена ------------------------
   const checkToken = () => {
@@ -178,7 +178,7 @@ function App() {
           </Modal>
         </Route>
       )}
-      {background && orders && (
+      {background && ordersConnected && (
         <Route
           path='/feed/:id'
           exact
