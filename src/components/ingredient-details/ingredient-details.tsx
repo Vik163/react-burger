@@ -3,11 +3,7 @@ import { useSelector } from '../../utils/hooks';
 
 import detailsStyles from './ingredient-details.module.css';
 
-import { TCard } from '../../utils/types';
-
-type TId = {
-  id: string;
-};
+import { TCard, TId } from '../../utils/types';
 
 export function IngredientDetails() {
   const { id } = useParams<TId>();

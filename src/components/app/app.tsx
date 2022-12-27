@@ -19,6 +19,7 @@ import { ProtectedRoute } from '../protected-route';
 import { IngredientDetails } from '../ingredient-details/ingredient-details';
 import { IngredientDetailsPage } from '../../pages/ingredient-details-page/ingredient-details-page';
 import { OrderDetailsPage } from '../../pages/order-details-page/order-details-page';
+import { OrderProcessDetails } from '../../components/order-process-details/order-process-details';
 import { StoryOrders } from '../story-orders/story-orders';
 import { OrderFeed } from '../../pages/order-feed/order-feed';
 import { Modal } from '../modal/modal';
@@ -28,7 +29,10 @@ import { getCards } from '../../services/actions/burger-ingredients';
 import { getUser } from '../../services/actions/get-user';
 import { requestToken } from '../../services/actions/update-token';
 import { deleteIngredientDetails } from '../../services/actions/ingredient-details';
-import { WS_CONNECTION_START } from '../../services/actions/constants';
+import {
+  WS_CONNECTION_CLOSED,
+  WS_CONNECTION_START,
+} from '../../services/actions/constants';
 
 import { TModalState } from '../../utils/types';
 
@@ -36,20 +40,26 @@ function App() {
   const dispatch = useDispatch();
   const history = useHistory();
   const location = useLocation<TModalState>();
+  const { pathname } = useLocation();
+
   const background = location.state && location.state.background;
   const userData = JSON.parse(`${localStorage.getItem('userData')}`);
+  const orderNumber = JSON.parse(`${localStorage.getItem('orderNumber')}`);
   const token = getCookie('token');
-  const { cards, messageError, loader, loggedIn } = useSelector((store) => ({
-    cards: store.burgerIngredients.cards,
-    userData: store.dataUser.messageError,
-    messageError:
-      store.burgerIngredients.messageError ||
-      store.orderDetails.messageError ||
-      store.authorizationInfo.messageError ||
-      store.dataUser.messageError,
-    loader: store.orderDetails.loader || store.burgerIngredients.loader,
-    loggedIn: store.authorizationInfo.loggedIn,
-  }));
+  const { cards, messageError, loader, loggedIn, orders } = useSelector(
+    (store) => ({
+      cards: store.burgerIngredients.cards,
+      userData: store.dataUser.messageError,
+      messageError:
+        store.burgerIngredients.messageError ||
+        store.orderDetails.messageError ||
+        store.authorizationInfo.messageError ||
+        store.dataUser.messageError,
+      loader: store.orderDetails.loader || store.burgerIngredients.loader,
+      loggedIn: store.authorizationInfo.loggedIn,
+      orders: store.OrderFeed.data.orders,
+    })
+  );
 
   // Проверка токена ------------------------
   const checkToken = () => {
@@ -66,8 +76,18 @@ function App() {
   }, []);
 
   useEffect(() => {
-    dispatch({ type: WS_CONNECTION_START });
-  }, []);
+    if (pathname.includes('/feed')) {
+      dispatch({ type: WS_CONNECTION_START });
+
+      if (orders && pathname.length > 6) {
+        const id = pathname.slice(6);
+        const order = orders.filter((i: { _id: string }) => i._id === id)[0];
+        localStorage.setItem('orderNumber', order.number);
+      }
+    } else {
+      dispatch({ type: WS_CONNECTION_CLOSED });
+    }
+  }, [pathname]);
 
   useEffect(() => {
     if (loggedIn) {
@@ -85,6 +105,7 @@ function App() {
 
   const handleModalClose = () => {
     dispatch(deleteIngredientDetails());
+    localStorage.removeItem('orderNumber');
     history.goBack();
   };
 
@@ -148,13 +169,13 @@ function App() {
           </Modal>
         </Route>
       )}
-      {background && (
+      {background && orders && (
         <Route
           path='/feed/:id'
           exact
           render={() => (
-            <Modal closeModal={handleModalClose} title='Детали ингредиента'>
-              <OrderDetailsPage />
+            <Modal closeModal={handleModalClose} title={orderNumber}>
+              <OrderProcessDetails modal={true} />
             </Modal>
           )}
         />

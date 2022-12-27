@@ -1,28 +1,4 @@
 .page {
   width: 640px;
-  margin-top: 122px;
-}
-
-.number {
-  text-align: center;
-}
-
-.status {
-  color: #00cccc;
-}
-
-.container_type_orders {
-  height: 312px;
-  width: 100%;
-}
-
-.container_type_date {
-  display: flex;
-  margin-top: 40px;
-  justify-content: space-between;
-}
-
-.container_type_price {
-  display: flex;
-  justify-content: flex-end;
+  margin: 122px 0;
 }

@@ -14,6 +14,7 @@
 
 .constructor__scrollbar {
   width: 584px;
+  max-height: 464px;
 }
 
 .constructor__item {

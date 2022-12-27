@@ -9,11 +9,12 @@
   transform: translate(-50%, -50%);
   width: 720px;
   background-color: #1c1c21;
-  padding: 0;
+  padding: 40px;
   margin: 0;
   border-radius: 40px;
   cursor: default;
-  z-index: 2;
+  z-index: 102;
+  box-sizing: border-box;
 }
 .title_container {
   display: flex;

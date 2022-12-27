@@ -17,7 +17,7 @@ export function OrderDetails() {
       <p className='text text_type_main-default mt-15 mb-2'>
         Ваш заказ начали готовить
       </p>
-      <p className={`${detailsStyles.text} text text_type_main-default mb-30`}>
+      <p className={`${detailsStyles.text} text text_type_main-default mb-20`}>
         Дождитесь готовности на орбитальной станции
       </p>
     </>

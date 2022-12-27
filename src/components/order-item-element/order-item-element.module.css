@@ -1,5 +1,5 @@
 .container_type_card {
-  width: 608px;
+  min-width: 608px;
   height: 64px;
   display: grid;
   grid-template-columns: 64px 320px 1fr;

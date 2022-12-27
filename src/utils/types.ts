@@ -86,7 +86,7 @@ export type TModalState = {
 };
 
 export type TModal = {
-  title?: string;
+  title?: string | null;
 } & TCloseModal &
   TChildren;
 
@@ -130,4 +130,8 @@ export type TResultOrder = {
 
 export type TOrder = {
   ingredients: string[];
+};
+
+export type TId = {
+  id: string;
 };
