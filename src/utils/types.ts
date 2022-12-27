@@ -1,5 +1,5 @@
 import * as H from 'history';
-import { SyntheticEvent } from 'react';
+import { ReactChild, ReactFragment, ReactPortal, SyntheticEvent } from 'react';
 import { ThunkDispatch } from 'redux-thunk';
 import { store } from '../services/store';
 import { TCardOder } from '../services/actions/burger-constructor-card';
@@ -17,6 +17,7 @@ import { TResetPasswordAction } from '../services/actions/reset-password';
 import { TTokenAction } from '../services/actions/update-token';
 import { TUpdateUserAction } from '../services/actions/update-user';
 import { TWsConnection } from '../services/actions/ws-order-feed';
+import { TWsProfileConnection } from '../services/actions/ws-orders-profile';
 
 export type TTypesActions =
   | TCardOder
@@ -33,7 +34,8 @@ export type TTypesActions =
   | TResetPasswordAction
   | TTokenAction
   | TUpdateUserAction
-  | TWsConnection;
+  | TWsConnection
+  | TWsProfileConnection;
 
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
@@ -65,6 +67,13 @@ export type TOrderItem = {
   updatedAt: string;
 };
 
+export type TWsProfile = {
+  orders: any;
+  success: boolean;
+  total: number;
+  totalToday: number;
+};
+
 export type TItem = {
   readonly card: TCard;
 };
@@ -91,10 +100,11 @@ export type TModal = {
   TChildren;
 
 export type TProtected = {
-  children: JSX.Element[] | JSX.Element;
+  children?: JSX.Element[] | JSX.Element;
   readonly onlyAuth: boolean;
   readonly path: string;
   exact?: boolean;
+  render?: () => JSX.Element;
 };
 
 export type TLocation = {

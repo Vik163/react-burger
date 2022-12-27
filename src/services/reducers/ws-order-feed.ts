@@ -6,13 +6,6 @@ import {
 } from '../actions/constants';
 import type { TWsConnection } from '../actions/ws-order-feed';
 
-// type TWSState = {
-//   wsConnected: boolean;
-//   messages: IMessage[];
-
-//   error?: Event;
-// };
-
 const initialState = {
   wsConnected: false,
   data: '',
@@ -41,10 +34,6 @@ export const wsOrderFeedReducer = (
         error: undefined,
         wsConnected: false,
       };
-
-    // Опишем обработку экшена с типом WS_GET_MESSAGE
-    // Обработка происходит, когда с сервера возвращаются данные
-    // В messages передадим данные, которые пришли с сервера
     case WS_GET_MESSAGE:
       return {
         ...state,

@@ -1,4 +1,4 @@
-import { useParams } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import { useSelector } from '../../utils/hooks';
 
 import orderDetailsStyles from './order-process-details.module.css';
@@ -7,7 +7,7 @@ import { CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components
 
 import { OrderItemElement } from '../../components/order-item-element/order-item-element';
 
-import { TCard } from '../../utils/types';
+import { TCard, TWsProfile } from '../../utils/types';
 
 type TIsModal = {
   modal?: boolean;
@@ -15,17 +15,27 @@ type TIsModal = {
 
 export function OrderProcessDetails({ modal }: TIsModal) {
   const { id } = useParams<{ id: string }>();
-  const { cards, orders } = useSelector((store) => ({
+  const { pathname } = useLocation();
+
+  const { cards, orders, ordersProfile } = useSelector((store) => ({
     cards: store.burgerIngredients.cards,
-    orders: store.OrderFeed.data.orders,
+    orders: store.orderFeed.data.orders,
+    ordersProfile: store.ordersProfile.data as TWsProfile,
   }));
 
+  const ordersProfileConnected = ordersProfile.orders;
+
   const orderDetailsCard =
-    orders && orders.filter((item: { _id: string }) => item._id === id)[0];
+    pathname.includes('/feed') && orders
+      ? orders.filter((item: { _id: string }) => item._id === id)[0]
+      : ordersProfile &&
+        ordersProfileConnected.filter(
+          (item: { _id: string }) => item._id === id
+        )[0];
 
   const cardsFeed =
     cards &&
-    orders &&
+    (orders || ordersProfile) &&
     cards.filter((item) => {
       return orderDetailsCard.ingredients.some((id: string) => item._id === id);
     });
@@ -38,10 +48,11 @@ export function OrderProcessDetails({ modal }: TIsModal) {
       0
     );
 
-  const date = orders && new Date(orderDetailsCard.createdAt);
+  const date =
+    (orders || ordersProfile) && new Date(orderDetailsCard.createdAt);
 
   const dateOrder =
-    orders &&
+    (orders || ordersProfile) &&
     date.toLocaleString('ru', {
       day: '2-digit',
       weekday: 'long',
@@ -64,7 +75,7 @@ export function OrderProcessDetails({ modal }: TIsModal) {
 
   return (
     <section className={orderDetailsStyles.page}>
-      {orders && (
+      {(orders || ordersProfile) && (
         <>
           {!modal && (
             <p

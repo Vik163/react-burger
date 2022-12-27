@@ -31,10 +31,10 @@ import { requestToken } from '../../services/actions/update-token';
 import { deleteIngredientDetails } from '../../services/actions/ingredient-details';
 import {
   WS_CONNECTION_CLOSED,
-  WS_CONNECTION_START,
+  WS_PROFILE_CONNECTION_CLOSED,
 } from '../../services/actions/constants';
 
-import { TModalState } from '../../utils/types';
+import { TModalState, TWsProfile } from '../../utils/types';
 
 function App() {
   const dispatch = useDispatch();
@@ -46,20 +46,33 @@ function App() {
   const userData = JSON.parse(`${localStorage.getItem('userData')}`);
   const orderNumber = JSON.parse(`${localStorage.getItem('orderNumber')}`);
   const token = getCookie('token');
-  const { cards, messageError, loader, loggedIn, orders } = useSelector(
-    (store) => ({
-      cards: store.burgerIngredients.cards,
-      userData: store.dataUser.messageError,
-      messageError:
-        store.burgerIngredients.messageError ||
-        store.orderDetails.messageError ||
-        store.authorizationInfo.messageError ||
-        store.dataUser.messageError,
-      loader: store.orderDetails.loader || store.burgerIngredients.loader,
-      loggedIn: store.authorizationInfo.loggedIn,
-      orders: store.OrderFeed.data.orders,
-    })
-  );
+  const {
+    cards,
+    messageError,
+    loader,
+    loggedIn,
+    orders,
+    ordersProfile,
+    wsProfileConnected,
+    wsConnected,
+  } = useSelector((store) => ({
+    cards: store.burgerIngredients.cards,
+    userData: store.dataUser.messageError,
+    messageError:
+      store.burgerIngredients.messageError ||
+      store.orderDetails.messageError ||
+      store.authorizationInfo.messageError ||
+      store.dataUser.messageError,
+    loader: store.orderDetails.loader || store.burgerIngredients.loader,
+    loggedIn: store.authorizationInfo.loggedIn,
+    orders: store.orderFeed.data.orders,
+    wsConnected: store.orderFeed.wsConnected,
+    ordersProfile: store.ordersProfile.data as TWsProfile,
+    wsProfileConnected: store.ordersProfile.wsProfileConnected,
+    errorProfileConnected: store.ordersProfile.error,
+  }));
+
+  const ordersProfileConnected = ordersProfile && ordersProfile.orders;
 
   // Проверка токена ------------------------
   const checkToken = () => {
@@ -76,18 +89,14 @@ function App() {
   }, []);
 
   useEffect(() => {
-    if (pathname.includes('/feed')) {
-      dispatch({ type: WS_CONNECTION_START });
-
-      if (orders && pathname.length > 6) {
-        const id = pathname.slice(6);
-        const order = orders.filter((i: { _id: string }) => i._id === id)[0];
-        localStorage.setItem('orderNumber', order.number);
-      }
-    } else {
+    !pathname.includes('/feed') &&
+      wsConnected &&
       dispatch({ type: WS_CONNECTION_CLOSED });
-    }
-  }, [pathname]);
+
+    !pathname.includes('/profile/orders') &&
+      wsProfileConnected &&
+      dispatch({ type: WS_PROFILE_CONNECTION_CLOSED });
+  }, [pathname, wsProfileConnected, wsConnected]);
 
   useEffect(() => {
     if (loggedIn) {
@@ -150,9 +159,9 @@ function App() {
             <StoryOrders />
           </Profile>
         </ProtectedRoute>
-        <Route path='/profile/orders/:id' exact>
+        <ProtectedRoute path='/profile/orders/:id' onlyAuth={true} exact>
           <OrderDetailsPage />
-        </Route>
+        </ProtectedRoute>
         <Route path='/ingredients/:id' exact>
           <IngredientDetailsPage />
         </Route>
@@ -179,6 +188,13 @@ function App() {
             </Modal>
           )}
         />
+      )}
+      {background && ordersProfileConnected && (
+        <ProtectedRoute path='/profile/orders/:id' exact onlyAuth={true}>
+          <Modal closeModal={handleModalClose} title={orderNumber}>
+            <OrderProcessDetails modal={true} />
+          </Modal>
+        </ProtectedRoute>
       )}
     </div>
   );

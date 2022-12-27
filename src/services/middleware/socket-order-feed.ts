@@ -12,16 +12,16 @@ export const socketOrderFeedMiddleware = (wsUrl: string): Middleware => {
       const { type } = action;
 
       if (type === 'WS_CONNECTION_START') {
-        socket = new WebSocket(wsUrl);
+        socket = new WebSocket(`${wsUrl}/all`);
       }
       if (socket) {
         socket.onopen = (event) => {
           dispatch({ type: 'WS_CONNECTION_SUCCESS', payload: event });
         };
 
-        // socket.onerror = (event) => {
-        //   dispatch({ type: onError, payload: event });
-        // };
+        socket.onerror = (event) => {
+          dispatch({ type: 'WS_CONNECTION_ERROR', payload: event });
+        };
         socket.onmessage = (event) => {
           const { data } = event;
 
@@ -30,12 +30,6 @@ export const socketOrderFeedMiddleware = (wsUrl: string): Middleware => {
         socket.onclose = (event) => {
           dispatch({ type: 'WS_CONNECTION_CLOSED', payload: event });
         };
-
-        // if (type === wsSendMessage) {
-        //   const message = payload;
-        //   // функция для отправки сообщения на сервер
-        //   socket.send(JSON.stringify(message));
-        // }
       }
 
       next(action);

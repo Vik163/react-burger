@@ -36,7 +36,10 @@ class BurgerApi {
   sendOrder(order: TOrder) {
     return this._request('/orders', {
       method: 'POST',
-      headers: this._settings.headers,
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + getCookie('token'),
+      },
       body: JSON.stringify(order),
     });
   }

@@ -41,9 +41,14 @@ export const OrderItem: FC<TOrderCard> = ({ card }) => {
       0
     );
 
+  const handleNumber = () => {
+    localStorage.setItem('orderNumber', `${card.number}`);
+  };
+
   return (
     <Link
       className={orderStyles.link}
+      onClick={handleNumber}
       to={{
         pathname:
           pathname === '/feed'

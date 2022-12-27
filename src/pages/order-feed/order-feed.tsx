@@ -1,16 +1,22 @@
 import { useEffect } from 'react';
-import { useSelector } from '../../utils/hooks';
+import { useSelector, useDispatch } from '../../utils/hooks';
 
 import orderFeedStyles from './order-feed.module.css';
 
 import { ScrollContainer } from '../../components/scroll-container/scroll-container';
 import { OrderItem } from '../../components/order-item/order-item';
 import { TOrderItem } from '../../utils/types';
+import { WS_CONNECTION_START } from '../../services/actions/constants';
 
 export function OrderFeed() {
+  const dispatch = useDispatch();
   const { orders } = useSelector((store) => ({
-    orders: store.OrderFeed.data,
+    orders: store.orderFeed.data,
   }));
+
+  useEffect(() => {
+    dispatch({ type: WS_CONNECTION_START });
+  }, []);
 
   const ordersFeed = orders.orders;
 
