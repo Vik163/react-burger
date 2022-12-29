@@ -1,17 +1,13 @@
 import { useParams } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useSelector } from '../../utils/hooks';
 
 import detailsStyles from './ingredient-details.module.css';
 
-import { TCard } from '../../utils/types'
-
-type TId = {
-  id: string;
-}
+import { TCard, TId } from '../../utils/types';
 
 export function IngredientDetails() {
   const { id } = useParams<TId>();
-  const { card, cards } = useSelector((store: any) => ({
+  const { card, cards } = useSelector((store) => ({
     card: store.ingredientDetails.ingredientDetails,
     cards: store.burgerIngredients.cards,
   }));

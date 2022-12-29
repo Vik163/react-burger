@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef, FormEvent } from 'react';
 import { Link } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from '../../utils/hooks';
 
 import registerStyles from './register.module.css';
 
@@ -12,15 +12,18 @@ import {
 import { registration } from '../../services/actions/register';
 import { useForm } from '../../components/hooks/use-form';
 
-import { TDataRegister } from '../../utils/types'
-
+import { TDataRegister } from '../../utils/types';
 
 export function Register() {
   const dispatch = useDispatch();
-  const { formReset } = useSelector((store: any) => ({
+  const { formReset } = useSelector((store) => ({
     formReset: store.authorizationInfo.formReset,
   }));
-  const {values, handleChange, setValues} = useForm<TDataRegister>({ name: '', email: '', password: '' });
+  const { values, handleChange, setValues } = useForm<TDataRegister>({
+    name: '',
+    email: '',
+    password: '',
+  });
   const inputRef = useRef<HTMLInputElement>(null);
   const [toggle, setToggle] = useState(false);
   const onIconClick = () => {
@@ -37,8 +40,7 @@ export function Register() {
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-    // @ts-ignore
-    dispatch(registration(value));
+    dispatch(registration(values));
   };
 
   return (

@@ -27,13 +27,13 @@ export function AppHeader() {
         </p>
       </Link>
       <Link
-        to='#'
+        to='/feed'
         className={`${headerStyles.header__link} header__link_type_list pl-5 pr-5 pb-4 pt-4`}
       >
-        <ListIcon type={pathname === '#' ? 'primary' : 'secondary'} />
+        <ListIcon type={pathname === '/feed' ? 'primary' : 'secondary'} />
         <p
           className='text text_type_main-default'
-          style={{ color: pathname === '#' ? 'white' : '#8585ad' }}
+          style={{ color: pathname === '/feed' ? 'white' : '#8585ad' }}
         >
           Лента заказов
         </p>

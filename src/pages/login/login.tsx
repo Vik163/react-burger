@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef, FormEvent } from 'react';
 import { Link } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from '../../utils/hooks';
 
 import loginStyles from './login.module.css';
 
@@ -13,17 +13,20 @@ import { authorization } from '../../services/actions/login';
 import { useForm } from '../../components/hooks/use-form';
 
 type TLogin = {
-  email: string; 
+  email: string;
   password: string;
-}
+};
 
 export function Login() {
   const dispatch = useDispatch();
-  const { formReset } = useSelector((store: any) => ({
+  const { formReset } = useSelector((store) => ({
     formReset: store.authorizationInfo.formReset,
   }));
   const [toggle, setToggle] = useState(false);
-  const {values, handleChange, setValues} = useForm<TLogin>({ email: '', password: '' });
+  const { values, handleChange, setValues } = useForm<TLogin>({
+    email: '',
+    password: '',
+  });
   const inputRef = useRef<HTMLInputElement>(null);
   const onIconClick = () => {
     setTimeout(() => (inputRef.current as HTMLInputElement).focus(), 0);
@@ -39,7 +42,6 @@ export function Login() {
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-    // @ts-ignore
     dispatch(authorization(values));
   };
 

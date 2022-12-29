@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect, SyntheticEvent } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector } from '../../utils/hooks';
 
 import ingredientsStyles from './burger-ingredients.module.css';
 
@@ -7,11 +7,10 @@ import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 
 import { BurgerIngredientsTypes } from './burger-ingredients-types/burger-ingredients-types';
 
-import { TCard } from '../../utils/types'
-
+import { TCard } from '../../utils/types';
 
 export const BurgerIngredients = () => {
-  const { cards } = useSelector((store: any) => ({
+  const { cards } = useSelector((store) => ({
     cards: store.burgerIngredients.cards,
   }));
   const bunRef = useRef<HTMLElement>(null);
@@ -30,11 +29,20 @@ export const BurgerIngredients = () => {
   const clickTab = (e: SyntheticEvent) => {
     const tab = (e.target as HTMLElement).textContent;
     if (tab === 'Булки') {
-      (bunRef.current as HTMLElement).scrollIntoView({ block: 'start', behavior: 'smooth' });
+      (bunRef.current as HTMLElement).scrollIntoView({
+        block: 'start',
+        behavior: 'smooth',
+      });
     } else if (tab === 'Соусы') {
-      (sauceRef.current as HTMLElement).scrollIntoView({ block: 'start', behavior: 'smooth' });
+      (sauceRef.current as HTMLElement).scrollIntoView({
+        block: 'start',
+        behavior: 'smooth',
+      });
     } else if (tab === 'Начинки') {
-      (fillingRef.current as HTMLElement).scrollIntoView({ block: 'start', behavior: 'smooth' });
+      (fillingRef.current as HTMLElement).scrollIntoView({
+        block: 'start',
+        behavior: 'smooth',
+      });
     }
   };
 
@@ -44,15 +52,15 @@ export const BurgerIngredients = () => {
   };
 
   const positionBlocks = () => {
-      const positionBun = (bunRef.current as HTMLElement).offsetTop;
-      const positionSauce = (sauceRef.current as HTMLElement).offsetTop;
-      const positionFilling = (fillingRef.current as HTMLElement).offsetTop;
-      const position = {
-        bun: (positionSauce - positionBun) / 1.7,
-        sauce:
-          positionSauce - positionBun + (positionFilling - positionSauce) / 1.7,
-      };
-      return position;
+    const positionBun = (bunRef.current as HTMLElement).offsetTop;
+    const positionSauce = (sauceRef.current as HTMLElement).offsetTop;
+    const positionFilling = (fillingRef.current as HTMLElement).offsetTop;
+    const position = {
+      bun: (positionSauce - positionBun) / 1.7,
+      sauce:
+        positionSauce - positionBun + (positionFilling - positionSauce) / 1.7,
+    };
+    return position;
   };
 
   useEffect(() => {
@@ -105,4 +113,4 @@ export const BurgerIngredients = () => {
       </section>
     </>
   );
-}
+};

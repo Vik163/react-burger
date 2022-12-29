@@ -1,8 +1,6 @@
-import  React, { useRef, FC, RefObject } from 'react';
-import { useDispatch } from 'react-redux';
+import { useRef, FC } from 'react';
+import { useDispatch } from '../../utils/hooks';
 import { useDrag, useDrop } from 'react-dnd';
-
-import { TCard, TChildren } from '../../utils/types'
 
 import constructorStyles from './burger-constructor.module.css';
 
@@ -13,7 +11,7 @@ import {
 
 import { setCardMove } from '../../services/actions/move-item';
 
-import { TDragCard } from '../../utils/types'
+import { TDragCard } from '../../utils/types';
 
 export const DragCard: FC<TDragCard> = ({ item, index, deleteItem }) => {
   const dispatch = useDispatch();
@@ -28,7 +26,7 @@ export const DragCard: FC<TDragCard> = ({ item, index, deleteItem }) => {
 
   const [, dropRef] = useDrop({
     accept: 'itemConstructor',
-    hover: (item: {index: number}, monitor) => {
+    hover: (item: { index: number }, monitor) => {
       const dragIndex = item.index;
       const hoverIndex = index;
       if (!ref.current || dragIndex === hoverIndex) {
@@ -71,5 +69,3 @@ export const DragCard: FC<TDragCard> = ({ item, index, deleteItem }) => {
     </li>
   );
 };
-
-

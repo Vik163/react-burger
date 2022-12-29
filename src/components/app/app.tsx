@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { Route, Switch, useHistory, useLocation } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from '../../utils/hooks';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 
@@ -18,7 +18,10 @@ import { ForgotPassword } from '../../pages/forgot-password/forgot-password';
 import { ProtectedRoute } from '../protected-route';
 import { IngredientDetails } from '../ingredient-details/ingredient-details';
 import { IngredientDetailsPage } from '../../pages/ingredient-details-page/ingredient-details-page';
+import { OrderDetailsPage } from '../../pages/order-details-page/order-details-page';
+import { OrderProcessDetails } from '../../components/order-process-details/order-process-details';
 import { StoryOrders } from '../story-orders/story-orders';
+import { OrderFeed } from '../../pages/order-feed/order-feed';
 import { Modal } from '../modal/modal';
 import { getCookie } from '../../utils/cookie';
 
@@ -26,17 +29,33 @@ import { getCards } from '../../services/actions/burger-ingredients';
 import { getUser } from '../../services/actions/get-user';
 import { requestToken } from '../../services/actions/update-token';
 import { deleteIngredientDetails } from '../../services/actions/ingredient-details';
+import {
+  WS_CONNECTION_CLOSED,
+  WS_PROFILE_CONNECTION_CLOSED,
+} from '../../services/actions/constants';
 
-import { TModalState } from '../../utils/types'
+import { TModalState, TWsProfile } from '../../utils/types';
 
 function App() {
   const dispatch = useDispatch();
   const history = useHistory();
   const location = useLocation<TModalState>();
-  const background = location.state && location.state.background ;
+  const { pathname } = useLocation();
+
+  const background = location.state && location.state.background;
   const userData = JSON.parse(`${localStorage.getItem('userData')}`);
+  const orderNumber = JSON.parse(`${localStorage.getItem('orderNumber')}`);
   const token = getCookie('token');
-  const { cards, messageError, loader, loggedIn } = useSelector((store: any) => ({
+  const {
+    cards,
+    messageError,
+    loader,
+    loggedIn,
+    orders,
+    ordersProfile,
+    wsProfileConnected,
+    wsConnected,
+  } = useSelector((store) => ({
     cards: store.burgerIngredients.cards,
     userData: store.dataUser.messageError,
     messageError:
@@ -46,11 +65,17 @@ function App() {
       store.dataUser.messageError,
     loader: store.orderDetails.loader || store.burgerIngredients.loader,
     loggedIn: store.authorizationInfo.loggedIn,
+    orders: store.orderFeed.data as TWsProfile,
+    wsConnected: store.orderFeed.wsConnected,
+    ordersProfile: store.ordersProfile.data as TWsProfile,
+    wsProfileConnected: store.ordersProfile.wsProfileConnected,
   }));
+
+  const ordersProfileConnected = ordersProfile && ordersProfile.orders;
+  const ordersConnected = orders && orders.orders;
 
   // Проверка токена ------------------------
   const checkToken = () => {
-    // @ts-ignore
     !token && dispatch(requestToken());
   };
 
@@ -60,14 +85,22 @@ function App() {
   // ----------------------------------------------
 
   useEffect(() => {
-    // @ts-ignore
     dispatch(getCards());
   }, []);
 
   useEffect(() => {
+    !pathname.includes('/feed') &&
+      wsConnected &&
+      dispatch({ type: WS_CONNECTION_CLOSED });
+
+    !pathname.includes('/profile/orders') &&
+      wsProfileConnected &&
+      dispatch({ type: WS_PROFILE_CONNECTION_CLOSED });
+  }, [pathname, wsProfileConnected, wsConnected]);
+
+  useEffect(() => {
     if (loggedIn) {
       if (!userData) {
-        // @ts-ignore
         token ? dispatch(getUser()) : checkToken();
       }
     }
@@ -81,6 +114,7 @@ function App() {
 
   const handleModalClose = () => {
     dispatch(deleteIngredientDetails());
+    localStorage.removeItem('orderNumber');
     history.goBack();
   };
 
@@ -99,42 +133,69 @@ function App() {
             )}
           </DndProvider>
         </Route>
-        <ProtectedRoute path='/forgot-password' onlyAuth={false}>
+        <Route path='/feed' exact>
+          <OrderFeed />
+        </Route>
+        <Route path='/feed/:id' exact>
+          <OrderDetailsPage />
+        </Route>
+        <ProtectedRoute path='/forgot-password' onlyAuth={false} exact>
           <ForgotPassword />
         </ProtectedRoute>
         <Route path='/reset-password'>
           <ResetPassword />
         </Route>
-        <ProtectedRoute path='/sign-in' onlyAuth={false}>
+        <ProtectedRoute path='/sign-in' onlyAuth={false} exact>
           <Login />
         </ProtectedRoute>
-        <ProtectedRoute path='/sign-up' onlyAuth={false}>
+        <ProtectedRoute path='/sign-up' onlyAuth={false} exact>
           <Register />
         </ProtectedRoute>
-        <ProtectedRoute path='/profile' onlyAuth={true}>
+        <ProtectedRoute path='/profile' onlyAuth={true} exact>
+          <Profile />
+        </ProtectedRoute>
+        <ProtectedRoute path='/profile/orders' onlyAuth={true} exact>
           <Profile>
-            <Route path='/profile/orders'>
-              <StoryOrders />
-            </Route>
+            <StoryOrders />
           </Profile>
+        </ProtectedRoute>
+        <ProtectedRoute path='/profile/orders/:id' onlyAuth={true} exact>
+          <OrderDetailsPage />
         </ProtectedRoute>
         <Route path='/ingredients/:id' exact>
           <IngredientDetailsPage />
         </Route>
         {messageError && (
-          <Route path='/errors'>
+          <Route path='/errors' exact>
             <ErrorsPage />
           </Route>
         )}
       </Switch>
       {background && (
-            <Route path='/ingredients/:id' exact>
-                <Modal closeModal={handleModalClose} title='Детали ингредиента'>
-                  <IngredientDetails />
-                </Modal>
-            </Route>
-          )
-        }
+        <Route path='/ingredients/:id' exact>
+          <Modal closeModal={handleModalClose} title='Детали ингредиента'>
+            <IngredientDetails />
+          </Modal>
+        </Route>
+      )}
+      {background && ordersConnected && (
+        <Route
+          path='/feed/:id'
+          exact
+          render={() => (
+            <Modal closeModal={handleModalClose} title={orderNumber}>
+              <OrderProcessDetails modal={true} />
+            </Modal>
+          )}
+        />
+      )}
+      {background && ordersProfileConnected && (
+        <ProtectedRoute path='/profile/orders/:id' exact onlyAuth={true}>
+          <Modal closeModal={handleModalClose} title={orderNumber}>
+            <OrderProcessDetails modal={true} />
+          </Modal>
+        </ProtectedRoute>
+      )}
     </div>
   );
 }

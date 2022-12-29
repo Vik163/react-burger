@@ -1,6 +1,6 @@
 import { useEffect, useState, FC, ChangeEvent, FormEvent } from 'react';
 import { useLocation, Link } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from '../../utils/hooks';
 
 import profileStyles from './profile.module.css';
 
@@ -16,7 +16,7 @@ import { requestToken } from '../../services/actions/update-token';
 import { logout } from '../../services/actions/logout';
 import { updateUser } from '../../services/actions/update-user';
 
-import { TChildren, TDataRegister } from '../../utils/types'
+import { TChildren, TDataRegister } from '../../utils/types';
 
 export const Profile: FC<TChildren> = ({ children }) => {
   const dispatch = useDispatch();
@@ -26,8 +26,12 @@ export const Profile: FC<TChildren> = ({ children }) => {
   const [isActive, setIsActive] = useState(false);
   const [isValue, setIsValue] = useState('');
   const [isUpdateToken, setIsUpdateToken] = useState(false);
-  const [value, setValue] = useState<TDataRegister>({ name: '', email: '', password: '' });
-  const { updateUserAnswer } = useSelector((store: any) => ({
+  const [value, setValue] = useState<TDataRegister>({
+    name: '',
+    email: '',
+    password: '',
+  });
+  const { updateUserAnswer } = useSelector((store) => ({
     updateUserAnswer: store.dataUser.updateUserAnswer,
   }));
 
@@ -83,7 +87,6 @@ export const Profile: FC<TChildren> = ({ children }) => {
       // @ts-ignore
       dispatch(updateUser(value));
       setIsValue('');
-
     } else {
       setIsUpdateToken(true);
       // @ts-ignore
@@ -175,16 +178,16 @@ export const Profile: FC<TChildren> = ({ children }) => {
               </Button>
             </div>
           )}
-          { (updateUserAnswer && !isValue) && 
-            <p 
+          {updateUserAnswer && !isValue && (
+            <p
               className={`${profileStyles.caption} text text_type_main-default mt-20`}
             >
               Данные успешно обновлены
             </p>
-            }
+          )}
         </form>
       )}
       {children}
     </div>
   );
-}
+};

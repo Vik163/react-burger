@@ -13,22 +13,8 @@
 }
 
 .constructor__scrollbar {
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-.constructor__scrollbar::-webkit-scrollbar {
-  width: 8px;
-}
-
-.constructor__scrollbar::-webkit-scrollbar-track {
-  background: #2f2f37;
-}
-
-.constructor__scrollbar::-webkit-scrollbar-thumb {
-  background: #8585ad;
+  width: 584px;
+  max-height: 464px;
 }
 
 .constructor__item {

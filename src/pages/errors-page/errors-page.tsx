@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useSelector } from '../../utils/hooks';
 
 import errorsStyles from './errors-page.module.css';
 

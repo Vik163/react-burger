@@ -1,13 +1,18 @@
 import { BASE_URL } from './constants';
 import { getCookie } from './cookie';
+import { TOrder } from './types';
 
 class BurgerApi {
   private _settings: {
-    baseUrl: string; headers: {
+    baseUrl: string;
+    headers: {
       'Content-Type': string;
     };
   };
-  constructor(settings: { baseUrl: string; headers: { 'Content-Type': string; }; }) {
+  constructor(settings: {
+    baseUrl: string;
+    headers: { 'Content-Type': string };
+  }) {
     this._settings = settings;
   }
 
@@ -28,10 +33,13 @@ class BurgerApi {
     });
   }
 
-  sendOrder(order: Array<string>) {
+  sendOrder(order: TOrder) {
     return this._request('/orders', {
       method: 'POST',
-      headers: this._settings.headers,
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + getCookie('token'),
+      },
       body: JSON.stringify(order),
     });
   }
@@ -46,7 +54,7 @@ class BurgerApi {
     });
   }
 
-  resetPassword(form: {password: string; token: string}) {
+  resetPassword(form: { password: string; token: string }) {
     return this._request('/password-reset/reset', {
       method: 'POST',
       headers: this._settings.headers,
@@ -57,7 +65,7 @@ class BurgerApi {
     });
   }
 
-  signUp(form: {name: string; password: string; email: string}) {
+  signUp(form: { name: string; password: string; email: string }) {
     return this._request('/auth/register', {
       method: 'POST',
       headers: this._settings.headers,
@@ -69,7 +77,7 @@ class BurgerApi {
     });
   }
 
-  signIn(form: {password: string; email: string}) {
+  signIn(form: { password: string; email: string }) {
     return this._request('/auth/login', {
       method: 'POST',
       headers: this._settings.headers,
@@ -114,7 +122,7 @@ class BurgerApi {
     });
   }
 
-  updateUser(form: {name: string; password: string; email: string}) {
+  updateUser(form: { name: string; password: string; email: string }) {
     return this._request('/auth/user', {
       method: 'PATCH',
       mode: 'cors',

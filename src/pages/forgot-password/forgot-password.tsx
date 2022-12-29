@@ -1,6 +1,6 @@
 import { useEffect, useState, FormEvent } from 'react';
 import { Link, Redirect } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from '../../utils/hooks';
 
 import forgotPasswordStyles from './forgot-password.module.css';
 
@@ -28,7 +28,6 @@ export function ForgotPassword() {
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-    // @ts-ignore
     dispatch(forgotPassword(value));
   };
 
